@@ -1,0 +1,13 @@
+/home/dominique/Documents/Commune/Backend/src/main/java/com/example/demo/repository/MereRepository.java
+/home/dominique/Documents/Commune/Backend/src/main/java/com/example/demo/repository/PereRepository.java
+/home/dominique/Documents/Commune/Backend/src/main/java/com/example/demo/repository/PersonneRepository.java
+/home/dominique/Documents/Commune/Backend/src/main/java/com/example/demo/repository/DeclarantRepository.java
+/home/dominique/Documents/Commune/Backend/src/main/java/com/example/demo/controller/PersonneController.java
+/home/dominique/Documents/Commune/Backend/src/main/java/com/example/demo/model/Pere.java
+/home/dominique/Documents/Commune/Backend/src/main/java/com/example/demo/model/Personne.java
+/home/dominique/Documents/Commune/Backend/src/main/java/com/example/demo/BackCommuneApplication.java
+/home/dominique/Documents/Commune/Backend/src/main/java/com/example/demo/controller/PereController.java
+/home/dominique/Documents/Commune/Backend/src/main/java/com/example/demo/model/Mere.java
+/home/dominique/Documents/Commune/Backend/src/main/java/com/example/demo/model/Declarant.java
+/home/dominique/Documents/Commune/Backend/src/main/java/com/example/demo/controller/DeclarantController.java
+/home/dominique/Documents/Commune/Backend/src/main/java/com/example/demo/controller/MereController.java
