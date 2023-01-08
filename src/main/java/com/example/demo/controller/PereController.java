@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
-import java.util.ArrayList;
+
 import java.util.List;
-import java.util.Optional;
+
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,75 +23,71 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.model.Pere;
 import com.example.demo.repository.PereRepository;
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin("*")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/peres")
 public class PereController {
 	
 	@Autowired
 	PereRepository pereRepository;
 	
-	@PostMapping("/pere")
-	  public ResponseEntity<Pere> createPere(@RequestBody Pere pere )
-	  {
-	    try {
-	    	Pere _pere = pereRepository
-	          .save(new Pere(pere.getNomPere(), pere.getPrenomsPere(), pere.getDatenaissPere(), pere.getLieuNaissPere(), pere.getProfessionPere(), pere.getAdressePere() ));
+	@PostMapping
+	  public ResponseEntity<Pere> createPere(@RequestBody @Valid Pere pere )
+	  {   
+	    	Pere _pere = pereRepository.save(pere);
 	      return new ResponseEntity<>(_pere, HttpStatus.CREATED);
-	    } catch (Exception e) {
-	      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-	    }
+	    
 	  }
 	
-	@GetMapping("/peres")
+	@GetMapping
 	  public ResponseEntity<List<Pere>> getAllPeres() {
 	    try {
-	      List<Pere> peres = new ArrayList<Pere>();
-
-	     	      
-	      pereRepository.findAll().forEach(peres::add);
+	      List<Pere> peres = pereRepository.findAll();
+	      
 	      if (peres.isEmpty()) {
 		        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		      }
-
+	      
 	      return new ResponseEntity<>(peres, HttpStatus.OK);
 	    } catch (Exception e) {
 	      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	  }
 	
-	@GetMapping("/peres/{id}")
+	@GetMapping("/{id}")
 	  public ResponseEntity<Pere> getPereById(@PathVariable("id") long id) 
 	{
-	    Optional<Pere> pereData = pereRepository.findById(id);
+	    Pere pereData = pereRepository.findById(id).get();
 
-	    if (pereData.isPresent()) {
-	      return new ResponseEntity<>(pereData.get(), HttpStatus.OK);
+	    if (pereData != null) {
+	      return new ResponseEntity<>(pereData, HttpStatus.OK);
 	    } else {
 	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }
 	  }
 	
-	@PutMapping("/peres/{id}")
-	  public ResponseEntity<Pere> updatePere(@PathVariable("id") long id, @RequestBody Pere pere) {
-	    Optional<Pere> pereData = pereRepository.findById(id);
+	@PutMapping("/{id}")
+	  public ResponseEntity<Pere> updatePere(@PathVariable("id") long id, @RequestBody @Valid Pere pere)
+	{
+	    Pere pereData = pereRepository.findById(id).get();
 
-	    if (pereData.isPresent()) {
-	    	Pere _pere = pereData.get();
-	    	_pere.setNomPere(pere.getNomPere());
-	    	_pere.setPrenomsPere(pere.getPrenomsPere());
-	    	_pere.setDatenaissPere(pere.getDatenaissPere());
-	    	_pere.setLieuNaissPere(pere.getLieuNaissPere());
-	    	_pere.setProfessionPere(pere.getProfessionPere());
-	    	_pere.setAdressePere(pere.getAdressePere());
+	    if (pereData != null) {
+	    	pereData.getIdPere();
+	    	pereData.setNomPere(pere.getNomPere());
+	    	pereData.setPrenomsPere(pere.getPrenomsPere());
+	    	pereData.setDatenaissPere(pere.getDatenaissPere());
+	    	pereData.setLieuNaissPere(pere.getLieuNaissPere());
+	    	pereData.setProfessionPere(pere.getProfessionPere());
+	    	pereData.setAdressePere(pere.getAdressePere());
 
-	      return new ResponseEntity<>(pereRepository.save(_pere), HttpStatus.OK);
+	    	pereRepository.save(pereData);
+	      return new ResponseEntity<>(pereData, HttpStatus.OK);
 	    } else {
 	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }
 	  }
 	
-	@DeleteMapping("/peres/{id}")
+	@DeleteMapping("/{id}")
 	  public ResponseEntity<HttpStatus> deletePere(@PathVariable("id") long id) {
 	    try {
 	    	pereRepository.deleteById(id);

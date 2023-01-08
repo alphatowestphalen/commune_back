@@ -14,92 +14,87 @@ import javax.persistence.Table;
 public class Declarant {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long Id;
-	
-	@Column(name = "NomDeclarant")
-	private String NomDeclarant;
-	
-	@Column(name = "PrenomsDeclarant")
-	private String PrenomsDeclarant;
-	
-	@Column(name = "DatenaissDeclarant")
-	private Date DatenaissDeclarant;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "idDeclarant")
+	private long idDeclarant;
 	
 	
-	public long getId() {
-		return Id;
+	@Column(name = "nomDeclarant")
+	private String nomDeclarant;
+	
+	@Column(name = "prenomsDeclarant")
+	private String prenomsDeclarant;
+	
+	@Column(name = "datenaissDeclarant")
+	private Date datenaissDeclarant;
+	
+	@Column(name = "lieuNaissDeclarant")
+	private String lieuNaissDeclarant;
+	
+	@Column(name = "adressDeclarant")
+	private String adressDeclarant;
+
+	public long getIdDeclarant() {
+		return idDeclarant;
 	}
 
-	public void setId(long id) {
-		Id = id;
+	public void setIdDeclarant(long idDeclarant) {
+		this.idDeclarant = idDeclarant;
 	}
 
 	public String getNomDeclarant() {
-		return NomDeclarant;
+		return nomDeclarant;
 	}
 
 	public void setNomDeclarant(String nomDeclarant) {
-		NomDeclarant = nomDeclarant;
+		this.nomDeclarant = nomDeclarant;
 	}
 
 	public String getPrenomsDeclarant() {
-		return PrenomsDeclarant;
+		return prenomsDeclarant;
 	}
 
 	public void setPrenomsDeclarant(String prenomsDeclarant) {
-		PrenomsDeclarant = prenomsDeclarant;
+		this.prenomsDeclarant = prenomsDeclarant;
 	}
 
 	public Date getDatenaissDeclarant() {
-		return DatenaissDeclarant;
+		return datenaissDeclarant;
 	}
 
 	public void setDatenaissDeclarant(Date datenaissDeclarant) {
-		DatenaissDeclarant = datenaissDeclarant;
+		this.datenaissDeclarant = datenaissDeclarant;
 	}
 
 	public String getLieuNaissDeclarant() {
-		return LieuNaissDeclarant;
+		return lieuNaissDeclarant;
 	}
 
 	public void setLieuNaissDeclarant(String lieuNaissDeclarant) {
-		LieuNaissDeclarant = lieuNaissDeclarant;
+		this.lieuNaissDeclarant = lieuNaissDeclarant;
 	}
 
 	public String getAdressDeclarant() {
-		return AdressDeclarant;
+		return adressDeclarant;
 	}
 
 	public void setAdressDeclarant(String adressDeclarant) {
-		AdressDeclarant = adressDeclarant;
-	}
-
-	@Column(name = "LieuNaissDeclarant")
-	private String LieuNaissDeclarant;
-	
-	@Column(name = "AdressDeclarant")
-	private String AdressDeclarant;
-
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return super.toString();
+		this.adressDeclarant = adressDeclarant;
 	}
 
 	public Declarant(String nomDeclarant, String prenomsDeclarant, Date datenaissDeclarant, String lieuNaissDeclarant,
 			String adressDeclarant) {
-		NomDeclarant = nomDeclarant;
-		PrenomsDeclarant = prenomsDeclarant;
-		DatenaissDeclarant = datenaissDeclarant;
-		LieuNaissDeclarant = lieuNaissDeclarant;
-		AdressDeclarant = adressDeclarant;
+		this.nomDeclarant = nomDeclarant;
+		this.prenomsDeclarant = prenomsDeclarant;
+		this.datenaissDeclarant = datenaissDeclarant;
+		this.lieuNaissDeclarant = lieuNaissDeclarant;
+		this.adressDeclarant = adressDeclarant;
 	}
 
 	public Declarant() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
-	
 	
 	
 

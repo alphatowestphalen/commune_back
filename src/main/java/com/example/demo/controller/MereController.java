@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
-import java.util.ArrayList;
+
 import java.util.List;
-import java.util.Optional;
+
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,75 +22,73 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.model.Mere;
 import com.example.demo.repository.MereRepository;
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin("*")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/meres")
 public class MereController {
 	
 	@Autowired
 	MereRepository mereRepository;
 	
-	@PostMapping("/mere")
-	  public ResponseEntity<Mere> createMere(@RequestBody Mere mere )
+	@PostMapping
+	  public ResponseEntity<Mere> createMere(@RequestBody @Valid Mere mere )
 	  {
-	    try {
-	    	Mere _mere = mereRepository
-	          .save(new Mere(mere.getNomMere(), mere.getPrenomsMere(), mere.getDatenaissMere(), mere.getLieuNaissMere(), mere.getProfessionMere(), mere.getAdresseMere() ));
+	   
+	    	Mere _mere = mereRepository.save(mere);
 	      return new ResponseEntity<>(_mere, HttpStatus.CREATED);
-	    } catch (Exception e) {
-	      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-	    }
+	   
 	  }
 	
-	@GetMapping("/meres")
+	@GetMapping
 	  public ResponseEntity<List<Mere>> getAllMeres() {
 	    try {
-	      List<Mere> meres = new ArrayList<Mere>();
+	      List<Mere> meres =  mereRepository.findAll();
 
-	     	      
-	      mereRepository.findAll().forEach(meres::add);
 	      if (meres.isEmpty()) {
 		        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		      }
-
+	      
 	      return new ResponseEntity<>(meres, HttpStatus.OK);
 	    } catch (Exception e) {
 	      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	  }
 	
-	@GetMapping("/meres/{id}")
+	@GetMapping("/{id}")
 	  public ResponseEntity<Mere> getMereById(@PathVariable("id") long id) 
 	{
-	    Optional<Mere> mereData = mereRepository.findById(id);
+	    Mere mereData = mereRepository.findById(id).get();
 
-	    if (mereData.isPresent()) {
-	      return new ResponseEntity<>(mereData.get(), HttpStatus.OK);
+	    if (mereData != null) {
+	      return new ResponseEntity<>(mereData, HttpStatus.OK);
 	    } else {
 	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }
 	  }
 	
-	@PutMapping("/meres/{id}")
-	  public ResponseEntity<Mere> updateMere(@PathVariable("id") long id, @RequestBody Mere mere) {
-	    Optional<Mere> mereData = mereRepository.findById(id);
+	@PutMapping("/{id}")
+	  public ResponseEntity<Mere> updateMere(@PathVariable("id") long id, @RequestBody @Valid Mere mere)
+	{
+	    Mere mereData = mereRepository.findById(id).get();
 
-	    if (mereData.isPresent()) {
-	    	Mere _mere = mereData.get();
-	    	_mere.setNomMere(mere.getNomMere());
-	    	_mere.setPrenomsMere(mere.getPrenomsMere());
-	    	_mere.setDatenaissMere(mere.getDatenaissMere());
-	    	_mere.setLieuNaissMere(mere.getLieuNaissMere());
-	    	_mere.setProfessionMere(mere.getProfessionMere());
-	    	_mere.setAdresseMere(mere.getAdresseMere());
+	    if (mereData != null) {
+	    	mereData.getIdMere();
+	    	mereData.setNomMere(mere.getNomMere());
+	    	mereData.setPrenomsMere(mere.getPrenomsMere());
+	    	mereData.setDatenaissMere(mere.getDatenaissMere());
+	    	mereData.setLieuNaissMere(mere.getLieuNaissMere());
+	    	mereData.setProfessionMere(mere.getProfessionMere());
+	    	mereData.setAdresseMere(mere.getAdresseMere());
+	    	
+	    	mereRepository.save(mereData);
 
-	      return new ResponseEntity<>(mereRepository.save(_mere), HttpStatus.OK);
+	      return new ResponseEntity<>(mereData, HttpStatus.OK);
 	    } else {
 	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }
 	  }
 	
-	@DeleteMapping("/meres/{id}")
+	@DeleteMapping("/{id}")
 	  public ResponseEntity<HttpStatus> deleteMere(@PathVariable("id") long id) {
 	    try {
 	    	mereRepository.deleteById(id);

@@ -23,24 +23,24 @@ import com.example.demo.repository.PersonneRepository;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/personnes")
 public class PersonneController {
 	@Autowired
 	PersonneRepository 	personneRepository;
 	
-	@PostMapping("/personne")
+	@PostMapping
 	  public ResponseEntity<Personne> createDeclarant(@RequestBody Personne personne )
 	  {
 	    try {
 	    	Personne _personne = personneRepository
-	          .save(new Personne(personne.getDatenaissPersonne(), personne.getHeurenaissPersonne(), personne.getLieuNaissPersonne(), personne.getNomPersonne(), personne.getPrenomsPersonne(), personne.getSexePersonne() ));
+	          .save(personne);
 	      return new ResponseEntity<>(_personne, HttpStatus.CREATED);
 	    } catch (Exception e) {
 	      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	  }
 	
-	@GetMapping("/personnes")
+	@GetMapping
 	  public ResponseEntity<List<Personne>> getAllPersonnes() {
 	    try {
 	      List<Personne> personnes = new ArrayList<Personne>();
@@ -57,7 +57,7 @@ public class PersonneController {
 	    }
 	  }
 	
-	@GetMapping("/personnes/{id}")
+	@GetMapping("/{id}")
 	  public ResponseEntity<Personne> getPersonneById(@PathVariable("id") long id) 
 	{
 	    Optional<Personne> personneData = personneRepository.findById(id);
@@ -69,7 +69,7 @@ public class PersonneController {
 	    }
 	  }
 	
-	@PutMapping("/personnes/{id}")
+	@PutMapping("/{id}")
 	  public ResponseEntity<Personne> updatePersonne(@PathVariable("id") long id, @RequestBody Personne personne) {
 	    Optional<Personne> personneData = personneRepository.findById(id);
 
@@ -88,7 +88,7 @@ public class PersonneController {
 	    }
 	  }
 	
-	@DeleteMapping("/personnes/{id}")
+	@DeleteMapping("/{id}")
 	  public ResponseEntity<HttpStatus> deletePersonne(@PathVariable("id") long id) {
 	    try {
 	    	personneRepository.deleteById(id);

@@ -1,9 +1,10 @@
 package com.example.demo.controller;
 
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,44 +22,26 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.model.Declarant;
 import com.example.demo.repository.DeclarantRepository;
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin("*")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/declarants")
 public class DeclarantController {
 	@Autowired
 	DeclarantRepository declarantRepository;
 	
-	@GetMapping("/declarants/{id}")
-	  public ResponseEntity<Declarant> getDeclarantById(@PathVariable("id") long id) 
-	{
-	    Optional<Declarant> declarantData = declarantRepository.findById(id);
-
-	    if (declarantData.isPresent()) {
-	      return new ResponseEntity<>(declarantData.get(), HttpStatus.OK);
-	    } else {
-	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	    }
-	  }
-	
-	@PostMapping("/declarant")
-	  public ResponseEntity<Declarant> createDeclarant(@RequestBody Declarant declarant )
-	  {
-	    try {
-	    	Declarant _declarant = declarantRepository
-	          .save(new Declarant(declarant.getNomDeclarant(), declarant.getPrenomsDeclarant(), declarant.getDatenaissDeclarant(), declarant.getLieuNaissDeclarant(), declarant.getAdressDeclarant() ));
+	@PostMapping
+	  public ResponseEntity<Declarant> createDeclarant(@RequestBody @Valid Declarant declarant )
+	  {	    
+	    	Declarant _declarant = declarantRepository.save(declarant);
 	      return new ResponseEntity<>(_declarant, HttpStatus.CREATED);
-	    } catch (Exception e) {
-	      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-	    }
 	  }
+
 	
-	@GetMapping("/declarants")
+	@GetMapping
 	  public ResponseEntity<List<Declarant>> getAllDeclarants() {
 	    try {
-	      List<Declarant> declarants = new ArrayList<Declarant>();
-
+	      List<Declarant> declarants = declarantRepository.findAll();
 	     	      
-	      declarantRepository.findAll().forEach(declarants::add);
 	      if (declarants.isEmpty()) {
 		        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		      }
@@ -69,26 +52,44 @@ public class DeclarantController {
 	    }
 	  }
 	
-	@PutMapping("/declarants/{id}")
-	  public ResponseEntity<Declarant> updateDeclarant(@PathVariable("id") long id, @RequestBody Declarant declarant) {
-	    Optional<Declarant> declarantData = declarantRepository.findById(id);
+	
+	@GetMapping("/{id}")
+	  public ResponseEntity<Declarant> getDeclarantById(@PathVariable("id") long id) 
+	{
+	    Declarant declarant = declarantRepository.findById(id).get();
 
-	    if (declarantData.isPresent()) {
-	    	Declarant _declarant = declarantData.get();
-	    	_declarant.setNomDeclarant(declarant.getNomDeclarant());
-	    	_declarant.setPrenomsDeclarant(declarant.getPrenomsDeclarant());
-	    	_declarant.setDatenaissDeclarant(declarant.getDatenaissDeclarant());
-	    	_declarant.setLieuNaissDeclarant(declarant.getLieuNaissDeclarant());
-	    	_declarant.setAdressDeclarant(declarant.getAdressDeclarant());
-
-	      return new ResponseEntity<>(declarantRepository.save(_declarant), HttpStatus.OK);
+	    if (declarant != null) {
+	      return new ResponseEntity<>(declarant, HttpStatus.OK);
 	    } else {
 	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }
 	  }
 	
-	 @DeleteMapping("/declarants/{id}")
-	  public ResponseEntity<HttpStatus> deleteDeclarant(@PathVariable("id") long id) {
+	
+	@PutMapping("/{id}")
+	  public ResponseEntity<Declarant> updateDeclarant(@PathVariable("id") long id, @RequestBody @Valid Declarant declarant)
+	{
+		 Declarant declarantData = declarantRepository.findById(id).get();
+
+	    if (declarantData != null) {
+	    	declarantData.getIdDeclarant();
+	    	declarantData.setNomDeclarant(declarant.getNomDeclarant());
+	    	declarantData.setPrenomsDeclarant(declarant.getPrenomsDeclarant());
+	    	declarantData.setDatenaissDeclarant(declarant.getDatenaissDeclarant());
+	    	declarantData.setLieuNaissDeclarant(declarant.getLieuNaissDeclarant());
+	    	declarantData.setAdressDeclarant(declarant.getAdressDeclarant());
+
+	    	declarantRepository.save(declarantData);
+	    	
+	      return new ResponseEntity<>(declarantData, HttpStatus.OK);
+	    } else {
+	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    }
+	  }
+	
+	 @DeleteMapping("/{id}")
+	  public ResponseEntity<HttpStatus> deleteDeclarant(@PathVariable("id") long id)
+	 {
 	    try {
 	    	declarantRepository.deleteById(id);
 	      return new ResponseEntity<>(HttpStatus.NO_CONTENT);

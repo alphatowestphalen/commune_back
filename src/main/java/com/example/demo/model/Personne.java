@@ -14,105 +14,99 @@ import javax.persistence.Table;
 public class Personne {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long Id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "idPersonne")
+	private long idPersonne;
 	
-	@Column(name = "DatenaissPersonne")
-	private Date DatenaissPersonne;
+	@Column(name = "datenaissPersonne")
+	private Date datenaissPersonne;
 	
-	@Column(name = "HeurenaissPersonne")
-	private String HeurenaissPersonne;
+	@Column(name = "heurenaissPersonne")
+	private String heurenaissPersonne;
 	
-	@Column(name = "LieuNaissPersonne")
-	private String LieuNaissPersonne;
+	@Column(name = "lieuNaissPersonne")
+	private String lieuNaissPersonne;
 	
-	@Column(name = "NomPersonne")
-	private String NomPersonne;
+	@Column(name = "nomPersonne")
+	private String nomPersonne;
 	
-	@Column(name = "PrenomsPersonne")
-	private String PrenomsPersonne;
+	@Column(name = "prenomsPersonne")
+	private String prenomsPersonne;
 	
-	@Column(name = "SexePersonne")
-	private String SexePersonne;
+	@Column(name = "sexePersonne")
+	private String sexePersonne;
 
-	public long getId() {
-		return Id;
+	public long getIdPersonne() {
+		return idPersonne;
 	}
 
-	public void setId(long id) {
-		Id = id;
+	public void setIdPersonne(long idPersonne) {
+		this.idPersonne = idPersonne;
 	}
 
 	public Date getDatenaissPersonne() {
-		return DatenaissPersonne;
+		return datenaissPersonne;
 	}
 
 	public void setDatenaissPersonne(Date datenaissPersonne) {
-		DatenaissPersonne = datenaissPersonne;
+		this.datenaissPersonne = datenaissPersonne;
 	}
 
 	public String getHeurenaissPersonne() {
-		return HeurenaissPersonne;
+		return heurenaissPersonne;
 	}
 
 	public void setHeurenaissPersonne(String heurenaissPersonne) {
-		HeurenaissPersonne = heurenaissPersonne;
+		this.heurenaissPersonne = heurenaissPersonne;
 	}
 
 	public String getLieuNaissPersonne() {
-		return LieuNaissPersonne;
+		return lieuNaissPersonne;
 	}
 
 	public void setLieuNaissPersonne(String lieuNaissPersonne) {
-		LieuNaissPersonne = lieuNaissPersonne;
+		this.lieuNaissPersonne = lieuNaissPersonne;
 	}
 
 	public String getNomPersonne() {
-		return NomPersonne;
+		return nomPersonne;
 	}
 
 	public void setNomPersonne(String nomPersonne) {
-		NomPersonne = nomPersonne;
+		this.nomPersonne = nomPersonne;
 	}
 
 	public String getPrenomsPersonne() {
-		return PrenomsPersonne;
+		return prenomsPersonne;
 	}
 
 	public void setPrenomsPersonne(String prenomsPersonne) {
-		PrenomsPersonne = prenomsPersonne;
+		this.prenomsPersonne = prenomsPersonne;
 	}
 
 	public String getSexePersonne() {
-		return SexePersonne;
+		return sexePersonne;
 	}
 
 	public void setSexePersonne(String sexePersonne) {
-		SexePersonne = sexePersonne;
+		this.sexePersonne = sexePersonne;
 	}
 
 	public Personne(Date datenaissPersonne, String heurenaissPersonne, String lieuNaissPersonne, String nomPersonne,
 			String prenomsPersonne, String sexePersonne) {
-		super();
-		DatenaissPersonne = datenaissPersonne;
-		HeurenaissPersonne = heurenaissPersonne;
-		LieuNaissPersonne = lieuNaissPersonne;
-		NomPersonne = nomPersonne;
-		PrenomsPersonne = prenomsPersonne;
-		SexePersonne = sexePersonne;
+		this.datenaissPersonne = datenaissPersonne;
+		this.heurenaissPersonne = heurenaissPersonne;
+		this.lieuNaissPersonne = lieuNaissPersonne;
+		this.nomPersonne = nomPersonne;
+		this.prenomsPersonne = prenomsPersonne;
+		this.sexePersonne = sexePersonne;
 	}
 
 	public Personne() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public String toString() {
-		return "Personne [Id=" + Id + ", DatenaissPersonne=" + DatenaissPersonne + ", HeurenaissPersonne="
-				+ HeurenaissPersonne + ", LieuNaissPersonne=" + LieuNaissPersonne + ", NomPersonne=" + NomPersonne
-				+ ", PrenomsPersonne=" + PrenomsPersonne + ", SexePersonne=" + SexePersonne + "]";
-	}
-	
 	
 
 }

@@ -14,104 +14,98 @@ import javax.persistence.Table;
 public class Pere {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long Id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "idPere")
+	private long idPere;
 	
-	@Column(name = "NomPere")
-	private String NomPere;
+	@Column(name = "nomPere")
+	private String nomPere;
 	
-	@Column(name = "PrenomsPere")
-	private String PrenomsPere;
+	@Column(name = "prenomsPere")
+	private String prenomsPere;
 	
-	@Column(name = "DatenaissPere")
-	private Date DatenaissPere;
+	@Column(name = "datenaissPere")
+	private Date datenaissPere;
 	
-	@Column(name = "LieuNaissPere")
-	private String LieuNaissPere;
+	@Column(name = "lieuNaissPere")
+	private String lieuNaissPere;
 	
-	@Column(name = "ProfessionPere")
-	private String ProfessionPere;
+	@Column(name = "professionPere")
+	private String professionPere;
 	
-	@Column(name = "AdressePere")
-	private String AdressePere;
+	@Column(name = "adressePere")
+	private String adressePere;
 
-	public long getId() {
-		return Id;
+	public long getIdPere() {
+		return idPere;
 	}
 
-	public void setId(long id) {
-		Id = id;
+	public void setIdPere(long idPere) {
+		this.idPere = idPere;
 	}
 
 	public String getNomPere() {
-		return NomPere;
+		return nomPere;
 	}
 
 	public void setNomPere(String nomPere) {
-		NomPere = nomPere;
+		this.nomPere = nomPere;
 	}
 
 	public String getPrenomsPere() {
-		return PrenomsPere;
+		return prenomsPere;
 	}
 
 	public void setPrenomsPere(String prenomsPere) {
-		PrenomsPere = prenomsPere;
+		this.prenomsPere = prenomsPere;
 	}
 
 	public Date getDatenaissPere() {
-		return DatenaissPere;
+		return datenaissPere;
 	}
 
 	public void setDatenaissPere(Date datenaissPere) {
-		DatenaissPere = datenaissPere;
+		this.datenaissPere = datenaissPere;
 	}
 
 	public String getLieuNaissPere() {
-		return LieuNaissPere;
+		return lieuNaissPere;
 	}
 
 	public void setLieuNaissPere(String lieuNaissPere) {
-		LieuNaissPere = lieuNaissPere;
+		this.lieuNaissPere = lieuNaissPere;
 	}
 
 	public String getProfessionPere() {
-		return ProfessionPere;
+		return professionPere;
 	}
 
 	public void setProfessionPere(String professionPere) {
-		ProfessionPere = professionPere;
+		this.professionPere = professionPere;
 	}
 
 	public String getAdressePere() {
-		return AdressePere;
+		return adressePere;
 	}
 
 	public void setAdressePere(String adressePere) {
-		AdressePere = adressePere;
+		this.adressePere = adressePere;
 	}
 
 	public Pere(String nomPere, String prenomsPere, Date datenaissPere, String lieuNaissPere, String professionPere,
 			String adressePere) {
-		NomPere = nomPere;
-		PrenomsPere = prenomsPere;
-		DatenaissPere = datenaissPere;
-		LieuNaissPere = lieuNaissPere;
-		ProfessionPere = professionPere;
-		AdressePere = adressePere;
+		this.nomPere = nomPere;
+		this.prenomsPere = prenomsPere;
+		this.datenaissPere = datenaissPere;
+		this.lieuNaissPere = lieuNaissPere;
+		this.professionPere = professionPere;
+		this.adressePere = adressePere;
 	}
 
 	public Pere() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public String toString() {
-		return "Pere [Id=" + Id + ", NomPere=" + NomPere + ", PrenomsPere=" + PrenomsPere + ", DatenaissPere="
-				+ DatenaissPere + ", LieuNaissPere=" + LieuNaissPere + ", ProfessionPere=" + ProfessionPere
-				+ ", AdressePere=" + AdressePere + "]";
-	}
 	
-	
-
 }
