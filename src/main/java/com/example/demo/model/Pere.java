@@ -1,7 +1,5 @@
 package com.example.demo.model;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,7 +23,7 @@ public class Pere {
 	private String prenomsPere;
 	
 	@Column(name = "datenaissPere")
-	private Date datenaissPere;
+	private String datenaissPere;
 	
 	@Column(name = "lieuNaissPere")
 	private String lieuNaissPere;
@@ -60,11 +58,11 @@ public class Pere {
 		this.prenomsPere = prenomsPere;
 	}
 
-	public Date getDatenaissPere() {
+	public String getDatenaissPere() {
 		return datenaissPere;
 	}
 
-	public void setDatenaissPere(Date datenaissPere) {
+	public void setDatenaissPere(String datenaissPere) {
 		this.datenaissPere = datenaissPere;
 	}
 
@@ -92,7 +90,7 @@ public class Pere {
 		this.adressePere = adressePere;
 	}
 
-	public Pere(String nomPere, String prenomsPere, Date datenaissPere, String lieuNaissPere, String professionPere,
+	public Pere(String nomPere, String prenomsPere, String datenaissPere, String lieuNaissPere, String professionPere,
 			String adressePere) {
 		this.nomPere = nomPere;
 		this.prenomsPere = prenomsPere;

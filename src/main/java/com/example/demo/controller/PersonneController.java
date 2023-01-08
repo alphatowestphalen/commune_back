@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.model.Personne;
 import com.example.demo.repository.PersonneRepository;
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/personnes")
 public class PersonneController {
@@ -29,28 +31,22 @@ public class PersonneController {
 	PersonneRepository 	personneRepository;
 	
 	@PostMapping
-	  public ResponseEntity<Personne> createDeclarant(@RequestBody Personne personne )
+	  public ResponseEntity<Personne> createDeclarant(@RequestBody @Valid Personne personne )
 	  {
-	    try {
-	    	Personne _personne = personneRepository
-	          .save(personne);
+	    
+	    	Personne _personne = personneRepository.save(personne);
 	      return new ResponseEntity<>(_personne, HttpStatus.CREATED);
-	    } catch (Exception e) {
-	      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-	    }
+	    
 	  }
 	
 	@GetMapping
 	  public ResponseEntity<List<Personne>> getAllPersonnes() {
 	    try {
-	      List<Personne> personnes = new ArrayList<Personne>();
-
-	     	      
-	      personneRepository.findAll().forEach(personnes::add);
+	      List<Personne> personnes = personneRepository.findAll();
+	     	 
 	      if (personnes.isEmpty()) {
 		        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		      }
-
 	      return new ResponseEntity<>(personnes, HttpStatus.OK);
 	    } catch (Exception e) {
 	      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -60,29 +56,32 @@ public class PersonneController {
 	@GetMapping("/{id}")
 	  public ResponseEntity<Personne> getPersonneById(@PathVariable("id") long id) 
 	{
-	    Optional<Personne> personneData = personneRepository.findById(id);
+	    Personne personneData = personneRepository.findById(id).get();
 
-	    if (personneData.isPresent()) {
-	      return new ResponseEntity<>(personneData.get(), HttpStatus.OK);
+	    if (personneData != null) {
+	      return new ResponseEntity<>(personneData, HttpStatus.OK);
 	    } else {
 	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }
 	  }
 	
 	@PutMapping("/{id}")
-	  public ResponseEntity<Personne> updatePersonne(@PathVariable("id") long id, @RequestBody Personne personne) {
-	    Optional<Personne> personneData = personneRepository.findById(id);
+	  public ResponseEntity<Personne> updatePersonne(@PathVariable("id") long id, @RequestBody @Valid Personne personne)
+	{
+	    Personne personneData = personneRepository.findById(id).get();
 
-	    if (personneData.isPresent()) {
-	    	Personne _personne = personneData.get();
-	    	_personne.setDatenaissPersonne(personne.getDatenaissPersonne());
-	    	_personne.setHeurenaissPersonne(personne.getHeurenaissPersonne());
-	    	_personne.setLieuNaissPersonne(personne.getLieuNaissPersonne());
-	    	_personne.setNomPersonne(personne.getNomPersonne());
-	    	_personne.setPrenomsPersonne(personne.getPrenomsPersonne());
-	    	_personne.setSexePersonne(personne.getSexePersonne());
+	    if (personneData != null) {
+	    	personneData.getIdPersonne();
+	    	personneData.setDatenaissPersonne(personne.getDatenaissPersonne());
+	    	personneData.setHeurenaissPersonne(personne.getHeurenaissPersonne());
+	    	personneData.setLieuNaissPersonne(personne.getLieuNaissPersonne());
+	    	personneData.setNomPersonne(personne.getNomPersonne());
+	    	personneData.setPrenomsPersonne(personne.getPrenomsPersonne());
+	    	personneData.setSexePersonne(personne.getSexePersonne());
 
-	      return new ResponseEntity<>(personneRepository.save(_personne), HttpStatus.OK);
+	    	personneRepository.save(personneData);
+	    	
+	      return new ResponseEntity<>(personneData, HttpStatus.OK);
 	    } else {
 	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }

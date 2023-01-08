@@ -1,6 +1,5 @@
 package com.example.demo.model;
 
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,7 +25,7 @@ public class Declarant {
 	private String prenomsDeclarant;
 	
 	@Column(name = "datenaissDeclarant")
-	private Date datenaissDeclarant;
+	private String datenaissDeclarant;
 	
 	@Column(name = "lieuNaissDeclarant")
 	private String lieuNaissDeclarant;
@@ -58,11 +57,11 @@ public class Declarant {
 		this.prenomsDeclarant = prenomsDeclarant;
 	}
 
-	public Date getDatenaissDeclarant() {
+	public String getDatenaissDeclarant() {
 		return datenaissDeclarant;
 	}
 
-	public void setDatenaissDeclarant(Date datenaissDeclarant) {
+	public void setDatenaissDeclarant(String datenaissDeclarant) {
 		this.datenaissDeclarant = datenaissDeclarant;
 	}
 
@@ -82,7 +81,7 @@ public class Declarant {
 		this.adressDeclarant = adressDeclarant;
 	}
 
-	public Declarant(String nomDeclarant, String prenomsDeclarant, Date datenaissDeclarant, String lieuNaissDeclarant,
+	public Declarant(String nomDeclarant, String prenomsDeclarant, String datenaissDeclarant, String lieuNaissDeclarant,
 			String adressDeclarant) {
 		this.nomDeclarant = nomDeclarant;
 		this.prenomsDeclarant = prenomsDeclarant;

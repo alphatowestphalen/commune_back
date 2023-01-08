@@ -38,22 +38,18 @@ public class PremierCopie {
 	
 	@ManyToOne()
 	  @JoinColumn(name = "idMere")
-	  @JsonIgnore
 	  private Mere mere;
 	
 	@ManyToOne()
 	  @JoinColumn(name = "idPere")
-	  @JsonIgnore
 	  private Pere pere;
 	
 	@ManyToOne()
 	  @JoinColumn(name = "idPersonne")
-	  @JsonIgnore
 	  private Personne personne;
 	
 	@ManyToOne()
 	  @JoinColumn(name = "idPieceJustificative")
-	  @JsonIgnore
 	  private PieceJustificative pieceJustificative;
 
 	public String getDescription() {
@@ -120,16 +116,16 @@ public class PremierCopie {
 		this.pieceJustificative = pieceJustificative;
 	}
 
-	public PremierCopie(String description, String mention, Declarant declarant, Maire maire, Mere mere, Pere pere,
-			Personne personne, PieceJustificative pieceJustificative) {
+	public PremierCopie(String description, String mention, Declarant declarant, Mere mere, Pere pere,
+			Personne personne, PieceJustificative pieceJustificative, Maire maire) {
 		this.description = description;
 		this.mention = mention;
 		this.declarant = declarant;
-		this.maire = maire;
 		this.mere = mere;
 		this.pere = pere;
 		this.personne = personne;
 		this.pieceJustificative = pieceJustificative;
+		this.maire = maire;
 	}
 
 	public PremierCopie() {

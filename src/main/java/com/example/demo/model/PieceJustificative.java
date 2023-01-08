@@ -31,6 +31,15 @@ public class PieceJustificative {
 	@Column(name = "cinDeclarant")
 	private Boolean cinDeclarant;
 
+	
+	public long getIdPieceJustificative() {
+		return idPieceJustificative;
+	}
+
+	public void setIdPieceJustificative(long idPieceJustificative) {
+		this.idPieceJustificative = idPieceJustificative;
+	}
+
 	public Boolean getCertificatAccouch() {
 		return certificatAccouch;
 	}
