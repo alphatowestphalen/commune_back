@@ -18,17 +18,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Declarant;
+import com.example.demo.model.Enfant;
 import com.example.demo.model.Maire;
 import com.example.demo.model.Mere;
 import com.example.demo.model.Pere;
-import com.example.demo.model.Personne;
 import com.example.demo.model.PieceJustificative;
 import com.example.demo.model.PremierCopie;
 import com.example.demo.repository.DeclarantRepository;
+import com.example.demo.repository.EnfantRepository;
 import com.example.demo.repository.MaireRepository;
 import com.example.demo.repository.MereRepository;
 import com.example.demo.repository.PereRepository;
-import com.example.demo.repository.PersonneRepository;
 import com.example.demo.repository.PieceJustificativeRepository;
 import com.example.demo.repository.PremierCopieRepository;
 import com.example.demo.request.PremierCopieRequest;
@@ -38,20 +38,22 @@ import com.example.demo.request.PremierCopieRequest;
 @RequestMapping("/api/premierCopies")
 public class PremierCopieController {
 	
-	@Autowired
-	PremierCopieRepository premierCopieRepository;
+	
 	@Autowired
 	DeclarantRepository declarantRepository;
+	@Autowired
+	EnfantRepository enfantRepository;
 	@Autowired
 	MaireRepository maireRepository;
 	@Autowired
 	MereRepository mereRepository;
 	@Autowired
 	PereRepository pereRepository;
-	@Autowired
-	PersonneRepository 	personneRepository;
+	
 	@Autowired
 	PieceJustificativeRepository pieceJustificativeRepository;
+	@Autowired
+	PremierCopieRepository premierCopieRepository;
 	
 	@PostMapping
 	  public ResponseEntity<PremierCopie> createPremierCopie(@RequestBody @Valid PremierCopieRequest premierCopieRequest )
@@ -64,7 +66,8 @@ public class PremierCopieController {
 			   premierCopieRequest.getPrenomsDeclarant(),
 			   premierCopieRequest.getDatenaissDeclarant(),
 			   premierCopieRequest.getLieuNaissDeclarant(),
-			   premierCopieRequest.getAdressDeclarant());	    	
+			   premierCopieRequest.getAdressDeclarant(),
+			   premierCopieRequest.getProfessionDeclarant());	    	
 	   declarantRepository.save(declarant);
 			   	   
 	   Mere mere = new Mere(
@@ -85,14 +88,15 @@ public class PremierCopieController {
 			   premierCopieRequest.getAdressePere() );
 	   pereRepository.save(pere);
 	   
-	   Personne personne =  new Personne(
-			   premierCopieRequest.getDatenaissPersonne(), 
-			   premierCopieRequest.getHeurenaissPersonne(), 
-			   premierCopieRequest.getLieuNaissPersonne(),
-			   premierCopieRequest.getNomPersonne(),
-			   premierCopieRequest.getPrenomsPersonne(),
-			   premierCopieRequest.getSexePersonne() );
-	   personneRepository.save(personne);
+	   Enfant enfant = new Enfant(
+			   premierCopieRequest.getNomEnfant(),
+			   premierCopieRequest.getPrenomsEnfant(),
+			   premierCopieRequest.getDatenaissEnfant(),
+			   premierCopieRequest.getLieunaissEnfant(),
+			   premierCopieRequest.getHeurenaissEnfant(),
+			   premierCopieRequest.getSexeEnfant(),
+			   premierCopieRequest.getDateEnfant());
+	   enfantRepository.save(enfant);
 	   
 	   PieceJustificative pieceJustificative = new PieceJustificative(
 			   premierCopieRequest.getCertificatAccouch(), 
@@ -102,15 +106,21 @@ public class PremierCopieController {
 	   pieceJustificativeRepository.save(pieceJustificative);
 	   
 	   PremierCopie premierCopie = new PremierCopie(
+			   premierCopieRequest.getIdPremierCopie(),
 			   premierCopieRequest.getDescription(),
 			   premierCopieRequest.getMention(),
+			   premierCopieRequest.getDatePCopie(),
+			   premierCopieRequest.getDatePremierCopie(),
 			   declarant,
+			   maire,
 			   mere,
 			   pere,
-			   personne,
-			   pieceJustificative,
-			   maire);
+			   enfant,
+			   pieceJustificative
+			   );
 	   premierCopieRepository.save(premierCopie);
+	   
+	   
 	   
 	   return new ResponseEntity<>(premierCopie, HttpStatus.CREATED);
 	    
@@ -145,109 +155,103 @@ public class PremierCopieController {
 	 }
 	
 	@PutMapping("/{IdPremierCopie}")
-	public ResponseEntity<PremierCopie> updatePremierCopie(@PathVariable("IdPremierCopie") Long IdPremierCopie, @RequestBody @Valid PremierCopieRequest premierCopieRequest) 
+	public ResponseEntity<PremierCopie> updatePremierCopie(@PathVariable("IdPremierCopie") Long IdPremierCopie,
+			@RequestBody PremierCopieRequest premierCopieRequest) 
 	{
-		PremierCopie premierCopie = premierCopieRepository.findById(IdPremierCopie).get();
-		
-		if(premierCopie != null)
-		{
-			Declarant declarant = declarantRepository.findById(premierCopie.getDeclarant().getIdDeclarant()).get();
-			Mere mere = mereRepository.findById(premierCopie.getMere().getIdMere()).get();
-			Pere pere = pereRepository.findById(premierCopie.getPere().getIdPere()).get();
-			Personne personne = personneRepository.findById(premierCopie.getPersonne().getIdPersonne()).get();
-			PieceJustificative pieceJustificative = pieceJustificativeRepository.findById(premierCopie.getPieceJustificative().getIdPieceJustificative()).get();
+		try {
+			PremierCopie premierCopie = premierCopieRepository.findById(IdPremierCopie).get();
+			Declarant declarant  =  premierCopie.getDeclarant();
+			Mere mere  =  premierCopie.getMere();
+			Pere pere =  premierCopie.getPere();
+			Enfant enfant =  premierCopie.getEnfant();
+			PieceJustificative pieceJustificative  =  premierCopie.getPieceJustificative();
 			
 			Maire maire = maireRepository.findById(premierCopieRequest.getIdMaire()).get();
 			
-			if (declarant != null) {
-				declarant.setNomDeclarant(premierCopieRequest.getNomDeclarant());
-				declarant.setPrenomsDeclarant(premierCopieRequest.getPrenomsDeclarant());
-				declarant.setDatenaissDeclarant(premierCopieRequest.getDatenaissDeclarant());
-				declarant.setLieuNaissDeclarant(premierCopieRequest.getLieuNaissDeclarant());
-				declarant.setAdressDeclarant(premierCopieRequest.getAdressDeclarant());
-
-		    	declarantRepository.save(declarant);
-		    } 			
-			if (mere != null) {
-				mere.setNomMere(premierCopieRequest.getNomMere());
-				mere.setPrenomsMere(premierCopieRequest.getPrenomsMere());
-				mere.setDatenaissMere(premierCopieRequest.getDatenaissMere());
-				mere.setLieuNaissMere(premierCopieRequest.getLieuNaissMere());
-				mere.setProfessionMere(premierCopieRequest.getProfessionMere());
-				mere.setAdresseMere(premierCopieRequest.getAdresseMere());
-		    	
-		    	mereRepository.save(mere);
-			}
-			if (pere != null) {
-				pere.setNomPere(premierCopieRequest.getNomPere());
-				pere.setPrenomsPere(premierCopieRequest.getPrenomsPere());
-				pere.setDatenaissPere(premierCopieRequest.getDatenaissPere());
-		    	pere.setLieuNaissPere(premierCopieRequest.getLieuNaissPere());
-		    	pere.setProfessionPere(premierCopieRequest.getProfessionPere());
-		    	pere.setAdressePere(premierCopieRequest.getAdressePere());
-
-		    	pereRepository.save(pere);
-			}
-			if (personne != null) {
-				personne.setDatenaissPersonne(premierCopieRequest.getDatenaissPersonne());
-		    	personne.setHeurenaissPersonne(premierCopieRequest.getHeurenaissPersonne());
-		    	personne.setLieuNaissPersonne(premierCopieRequest.getLieuNaissPersonne());
-		    	personne.setNomPersonne(premierCopieRequest.getNomPersonne());
-		    	personne.setPrenomsPersonne(premierCopieRequest.getPrenomsPersonne());
-		    	personne.setSexePersonne(premierCopieRequest.getSexePersonne());
-
-		    	personneRepository.save(personne);
-			}
-			 if (pieceJustificative != null) {
-				 pieceJustificative.setCertificatAccouch(premierCopieRequest.getCertificatAccouch());
-				 pieceJustificative.setCinDeclarant(premierCopieRequest.getCinDeclarant());
-				 pieceJustificative.setCinMere(premierCopieRequest.getCinMere());
-				 pieceJustificative.setLivretFamille(premierCopieRequest.getLivretFamille());
-			    	
-			    pieceJustificativeRepository.save(pieceJustificative);
-			 }
+			declarant.setNomDeclarant( premierCopieRequest.getNomDeclarant());
+			declarant.setPrenomsDeclarant(premierCopieRequest.getPrenomsDeclarant());
+			declarant.setDatenaissDeclarant( premierCopieRequest.getDatenaissDeclarant());
+			declarant.setLieuNaissDeclarant( premierCopieRequest.getLieuNaissDeclarant());
+			declarant.setAdressDeclarant( premierCopieRequest.getAdressDeclarant());
+			declarant.setProfessionDeclarant( premierCopieRequest.getProfessionDeclarant());			
+			declarantRepository.save(declarant);
 			
-			 premierCopie.setDescription(premierCopieRequest.getDescription());
-			 premierCopie.setMention(premierCopieRequest.getMention()) ;
-			 premierCopie.setMaire(maire);
-			 
-			 premierCopieRepository.save(premierCopie);
-			 
-			 return new ResponseEntity<>(premierCopie, HttpStatus.OK);	   
-		}else {
-		      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			mere.setNomMere( premierCopieRequest.getNomMere());
+			mere.setPrenomsMere( premierCopieRequest.getPrenomsMere());
+			mere.setDatenaissMere( premierCopieRequest.getDatenaissMere());
+			mere.setLieuNaissMere( premierCopieRequest.getLieuNaissMere());
+			mere.setProfessionMere( premierCopieRequest.getProfessionMere());
+			mere.setAdresseMere( premierCopieRequest.getAdresseMere());
+			mereRepository.save(mere);
+			
+			pere.setNomPere( premierCopieRequest.getNomPere());
+			pere.setPrenomsPere( premierCopieRequest.getPrenomsPere());
+			pere.setDatenaissPere( premierCopieRequest.getDatenaissPere());
+			pere.setLieuNaissPere( premierCopieRequest.getLieuNaissPere());
+			pere.setProfessionPere( premierCopieRequest.getProfessionPere());
+			pere.setAdressePere( premierCopieRequest.getAdressePere());
+			pereRepository.save(pere);
+			
+			enfant.setNomEnfant( premierCopieRequest.getNomEnfant());
+			enfant.setPrenomsEnfant( premierCopieRequest.getPrenomsEnfant());
+			enfant.setDatenaissEnfant( premierCopieRequest.getDatenaissEnfant());
+			enfant.setLieunaissEnfant( premierCopieRequest.getLieunaissEnfant());
+			enfant.setHeurenaissEnfant( premierCopieRequest.getHeurenaissEnfant());
+			enfant.setSexeEnfant( premierCopieRequest.getSexeEnfant());
+			enfant.setDateEnfant( premierCopieRequest.getDateEnfant());
+			enfant.setNomEnfant( premierCopieRequest.getNomEnfant());
+			enfantRepository.save(enfant);
+			
+			pieceJustificative.setCertificatAccouch( premierCopieRequest.getCertificatAccouch());
+			pieceJustificative.setLivretFamille( premierCopieRequest.getLivretFamille());
+			pieceJustificative.setCinMere( premierCopieRequest.getCinMere());
+			pieceJustificative.setCinDeclarant( premierCopieRequest.getCinDeclarant());
+			pieceJustificativeRepository.save(pieceJustificative);
+			
+			premierCopie.setIdPremierCopie( premierCopieRequest.getIdPremierCopie());
+			premierCopie.setDescription( premierCopieRequest.getDescription());
+			premierCopie.setMention( premierCopieRequest.getMention());
+			premierCopie.setDatePCopie( premierCopieRequest.getDatePCopie());
+			premierCopie.setDatePremierCopie( premierCopieRequest.getDatePremierCopie());
+			premierCopie.setDeclarant(declarant);
+			premierCopie.setMaire(maire);
+			premierCopie.setMere(mere);
+			premierCopie.setPere(pere);
+			premierCopie.setEnfant(enfant);
+			premierCopie.setPieceJustificative(pieceJustificative);			
+			premierCopieRepository.save(premierCopie);
+	   
+	   return new ResponseEntity<>(premierCopie, HttpStatus.CREATED);
+		}
+		catch (Exception e) {
+		      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		    }
 	}
 	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<HttpStatus>  supprPremierCopie(@PathVariable("id") long id)
+	@DeleteMapping("/{IdPremierCopie}")
+	public ResponseEntity<HttpStatus>  supprPremierCopie(@PathVariable("IdPremierCopie") long IdPremierCopie)
 	{	
 		try
 		{
-			PremierCopie premierCopie = premierCopieRepository.findById(id).get();
-			
-			if(premierCopie != null)
-			{
-				Declarant declarant = declarantRepository.findById(premierCopie.getDeclarant().getIdDeclarant()).get();
-				Mere mere = mereRepository.findById(premierCopie.getMere().getIdMere()).get();
-				Pere pere = pereRepository.findById(premierCopie.getPere().getIdPere()).get();
-				Personne personne = personneRepository.findById(premierCopie.getPersonne().getIdPersonne()).get();
-				PieceJustificative pieceJustificative = pieceJustificativeRepository.findById(premierCopie.getPieceJustificative().getIdPieceJustificative()).get();
-								
-				premierCopieRepository.delete(premierCopie);
-				declarantRepository.delete(declarant);
-				mereRepository.delete(mere);
-				pereRepository.delete(pere);
-				personneRepository.delete(personne);
-				pieceJustificativeRepository.delete(pieceJustificative);
+			PremierCopie premierCopie = premierCopieRepository.findById(IdPremierCopie).get();
+			Declarant declarant  =  premierCopie.getDeclarant();
+			Mere mere  =  premierCopie.getMere();
+			Pere pere =  premierCopie.getPere();
+			Enfant enfant =  premierCopie.getEnfant();
+			PieceJustificative pieceJustificative  =  premierCopie.getPieceJustificative();
 				
-		        return new ResponseEntity<>(HttpStatus.OK);
-			}
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			premierCopieRepository.delete(premierCopie);
+			pieceJustificativeRepository.delete(pieceJustificative);
+			enfantRepository.delete(enfant);
+			pereRepository.delete(pere);
+			mereRepository.delete(mere);
+			declarantRepository.delete(declarant);
+				
+		    return new ResponseEntity<>(HttpStatus.OK);
+			
 	    } 
 		catch (Exception e) {
 	      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	}
-	
 }

@@ -20,18 +20,17 @@ public class PieceJustificative {
 	private long idPieceJustificative;
 	
 	@Column(name = "certificatAccouch")
-	private Boolean certificatAccouch;
+	private boolean certificatAccouch;
 	
 	@Column(name = "livretFamille")
-	private Boolean livretFamille;
+	private boolean livretFamille;
 	
 	@Column(name = "cinMere")
-	private Boolean cinMere;
+	private boolean cinMere;
 	
 	@Column(name = "cinDeclarant")
-	private Boolean cinDeclarant;
+	private boolean cinDeclarant;
 
-	
 	public long getIdPieceJustificative() {
 		return idPieceJustificative;
 	}
@@ -40,39 +39,40 @@ public class PieceJustificative {
 		this.idPieceJustificative = idPieceJustificative;
 	}
 
-	public Boolean getCertificatAccouch() {
+	public boolean isCertificatAccouch() {
 		return certificatAccouch;
 	}
 
-	public void setCertificatAccouch(Boolean certificatAccouch) {
+	public void setCertificatAccouch(boolean certificatAccouch) {
 		this.certificatAccouch = certificatAccouch;
 	}
 
-	public Boolean getLivretFamille() {
+	public boolean isLivretFamille() {
 		return livretFamille;
 	}
 
-	public void setLivretFamille(Boolean livretFamille) {
+	public void setLivretFamille(boolean livretFamille) {
 		this.livretFamille = livretFamille;
 	}
 
-	public Boolean getCinMere() {
+	public boolean isCinMere() {
 		return cinMere;
 	}
 
-	public void setCinMere(Boolean cinMere) {
+	public void setCinMere(boolean cinMere) {
 		this.cinMere = cinMere;
 	}
 
-	public Boolean getCinDeclarant() {
+	public boolean isCinDeclarant() {
 		return cinDeclarant;
 	}
 
-	public void setCinDeclarant(Boolean cinDeclarant) {
+	public void setCinDeclarant(boolean cinDeclarant) {
 		this.cinDeclarant = cinDeclarant;
 	}
 
-	public PieceJustificative(Boolean certificatAccouch, Boolean livretFamille, Boolean cinMere, Boolean cinDeclarant) {
+	
+	public PieceJustificative(boolean certificatAccouch, boolean livretFamille, boolean cinMere, boolean cinDeclarant) {
 		this.certificatAccouch = certificatAccouch;
 		this.livretFamille = livretFamille;
 		this.cinMere = cinMere;
@@ -84,6 +84,7 @@ public class PieceJustificative {
 		// TODO Auto-generated constructor stub
 	}
 
+	
 	
 	
 }

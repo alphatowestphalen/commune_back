@@ -1,24 +1,16 @@
 package com.example.demo.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.*;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="premierCopie")
 public class PremierCopie {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "idPremierCopie")
 	private long idPremierCopie;
 	
@@ -27,6 +19,12 @@ public class PremierCopie {
 	
 	@Column(name = "mention")
 	private String mention;
+	
+	@Column(name = "datePCopie")
+	private String datePCopie;
+	
+	@Column(name = "datePremierCopie")
+	private String datePremierCopie;
 	
 	@ManyToOne()
 	  @JoinColumn(name ="idDeclarant")
@@ -45,12 +43,30 @@ public class PremierCopie {
 	  private Pere pere;
 	
 	@ManyToOne()
-	  @JoinColumn(name = "idPersonne")
-	  private Personne personne;
+	  @JoinColumn(name = "idEnfant")
+	  private Enfant enfant;
 	
 	@ManyToOne()
 	  @JoinColumn(name = "idPieceJustificative")
 	  private PieceJustificative pieceJustificative;
+	
+	@ManyToMany(fetch = FetchType.LAZY,
+		      cascade = {
+		          CascadeType.PERSIST,
+		          CascadeType.MERGE
+		      })
+		  @JoinTable(name = "premierCopie_reconnaissances",
+		        joinColumns = { @JoinColumn(name = "idPremierCopie") },
+		        inverseJoinColumns = { @JoinColumn(name = "idReconnaissance") })
+		  private Set<Reconnaissance> reconnaissances = new HashSet<>();
+
+	public long getIdPremierCopie() {
+		return idPremierCopie;
+	}
+
+	public void setIdPremierCopie(long idPremierCopie) {
+		this.idPremierCopie = idPremierCopie;
+	}
 
 	public String getDescription() {
 		return description;
@@ -66,6 +82,22 @@ public class PremierCopie {
 
 	public void setMention(String mention) {
 		this.mention = mention;
+	}
+
+	public String getDatePCopie() {
+		return datePCopie;
+	}
+
+	public void setDatePCopie(String datePCopie) {
+		this.datePCopie = datePCopie;
+	}
+
+	public String getDatePremierCopie() {
+		return datePremierCopie;
+	}
+
+	public void setDatePremierCopie(String datePremierCopie) {
+		this.datePremierCopie = datePremierCopie;
 	}
 
 	public Declarant getDeclarant() {
@@ -100,12 +132,12 @@ public class PremierCopie {
 		this.pere = pere;
 	}
 
-	public Personne getPersonne() {
-		return personne;
+	public Enfant getEnfant() {
+		return enfant;
 	}
 
-	public void setPersonne(Personne personne) {
-		this.personne = personne;
+	public void setEnfant(Enfant enfant) {
+		this.enfant = enfant;
 	}
 
 	public PieceJustificative getPieceJustificative() {
@@ -116,16 +148,30 @@ public class PremierCopie {
 		this.pieceJustificative = pieceJustificative;
 	}
 
-	public PremierCopie(String description, String mention, Declarant declarant, Mere mere, Pere pere,
-			Personne personne, PieceJustificative pieceJustificative, Maire maire) {
+	
+	
+	public Set<Reconnaissance> getReconnaissances() {
+		return reconnaissances;
+	}
+
+	public void setReconnaissances(Set<Reconnaissance> reconnaissances) {
+		this.reconnaissances = reconnaissances;
+	}
+
+	public PremierCopie(long idPremierCopie, String description, String mention, String datePCopie,
+			String datePremierCopie, Declarant declarant, Maire maire, Mere mere, Pere pere, Enfant enfant,
+			PieceJustificative pieceJustificative) {
+		this.idPremierCopie = idPremierCopie;
 		this.description = description;
 		this.mention = mention;
+		this.datePCopie = datePCopie;
+		this.datePremierCopie = datePremierCopie;
 		this.declarant = declarant;
+		this.maire = maire;
 		this.mere = mere;
 		this.pere = pere;
-		this.personne = personne;
+		this.enfant = enfant;
 		this.pieceJustificative = pieceJustificative;
-		this.maire = maire;
 	}
 
 	public PremierCopie() {
@@ -133,7 +179,18 @@ public class PremierCopie {
 		// TODO Auto-generated constructor stub
 	}
 
-	
+	public void addReconnaissance(Reconnaissance reconnaissance) {
+	    this.reconnaissances.add(reconnaissance);
+	    reconnaissance.getPremierCopies().add(this);
+	  }
+	  
+	  public void removeReconnaissance(long idReconnaissance) {
+		  Reconnaissance reconnaissance = this.reconnaissances.stream().filter(r -> r.getIdReconnaissance() == idReconnaissance).findFirst().orElse(null);
+	    if (reconnaissance != null) {
+	      this.reconnaissances.remove(reconnaissance);
+	      reconnaissance.getPremierCopies().remove(this);
+	    }
+	  }
 	
 
 }

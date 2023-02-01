@@ -25,8 +25,8 @@ public class Pere {
 	@Column(name = "datenaissPere")
 	private String datenaissPere;
 	
-	@Column(name = "lieuNaissPere")
-	private String lieuNaissPere;
+	@Column(name = "lieunaissPere")
+	private String lieunaissPere;
 	
 	@Column(name = "professionPere")
 	private String professionPere;
@@ -67,11 +67,11 @@ public class Pere {
 	}
 
 	public String getLieuNaissPere() {
-		return lieuNaissPere;
+		return lieunaissPere;
 	}
 
 	public void setLieuNaissPere(String lieuNaissPere) {
-		this.lieuNaissPere = lieuNaissPere;
+		this.lieunaissPere = lieuNaissPere;
 	}
 
 	public String getProfessionPere() {
@@ -95,7 +95,7 @@ public class Pere {
 		this.nomPere = nomPere;
 		this.prenomsPere = prenomsPere;
 		this.datenaissPere = datenaissPere;
-		this.lieuNaissPere = lieuNaissPere;
+		this.lieunaissPere = lieuNaissPere;
 		this.professionPere = professionPere;
 		this.adressePere = adressePere;
 	}
