@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
 import com.example.demo.model.Declarant;
 import com.example.demo.model.Enfant;
@@ -144,14 +145,11 @@ public class PremierCopieController {
 	@GetMapping("/{id}")
 	  public ResponseEntity<PremierCopie> getByIdPremierCopie(@PathVariable("id") Long id) 
 	{
-		PremierCopie premierCopie = premierCopieRepository.findById(id).get();
-		
-	   if(premierCopie != null){		   
-		      return new ResponseEntity<>(premierCopie, HttpStatus.OK);	   
-	   }
-	   else {
-		   return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	   }	   	     	   
+		PremierCopie premierCopie = premierCopieRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Not found Premier Copie with id = " + id));;
+			  		   
+		return new ResponseEntity<>(premierCopie, HttpStatus.OK);	   
+	   	   	     	   
 	 }
 	
 	@PutMapping("/{IdPremierCopie}")
@@ -159,7 +157,9 @@ public class PremierCopieController {
 			@RequestBody PremierCopieRequest premierCopieRequest) 
 	{
 		try {
-			PremierCopie premierCopie = premierCopieRepository.findById(IdPremierCopie).get();
+			PremierCopie premierCopie = premierCopieRepository.findById(IdPremierCopie)
+					.orElseThrow(() -> new ResourceNotFoundException("Not found Premier Copie with id = " + IdPremierCopie));;
+				  		   
 			Declarant declarant  =  premierCopie.getDeclarant();
 			Mere mere  =  premierCopie.getMere();
 			Pere pere =  premierCopie.getPere();

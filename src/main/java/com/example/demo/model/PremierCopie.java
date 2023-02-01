@@ -55,10 +55,20 @@ public class PremierCopie {
 		          CascadeType.PERSIST,
 		          CascadeType.MERGE
 		      })
-		  @JoinTable(name = "premierCopie_reconnaissances",
-		        joinColumns = { @JoinColumn(name = "idPremierCopie") },
-		        inverseJoinColumns = { @JoinColumn(name = "idReconnaissance") })
-		  private Set<Reconnaissance> reconnaissances = new HashSet<>();
+	  @JoinTable(name = "premierCopie_reconnaissances",
+	        joinColumns = { @JoinColumn(name = "idPremierCopie") },
+	        inverseJoinColumns = { @JoinColumn(name = "idReconnaissance") })
+	  private Set<Reconnaissance> reconnaissances = new HashSet<>();
+	
+	@ManyToMany(fetch = FetchType.LAZY,
+		      cascade = {
+		          CascadeType.PERSIST,
+		          CascadeType.MERGE
+		      })
+	  @JoinTable(name = "premierCopie_adoptions",
+	        joinColumns = { @JoinColumn(name = "idPremierCopie") },
+	        inverseJoinColumns = { @JoinColumn(name = "idAdoption") })
+	  private Set<Adoption> adoptions = new HashSet<>();
 
 	public long getIdPremierCopie() {
 		return idPremierCopie;
@@ -158,6 +168,15 @@ public class PremierCopie {
 		this.reconnaissances = reconnaissances;
 	}
 
+	
+	public Set<Adoption> getAdoptions() {
+		return adoptions;
+	}
+
+	public void setAdoptions(Set<Adoption> adoptions) {
+		this.adoptions = adoptions;
+	}
+
 	public PremierCopie(long idPremierCopie, String description, String mention, String datePCopie,
 			String datePremierCopie, Declarant declarant, Maire maire, Mere mere, Pere pere, Enfant enfant,
 			PieceJustificative pieceJustificative) {
@@ -191,6 +210,18 @@ public class PremierCopie {
 	      reconnaissance.getPremierCopies().remove(this);
 	    }
 	  }
-	
+	  public void addAdoption(Adoption adoption) {
+		    this.adoptions.add(adoption);
+		    adoption.getPremierCopies().add(this);
+		  }
+		  
+		  public void removeAdoption(long idAdoption) {
+			  Adoption adoption = this.adoptions.stream().filter(r -> r.getIdAdoption() == idAdoption).findFirst().orElse(null);
+		    if (adoption != null) {
+		      this.adoptions.remove(adoption);
+		      adoption.getPremierCopies().remove(this);
+		    }
+		  }
+	  
 
 }
