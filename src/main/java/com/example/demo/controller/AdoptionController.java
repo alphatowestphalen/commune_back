@@ -108,7 +108,7 @@ public class AdoptionController {
 		
 	}
 	@DeleteMapping("/{id}")
-	  public ResponseEntity<HttpStatus> deleteTag(@PathVariable("id") long id) 
+	  public ResponseEntity<HttpStatus> deleteAdoption(@PathVariable("id") long id) 
 	{
 		try {
 			adoptionRepository.deleteById(id);
