@@ -39,7 +39,7 @@ public class Adoption {
 		          CascadeType.PERSIST,
 		          CascadeType.MERGE
 		      },
-		      mappedBy = "reconnaissances")
+		      mappedBy = "adoptions")
 	@JsonIgnore
 	private Set<PremierCopie> premierCopies = new HashSet<>();
 

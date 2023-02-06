@@ -33,7 +33,7 @@ public class Jugement {
 		          CascadeType.PERSIST,
 		          CascadeType.MERGE
 		      },
-		      mappedBy = "reconnaissances")
+		      mappedBy = "jugements")
 	@JsonIgnore
 	private Set<PremierCopie> premierCopies = new HashSet<>();
 

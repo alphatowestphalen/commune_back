@@ -79,6 +79,16 @@ public class PremierCopie {
 	        joinColumns = { @JoinColumn(name = "idPremierCopie") },
 	        inverseJoinColumns = { @JoinColumn(name = "idJugement") })
 	  private Set<Jugement> jugements = new HashSet<>();
+	
+	@ManyToMany(fetch = FetchType.LAZY,
+		      cascade = {
+		          CascadeType.PERSIST,
+		          CascadeType.MERGE
+		      })
+	  @JoinTable(name = "premierCopie_deces",
+	        joinColumns = { @JoinColumn(name = "idPremierCopie") },
+	        inverseJoinColumns = { @JoinColumn(name = "idActeDeces") })
+	  private Set<ActeDeces> acteDeces = new HashSet<>();
 
 	public long getIdPremierCopie() {
 		return idPremierCopie;
@@ -196,6 +206,14 @@ public class PremierCopie {
 		this.jugements = jugements;
 	}
 
+	public Set<ActeDeces> getActeDeces() {
+		return acteDeces;
+	}
+
+	public void setActeDeces(Set<ActeDeces> acteDeces) {
+		this.acteDeces = acteDeces;
+	}
+
 	public PremierCopie(long idPremierCopie, String description, String mention, String datePCopie,
 			String datePremierCopie, Declarant declarant, Maire maire, Mere mere, Pere pere, Enfant enfant,
 			PieceJustificative pieceJustificative) {
@@ -243,16 +261,28 @@ public class PremierCopie {
 		    }
 		  }
 	 
-		  public void addJugement(Jugement jugement) {
-			    this.jugements.add(jugement);
-			    jugement.getPremierCopies().add(this);
+	  public void addJugement(Jugement jugement) {
+		    this.jugements.add(jugement);
+		    jugement.getPremierCopies().add(this);
+		  }
+		  
+		  public void removeJugement(long idJugement) {
+			  Jugement jugement = this.jugements.stream().filter(r -> r.getIdJugement() == idJugement).findFirst().orElse(null);
+		    if (jugement != null) {
+		      this.jugements.remove(jugement);
+		      jugement.getPremierCopies().remove(this);
+		    }
+		  }
+		  public void addDeces(ActeDeces acteDeces) {
+			    this.acteDeces.add(acteDeces);
+			    acteDeces.getPremierCopies().add(this);
 			  }
 			  
-			  public void removeJugement(long idJugement) {
-				  Jugement jugement = this.jugements.stream().filter(r -> r.getIdJugement() == idJugement).findFirst().orElse(null);
-			    if (jugement != null) {
-			      this.jugements.remove(jugement);
-			      jugement.getPremierCopies().remove(this);
+			  public void removeDeces(long idActeDeces) {
+				  ActeDeces acteDeces = this.acteDeces.stream().filter(r -> r.getIdActeDeces() == idActeDeces).findFirst().orElse(null);
+			    if (acteDeces != null) {
+			      this.acteDeces.remove(acteDeces);
+			      acteDeces.getPremierCopies().remove(this);
 			    }
 			  }
 
