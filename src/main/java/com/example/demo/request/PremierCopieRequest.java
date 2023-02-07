@@ -5,22 +5,33 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class PremierCopieRequest {
 
+	private long idPremierCopie;
+	
 	private String description;
 	
 	private String mention;
+	
+	@JsonFormat(pattern ="dd/MM/yyyy")
+	private String datePCopie;
+	
+	private String datePremierCopie;
 	
 	private String nomDeclarant;
 	
 	private String prenomsDeclarant;
 	
-	@JsonFormat(pattern ="dd/MM/yyyy")
 	private String datenaissDeclarant;
+	
+	private String lieuNaissDeclarant;
+	
+	private String adressDeclarant;
+	
+	private String professionDeclarant;
 	
 	private String nomMere;
 	
 	private String prenomsMere;
 	
-	@JsonFormat(pattern ="dd/MM/yyyy")
 	private String datenaissMere;
 	
 	private String lieuNaissMere;
@@ -33,7 +44,6 @@ public class PremierCopieRequest {
 	
 	private String prenomsPere;
 	
-	@JsonFormat(pattern ="dd/MM/yyyy")
 	private String datenaissPere;
 	
 	private String lieuNaissPere;
@@ -42,18 +52,20 @@ public class PremierCopieRequest {
 	
 	private String adressePere;
 	
+	private String nomEnfant;
+	
+	private String prenomsEnfant;
+	
+	private String datenaissEnfant;
+	
+	private String lieunaissEnfant;
+	
+	private String heurenaissEnfant;
+	
+	private String sexeEnfant;
+	
 	@JsonFormat(pattern ="dd/MM/yyyy")
-	private String datenaissPersonne;
-	
-	private String heurenaissPersonne;
-	
-	private String lieuNaissPersonne;
-	
-	private String nomPersonne;
-	
-	private String prenomsPersonne;
-	
-	private String sexePersonne;
+	private String dateEnfant;
 	
 	private Boolean certificatAccouch;
 	
@@ -63,11 +75,15 @@ public class PremierCopieRequest {
 	
 	private Boolean cinDeclarant;
 	
-	private String lieuNaissDeclarant;
+	private long idMaire;
 
-	private String adressDeclarant;
-	
-	private Long idMaire;
+	public long getIdPremierCopie() {
+		return idPremierCopie;
+	}
+
+	public void setIdPremierCopie(long idPremierCopie) {
+		this.idPremierCopie = idPremierCopie;
+	}
 
 	public String getDescription() {
 		return description;
@@ -83,6 +99,22 @@ public class PremierCopieRequest {
 
 	public void setMention(String mention) {
 		this.mention = mention;
+	}
+
+	public String getDatePCopie() {
+		return datePCopie;
+	}
+
+	public void setDatePCopie(String datePCopie) {
+		this.datePCopie = datePCopie;
+	}
+
+	public String getDatePremierCopie() {
+		return datePremierCopie;
+	}
+
+	public void setDatePremierCopie(String datePremierCopie) {
+		this.datePremierCopie = datePremierCopie;
 	}
 
 	public String getNomDeclarant() {
@@ -107,6 +139,30 @@ public class PremierCopieRequest {
 
 	public void setDatenaissDeclarant(String datenaissDeclarant) {
 		this.datenaissDeclarant = datenaissDeclarant;
+	}
+
+	public String getLieuNaissDeclarant() {
+		return lieuNaissDeclarant;
+	}
+
+	public void setLieuNaissDeclarant(String lieuNaissDeclarant) {
+		this.lieuNaissDeclarant = lieuNaissDeclarant;
+	}
+
+	public String getAdressDeclarant() {
+		return adressDeclarant;
+	}
+
+	public void setAdressDeclarant(String adressDeclarant) {
+		this.adressDeclarant = adressDeclarant;
+	}
+
+	public String getProfessionDeclarant() {
+		return professionDeclarant;
+	}
+
+	public void setProfessionDeclarant(String professionDeclarant) {
+		this.professionDeclarant = professionDeclarant;
 	}
 
 	public String getNomMere() {
@@ -205,52 +261,60 @@ public class PremierCopieRequest {
 		this.adressePere = adressePere;
 	}
 
-	public String getDatenaissPersonne() {
-		return datenaissPersonne;
+	public String getNomEnfant() {
+		return nomEnfant;
 	}
 
-	public void setDatenaissPersonne(String datenaissPersonne) {
-		this.datenaissPersonne = datenaissPersonne;
+	public void setNomEnfant(String nomEnfant) {
+		this.nomEnfant = nomEnfant;
 	}
 
-	public String getHeurenaissPersonne() {
-		return heurenaissPersonne;
+	public String getPrenomsEnfant() {
+		return prenomsEnfant;
 	}
 
-	public void setHeurenaissPersonne(String heurenaissPersonne) {
-		this.heurenaissPersonne = heurenaissPersonne;
+	public void setPrenomsEnfant(String prenomsEnfant) {
+		this.prenomsEnfant = prenomsEnfant;
 	}
 
-	public String getLieuNaissPersonne() {
-		return lieuNaissPersonne;
+	public String getDatenaissEnfant() {
+		return datenaissEnfant;
 	}
 
-	public void setLieuNaissPersonne(String lieuNaissPersonne) {
-		this.lieuNaissPersonne = lieuNaissPersonne;
+	public void setDatenaissEnfant(String datenaissEnfant) {
+		this.datenaissEnfant = datenaissEnfant;
 	}
 
-	public String getNomPersonne() {
-		return nomPersonne;
+	public String getLieunaissEnfant() {
+		return lieunaissEnfant;
 	}
 
-	public void setNomPersonne(String nomPersonne) {
-		this.nomPersonne = nomPersonne;
+	public void setLieunaissEnfant(String lieunaissEnfant) {
+		this.lieunaissEnfant = lieunaissEnfant;
 	}
 
-	public String getPrenomsPersonne() {
-		return prenomsPersonne;
+	public String getHeurenaissEnfant() {
+		return heurenaissEnfant;
 	}
 
-	public void setPrenomsPersonne(String prenomsPersonne) {
-		this.prenomsPersonne = prenomsPersonne;
+	public void setHeurenaissEnfant(String heurenaissEnfant) {
+		this.heurenaissEnfant = heurenaissEnfant;
 	}
 
-	public String getSexePersonne() {
-		return sexePersonne;
+	public String getSexeEnfant() {
+		return sexeEnfant;
 	}
 
-	public void setSexePersonne(String sexePersonne) {
-		this.sexePersonne = sexePersonne;
+	public void setSexeEnfant(String sexeEnfant) {
+		this.sexeEnfant = sexeEnfant;
+	}
+
+	public String getDateEnfant() {
+		return dateEnfant;
+	}
+
+	public void setDateEnfant(String dateEnfant) {
+		this.dateEnfant = dateEnfant;
 	}
 
 	public Boolean getCertificatAccouch() {
@@ -285,29 +349,15 @@ public class PremierCopieRequest {
 		this.cinDeclarant = cinDeclarant;
 	}
 
-	public String getLieuNaissDeclarant() {
-		return lieuNaissDeclarant;
-	}
-
-	public void setLieuNaissDeclarant(String lieuNaissDeclarant) {
-		this.lieuNaissDeclarant = lieuNaissDeclarant;
-	}
-
-	public String getAdressDeclarant() {
-		return adressDeclarant;
-	}
-
-	public void setAdressDeclarant(String adressDeclarant) {
-		this.adressDeclarant = adressDeclarant;
-	}
-
-	public Long getIdMaire() {
+	public long getIdMaire() {
 		return idMaire;
 	}
 
-	public void setIdMaire(Long idMaire) {
+	public void setIdMaire(long idMaire) {
 		this.idMaire = idMaire;
 	}
+
 	
+
 	
 }

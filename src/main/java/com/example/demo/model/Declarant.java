@@ -1,12 +1,7 @@
 package com.example.demo.model;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="declarant")
@@ -27,11 +22,14 @@ public class Declarant {
 	@Column(name = "datenaissDeclarant")
 	private String datenaissDeclarant;
 	
-	@Column(name = "lieuNaissDeclarant")
-	private String lieuNaissDeclarant;
+	@Column(name = "lieunaissDeclarant")
+	private String lieunaissDeclarant;
 	
-	@Column(name = "adressDeclarant")
-	private String adressDeclarant;
+	@Column(name = "adresseDeclarant")
+	private String adresseDeclarant;
+	
+	@Column(name = "professionDeclarant")
+	private String professionDeclarant;
 
 	public long getIdDeclarant() {
 		return idDeclarant;
@@ -66,34 +64,44 @@ public class Declarant {
 	}
 
 	public String getLieuNaissDeclarant() {
-		return lieuNaissDeclarant;
+		return lieunaissDeclarant;
 	}
 
 	public void setLieuNaissDeclarant(String lieuNaissDeclarant) {
-		this.lieuNaissDeclarant = lieuNaissDeclarant;
+		this.lieunaissDeclarant = lieuNaissDeclarant;
 	}
 
 	public String getAdressDeclarant() {
-		return adressDeclarant;
+		return adresseDeclarant;
 	}
 
 	public void setAdressDeclarant(String adressDeclarant) {
-		this.adressDeclarant = adressDeclarant;
+		this.adresseDeclarant = adressDeclarant;
+	}
+
+	public String getProfessionDeclarant() {
+		return professionDeclarant;
+	}
+
+	public void setProfessionDeclarant(String professionDeclarant) {
+		this.professionDeclarant = professionDeclarant;
 	}
 
 	public Declarant(String nomDeclarant, String prenomsDeclarant, String datenaissDeclarant, String lieuNaissDeclarant,
-			String adressDeclarant) {
+			String adressDeclarant, String professionDeclarant) {
 		this.nomDeclarant = nomDeclarant;
 		this.prenomsDeclarant = prenomsDeclarant;
 		this.datenaissDeclarant = datenaissDeclarant;
-		this.lieuNaissDeclarant = lieuNaissDeclarant;
-		this.adressDeclarant = adressDeclarant;
+		this.lieunaissDeclarant = lieuNaissDeclarant;
+		this.adresseDeclarant = adressDeclarant;
+		this.professionDeclarant = professionDeclarant;
 	}
 
 	public Declarant() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
 	
 	
 
