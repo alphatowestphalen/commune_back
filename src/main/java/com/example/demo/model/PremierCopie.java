@@ -1,9 +1,11 @@
 package com.example.demo.model;
 
-import java.util.HashSet;
-import java.util.Set;
+
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
 @Entity
@@ -50,45 +52,19 @@ public class PremierCopie {
 	  @JoinColumn(name = "idPieceJustificative")
 	  private PieceJustificative pieceJustificative;
 	
-	@ManyToMany(fetch = FetchType.LAZY,
-		      cascade = {
-		          CascadeType.PERSIST,
-		          CascadeType.MERGE
-		      })
-	  @JoinTable(name = "premierCopie_reconnaissances",
-	        joinColumns = { @JoinColumn(name = "idPremierCopie") },
-	        inverseJoinColumns = { @JoinColumn(name = "idReconnaissance") })
-	  private Set<Reconnaissance> reconnaissances = new HashSet<>();
+	 @OneToOne(mappedBy = "premierCopie")
+	 private Reconnaissance reconnaissance;
 	
-	@ManyToMany(fetch = FetchType.LAZY,
-		      cascade = {
-		          CascadeType.PERSIST,
-		          CascadeType.MERGE
-		      })
-	  @JoinTable(name = "premierCopie_adoptions",
-	        joinColumns = { @JoinColumn(name = "idPremierCopie") },
-	        inverseJoinColumns = { @JoinColumn(name = "idAdoption") })
-	  private Set<Adoption> adoptions = new HashSet<>();
+	 @OneToOne(mappedBy = "premierCopie")
+	 private Adoption adoption;
 	
-	@ManyToMany(fetch = FetchType.LAZY,
-		      cascade = {
-		          CascadeType.PERSIST,
-		          CascadeType.MERGE
-		      })
-	  @JoinTable(name = "premierCopie_jugements",
-	        joinColumns = { @JoinColumn(name = "idPremierCopie") },
-	        inverseJoinColumns = { @JoinColumn(name = "idJugement") })
-	  private Set<Jugement> jugements = new HashSet<>();
+	 @OneToOne(mappedBy = "premierCopie")
+	 private Jugement jugement;
 	
-	@ManyToMany(fetch = FetchType.LAZY,
-		      cascade = {
-		          CascadeType.PERSIST,
-		          CascadeType.MERGE
-		      })
-	  @JoinTable(name = "premierCopie_deces",
-	        joinColumns = { @JoinColumn(name = "idPremierCopie") },
-	        inverseJoinColumns = { @JoinColumn(name = "idActeDeces") })
-	  private Set<ActeDeces> acteDeces = new HashSet<>();
+	 @OneToOne(mappedBy = "premierCopie")
+	 private ActeDeces acteDeces;
+
+	
 
 	public long getIdPremierCopie() {
 		return idPremierCopie;
@@ -178,39 +154,35 @@ public class PremierCopie {
 		this.pieceJustificative = pieceJustificative;
 	}
 
-	
-	
-	public Set<Reconnaissance> getReconnaissances() {
-		return reconnaissances;
+	public Reconnaissance getReconnaissance() {
+		return reconnaissance;
 	}
 
-	public void setReconnaissances(Set<Reconnaissance> reconnaissances) {
-		this.reconnaissances = reconnaissances;
+	public void setReconnaissance(Reconnaissance reconnaissance) {
+		this.reconnaissance = reconnaissance;
 	}
 
-	
-	public Set<Adoption> getAdoptions() {
-		return adoptions;
+	public Adoption getAdoption() {
+		return adoption;
 	}
 
-	public void setAdoptions(Set<Adoption> adoptions) {
-		this.adoptions = adoptions;
+	public void setAdoption(Adoption adoption) {
+		this.adoption = adoption;
 	}
 
-	
-	public Set<Jugement> getJugements() {
-		return jugements;
+	public Jugement getJugement() {
+		return jugement;
 	}
 
-	public void setJugements(Set<Jugement> jugements) {
-		this.jugements = jugements;
+	public void setJugement(Jugement jugement) {
+		this.jugement = jugement;
 	}
 
-	public Set<ActeDeces> getActeDeces() {
+	public ActeDeces getActeDeces() {
 		return acteDeces;
 	}
 
-	public void setActeDeces(Set<ActeDeces> acteDeces) {
+	public void setActeDeces(ActeDeces acteDeces) {
 		this.acteDeces = acteDeces;
 	}
 
@@ -235,55 +207,5 @@ public class PremierCopie {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void addReconnaissance(Reconnaissance reconnaissance) {
-	    this.reconnaissances.add(reconnaissance);
-	    reconnaissance.getPremierCopies().add(this);
-	  }
-	  
-	  public void removeReconnaissance(long idReconnaissance) {
-		  Reconnaissance reconnaissance = this.reconnaissances.stream().filter(r -> r.getIdReconnaissance() == idReconnaissance).findFirst().orElse(null);
-	    if (reconnaissance != null) {
-	      this.reconnaissances.remove(reconnaissance);
-	      reconnaissance.getPremierCopies().remove(this);
-	    }
-	  }
-	  
-	  public void addAdoption(Adoption adoption) {
-		    this.adoptions.add(adoption);
-		    adoption.getPremierCopies().add(this);
-		  }
-		  
-		  public void removeAdoption(long idAdoption) {
-			  Adoption adoption = this.adoptions.stream().filter(r -> r.getIdAdoption() == idAdoption).findFirst().orElse(null);
-		    if (adoption != null) {
-		      this.adoptions.remove(adoption);
-		      adoption.getPremierCopies().remove(this);
-		    }
-		  }
-	 
-	  public void addJugement(Jugement jugement) {
-		    this.jugements.add(jugement);
-		    jugement.getPremierCopies().add(this);
-		  }
-		  
-		  public void removeJugement(long idJugement) {
-			  Jugement jugement = this.jugements.stream().filter(r -> r.getIdJugement() == idJugement).findFirst().orElse(null);
-		    if (jugement != null) {
-		      this.jugements.remove(jugement);
-		      jugement.getPremierCopies().remove(this);
-		    }
-		  }
-		  public void addDeces(ActeDeces acteDeces) {
-			    this.acteDeces.add(acteDeces);
-			    acteDeces.getPremierCopies().add(this);
-			  }
-			  
-			  public void removeDeces(long idActeDeces) {
-				  ActeDeces acteDeces = this.acteDeces.stream().filter(r -> r.getIdActeDeces() == idActeDeces).findFirst().orElse(null);
-			    if (acteDeces != null) {
-			      this.acteDeces.remove(acteDeces);
-			      acteDeces.getPremierCopies().remove(this);
-			    }
-			  }
-
+	
 }

@@ -1,14 +1,13 @@
 package com.example.demo.model;
 
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.*;
 
 import org.springframework.data.annotation.CreatedDate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 @Entity
 @Table(name="jugement")
@@ -28,15 +27,11 @@ public class Jugement {
 	@CreatedDate
 	private Instant createdDate;
 	
-	@ManyToMany(fetch = FetchType.LAZY,
-		      cascade = {
-		          CascadeType.PERSIST,
-		          CascadeType.MERGE
-		      },
-		      mappedBy = "jugements")
-	@JsonIgnore
-	private Set<PremierCopie> premierCopies = new HashSet<>();
-
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idPremierCopie")
+	@JsonManagedReference
+	private PremierCopie premierCopie;
+	
 	public long getIdJugement() {
 		return idJugement;
 	}
@@ -69,19 +64,22 @@ public class Jugement {
 		this.createdDate = createdDate;
 	}
 
-	public Set<PremierCopie> getPremierCopies() {
-		return premierCopies;
+	
+
+	public PremierCopie getPremierCopie() {
+		return premierCopie;
 	}
 
-	public void setPremierCopies(Set<PremierCopie> premierCopies) {
-		this.premierCopies = premierCopies;
+	public void setPremierCopie(PremierCopie premierCopie) {
+		this.premierCopie = premierCopie;
 	}
 
-	public Jugement(String infoChangement, String numJugement, Instant createdDate, Set<PremierCopie> premierCopies) {
+	
+	public Jugement(String infoChangement, String numJugement, Instant createdDate, PremierCopie premierCopie) {
 		this.infoChangement = infoChangement;
 		this.numJugement = numJugement;
 		this.createdDate = createdDate;
-		this.premierCopies = premierCopies;
+		this.premierCopie = premierCopie;
 	}
 
 	public Jugement() {

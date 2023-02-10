@@ -9,6 +9,7 @@ import javax.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name="acteDeces")
@@ -60,14 +61,12 @@ public class ActeDeces {
 	@CreatedDate
 	private Instant createdDate;
 	
-	@ManyToMany(fetch = FetchType.LAZY,
-		      cascade = {
-		          CascadeType.PERSIST,
-		          CascadeType.MERGE
-		      },
-		      mappedBy = "acteDeces")
-	@JsonIgnore
-	private Set<PremierCopie> premierCopies = new HashSet<>();
+
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idPremierCopie")
+	@JsonManagedReference
+	private PremierCopie premierCopie;
+	
 
 	public long getIdActeDeces() {
 		return idActeDeces;
@@ -181,17 +180,22 @@ public class ActeDeces {
 		this.createdDate = createdDate;
 	}
 
-	public Set<PremierCopie> getPremierCopies() {
-		return premierCopies;
+	
+
+	public PremierCopie getPremierCopie() {
+		return premierCopie;
 	}
 
-	public void setPremierCopies(Set<PremierCopie> premierCopies) {
-		this.premierCopies = premierCopies;
+	public void setPremierCopie(PremierCopie premierCopie) {
+		this.premierCopie = premierCopie;
 	}
+
+	
 
 	public ActeDeces(long idActeDeces, String dateDeclaration, String heureDeclaration, String nomDeclarant,
 			String prenomsDeclarant, String professionDeclarant, String lieuNaissanceDeclarant, String adresseDeclarant,
-			String dateNaissanceDeclarant, String date, Maire maire, Defunt defunt, PieceDeces pieceDeces, Instant createdDate) {
+			String dateNaissanceDeclarant, String date, Maire maire, Defunt defunt, PieceDeces pieceDeces,
+			Instant createdDate, PremierCopie premierCopie) {
 		this.idActeDeces = idActeDeces;
 		this.dateDeclaration = dateDeclaration;
 		this.heureDeclaration = heureDeclaration;
@@ -206,6 +210,7 @@ public class ActeDeces {
 		this.defunt = defunt;
 		this.pieceDeces = pieceDeces;
 		this.createdDate = createdDate;
+		this.premierCopie = premierCopie;
 	}
 
 	public ActeDeces() {

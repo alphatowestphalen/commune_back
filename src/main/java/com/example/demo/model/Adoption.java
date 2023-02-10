@@ -9,6 +9,7 @@ import javax.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name="adoption")
@@ -34,14 +35,10 @@ public class Adoption {
 	@CreatedDate
 	private Instant createdDate;
 	
-	@ManyToMany(fetch = FetchType.LAZY,
-		      cascade = {
-		          CascadeType.PERSIST,
-		          CascadeType.MERGE
-		      },
-		      mappedBy = "adoptions")
-	@JsonIgnore
-	private Set<PremierCopie> premierCopies = new HashSet<>();
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idPremierCopie")
+	@JsonManagedReference
+	private PremierCopie premierCopie;
 
 	public long getIdAdoption() {
 		return idAdoption;
@@ -91,20 +88,25 @@ public class Adoption {
 		this.createdDate = createdDate;
 	}
 
-	public Set<PremierCopie> getPremierCopies() {
-		return premierCopies;
+	
+
+	public PremierCopie getPremierCopie() {
+		return premierCopie;
 	}
 
-	public void setPremierCopies(Set<PremierCopie> premierCopies) {
-		this.premierCopies = premierCopies;
+	public void setPremierCopie(PremierCopie premierCopie) {
+		this.premierCopie = premierCopie;
 	}
 
-	public Adoption(String parentAdoptif, String dateAdoption, String heureAdoption, String numAdoption, Set<PremierCopie> premierCopies) {
+	
+	public Adoption(String parentAdoptif, String dateAdoption, String heureAdoption, String numAdoption,
+			Instant createdDate, PremierCopie premierCopie) {
 		this.parentAdoptif = parentAdoptif;
 		this.dateAdoption = dateAdoption;
 		this.heureAdoption = heureAdoption;
 		this.numAdoption = numAdoption;
-		this.premierCopies = premierCopies;
+		this.createdDate = createdDate;
+		this.premierCopie = premierCopie;
 	}
 
 	public Adoption() {

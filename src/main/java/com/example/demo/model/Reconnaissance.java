@@ -1,14 +1,13 @@
 package com.example.demo.model;
 
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.*;
 
 import org.springframework.data.annotation.CreatedDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name="reconnaissance")
@@ -31,14 +30,10 @@ public class Reconnaissance {
 	@CreatedDate
 	private Instant createdDate;
 	
-	@ManyToMany(fetch = FetchType.LAZY,
-		      cascade = {
-		          CascadeType.PERSIST,
-		          CascadeType.MERGE
-		      },
-		      mappedBy = "reconnaissances")
-	@JsonIgnore
-	private Set<PremierCopie> premierCopies = new HashSet<>();
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idPremierCopie")
+	@JsonManagedReference
+	private PremierCopie premierCopie;
 
 	public long getIdReconnaissance() {
 		return idReconnaissance;
@@ -80,12 +75,13 @@ public class Reconnaissance {
 		this.createdDate = createdDate;
 	}
 
-	public Set<PremierCopie> getPremierCopies() {
-		return premierCopies;
+	
+	public PremierCopie getPremierCopie() {
+		return premierCopie;
 	}
 
-	public void setPremierCopies(Set<PremierCopie> premierCopies) {
-		this.premierCopies = premierCopies;
+	public void setPremierCopie(PremierCopie premierCopie) {
+		this.premierCopie = premierCopie;
 	}
 
 	public Reconnaissance() {
@@ -93,14 +89,14 @@ public class Reconnaissance {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Reconnaissance(String dateDeclaration, String heureDeclaration, String infoPersonDeclarant,
-			Instant createdDate, Set<PremierCopie> premierCopies) {
+	public Reconnaissance( String dateDeclaration, String heureDeclaration,
+			String infoPersonDeclarant, Instant createdDate, PremierCopie premierCopie) {
 		this.dateDeclaration = dateDeclaration;
 		this.heureDeclaration = heureDeclaration;
 		this.infoPersonDeclarant = infoPersonDeclarant;
 		this.createdDate = createdDate;
-		this.premierCopies = premierCopies;
+		this.premierCopie = premierCopie;
 	}
-	
+
 	
 }
