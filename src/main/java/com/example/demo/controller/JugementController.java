@@ -58,24 +58,20 @@ public class JugementController {
 	  public ResponseEntity<Jugement> addJugement(@PathVariable(value = "IdPremierCopie") Long IdPremierCopie, 
 			  @RequestBody Jugement jugementRequest) 
 	{
-		Jugement jugement = premierCopieRepository.findById(IdPremierCopie).map(premierCopie -> {
-			long idJugement = jugementRequest.getIdJugement();
+		try {
+			PremierCopie premierCopie = premierCopieRepository.findById(IdPremierCopie).get();
 			
-			// is existed
-			if(idJugement != 0L) {
-				Jugement _jugement = jugementRepository.findById(idJugement)
-						.orElseThrow(() -> new ResourceNotFoundException("Not found Jugement with id = " + idJugement));
-				premierCopie.addJugement(_jugement);
-				premierCopieRepository.save(premierCopie);
-				return _jugement;
-			}
-			
-			//add and create
-			premierCopie.addJugement(jugementRequest);
-			return jugementRepository.save(jugementRequest);
-			
-		}).orElseThrow(() -> new ResourceNotFoundException("Not found Premier Copie with id = " + IdPremierCopie));
-	    return new ResponseEntity<>(jugement, HttpStatus.CREATED);
+			Jugement jugement = new Jugement(
+					jugementRequest.getInfoChangement(),
+					jugementRequest.getNumJugement(),
+					jugementRequest.getCreatedDate(),
+					premierCopie);
+			jugementRepository.save(jugement);
+			return new ResponseEntity<>(jugement, HttpStatus.OK);
+		}
+		catch (Exception e) {
+		      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		    }
 
 	}
 	
@@ -86,28 +82,18 @@ public class JugementController {
 		Jugement jugement = jugementRepository.findById(id)
 		        .orElseThrow(() -> new ResourceNotFoundException("Not found Jugement with id = " + id));
 		
+		PremierCopie premierCopie = premierCopieRepository.findById(jugementRequest.getPremierCopie().getIdPremierCopie()).get();
+		
 		jugement.setInfoChangement(jugementRequest.getInfoChangement());
 		jugement.setNumJugement(jugementRequest.getNumJugement());
+		jugement.setPremierCopie(premierCopie);
 		
 		jugementRepository.save(jugement);
 		
 		return new ResponseEntity<>(jugement, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/{id}/premierCopie/{IdPremierCopie}")
-	public ResponseEntity<HttpStatus> deleteJugementFromPremierCopie(@PathVariable(value = "id") Long id,
-			@PathVariable(value = "IdPremierCopie") Long IdPremierCopie)
-	{
-		
-		PremierCopie premierCopie = premierCopieRepository.findById(IdPremierCopie)
-		        .orElseThrow(() -> new ResourceNotFoundException("Not found Premier Copie with id = " + IdPremierCopie));
-		
-		premierCopie.removeJugement(id);
-		premierCopieRepository.save(premierCopie);
-		
-		 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	
-	}
 	
 	@DeleteMapping("/{id}")
 	  public ResponseEntity<HttpStatus> deleteJugement(@PathVariable("id") long id) 
