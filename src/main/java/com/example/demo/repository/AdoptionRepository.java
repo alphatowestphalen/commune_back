@@ -10,10 +10,5 @@ import com.example.demo.model.Adoption;
 import com.example.demo.model.PremierCopie;
 
 public interface AdoptionRepository extends JpaRepository<Adoption, Long> {
-	
-	@Query(value = " SELECT * FROM premier_copie_adoptions pa, premier_copie p, adoption a WHERE pa.id_premier = p.id_premier_copie AND pa.id_ado = a.id_adoption AND a.id_adoption = 'id'", nativeQuery = true)
-	List<PremierCopie> getAdoptionById(@PathVariable(value = "id") Long id);
-/*
-	Adoption findPremierCopiesByIdAdoption(Long id);
-	*/
+
 }

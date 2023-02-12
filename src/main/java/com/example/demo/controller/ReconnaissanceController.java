@@ -84,12 +84,12 @@ public class ReconnaissanceController {
 	
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Reconnaissance> updateReconnaissance(@PathVariable(value = "id") Long id, @RequestBody Reconnaissance reconnaissanceRequest)
+	public ResponseEntity<Reconnaissance> updateReconnaissance(@PathVariable(value = "id") Long id, @RequestBody ReconnaissanceRequest reconnaissanceRequest)
 	{
 		Reconnaissance reconnaissance = reconnaissanceRepository.findById(id)
 		        .orElseThrow(() -> new ResourceNotFoundException("Not found Reconnaissance with id = " + id));
 		
-		PremierCopie premierCopie = premierCopieRepository.findById(reconnaissanceRequest.getPremierecopie().getIdPremierCopie()).get();
+		PremierCopie premierCopie = premierCopieRepository.findById(reconnaissance.getPremierecopie().getIdPremierCopie()).get();
 		
 		reconnaissance.setDateDeclaration(reconnaissanceRequest.getDateDeclaration());
 		reconnaissance.setHeureDeclaration(reconnaissanceRequest.getHeureDeclaration());

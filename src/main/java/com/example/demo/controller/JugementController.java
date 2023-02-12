@@ -78,12 +78,12 @@ public class JugementController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Jugement> updateJugement(@PathVariable(value = "id") Long id, 
-			@RequestBody Jugement jugementRequest)
+			@RequestBody JugementRequest jugementRequest)
 	{
 		Jugement jugement = jugementRepository.findById(id)
 		        .orElseThrow(() -> new ResourceNotFoundException("Not found Jugement with id = " + id));
 		
-		PremierCopie premierCopie = premierCopieRepository.findById(jugementRequest.getPremierCopie().getIdPremierCopie()).get();
+		PremierCopie premierCopie = premierCopieRepository.findById(jugement.getPremierCopie().getIdPremierCopie()).get();
 		
 		jugement.setInfoChangement(jugementRequest.getInfoChangement());
 		jugement.setNumJugement(jugementRequest.getNumJugement());

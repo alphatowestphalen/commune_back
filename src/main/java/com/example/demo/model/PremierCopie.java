@@ -75,10 +75,10 @@ public class PremierCopie implements Serializable{
 	private	List<Reconnaissance> reconnaissance = new ArrayList<>();
 	
 	
-	 @OneToOne(mappedBy = "premierCopie", cascade = CascadeType.ALL)
+	 @OneToOne(mappedBy = "premierCopie", cascade = CascadeType.ALL, orphanRemoval = true)
 	 private Jugement jugement;
 	
-	 @OneToOne(mappedBy = "premierCopie", cascade = CascadeType.ALL)
+	 @OneToOne(mappedBy = "premierCopie", cascade = CascadeType.ALL , orphanRemoval = true)
 	 private ActeDeces acteDeces;
 
 	

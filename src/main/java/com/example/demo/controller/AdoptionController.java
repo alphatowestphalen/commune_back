@@ -47,9 +47,9 @@ public class AdoptionController {
 	  }
 	
 	@GetMapping("/{id}")
-	  public ResponseEntity<List<PremierCopie>> getAdoptionById(@PathVariable(value = "id") Long id) {
-		List<PremierCopie> adoption = adoptionRepository.getAdoptionById(id);
-
+	  public ResponseEntity<Adoption> getAdoptionById(@PathVariable(value = "id") Long id) {
+		Adoption adoption = adoptionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found Jugement with id = " + id));
+;
 	    return new ResponseEntity<>(adoption, HttpStatus.OK);
 	  }
 	
@@ -78,26 +78,25 @@ public class AdoptionController {
 		
 	}
 	
-//	@PutMapping("/{id}")
-//	public ResponseEntity<Adoption> updateAdoption(@PathVariable(value = "id") Long id, @RequestBody Adoption adoptionRequest)
-//	{
-//		Adoption adoption = adoptionRepository.findById(id)
-//		        .orElseThrow(() -> new ResourceNotFoundException("Not found Adoption with id = " + id));
-//		
-//		PremierCopie premierCopie = premierCopieRepository.findById(adoptionRequest.getPremierecopie().getIdPremierCopie()).get();
-//		
-//		adoption.setParentAdoptif(adoptionRequest.getParentAdoptif());
-//		adoption.setDateAdoption(adoptionRequest.getDateAdoption());
-//		adoption.setHeureAdoption(adoptionRequest.getHeureAdoption());
-//		adoption.setNumAdoption(adoptionRequest.getNumAdoption());
-//		adoption.setPremierecopie(premierCopie);
-//		
-//		
-//		adoptionRepository.save(adoption);
-//		
-//		return new ResponseEntity<>(adoption, HttpStatus.OK);
-//	}
-	
+	@PutMapping("/{id}")
+	public ResponseEntity<Adoption> updateAdoption(@PathVariable(value = "id") Long id, @RequestBody AdoptionRequest adoptionRequest)
+	{
+		Adoption adoption = adoptionRepository.findById(id)
+		        .orElseThrow(() -> new ResourceNotFoundException("Not found Adoption with id = " + id));
+		
+		PremierCopie premierCopie = premierCopieRepository.findById(adoption.getPremierecopie().getIdPremierCopie()).get();
+		
+		adoption.setParentAdoptif(adoptionRequest.getParentAdoptif());
+		adoption.setDateAdoption(adoptionRequest.getDateAdoption());
+		adoption.setHeureAdoption(adoptionRequest.getHeureAdoption());
+		adoption.setNumAdoption(adoptionRequest.getNumAdoption());
+		adoption.setPremierecopie(premierCopie);
+		
+		
+		adoptionRepository.save(adoption);
+		
+		return new ResponseEntity<>(adoption, HttpStatus.OK);	}
+
 	
 	@DeleteMapping("/{id}")
 	  public ResponseEntity<HttpStatus> deleteAdoption(@PathVariable("id") long id) 

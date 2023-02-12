@@ -31,7 +31,7 @@ public class Jugement {
 	private Instant createdDate;
 	
 	@OneToOne
-    @JoinColumn(name = "idPremierCopie")
+	@JoinColumn(name = "idPremierCopie")
 	private PremierCopie premierCopie;
 	
 	public long getIdJugement() {
