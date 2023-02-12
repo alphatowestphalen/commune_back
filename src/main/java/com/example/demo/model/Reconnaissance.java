@@ -1,17 +1,25 @@
 package com.example.demo.model;
 
+import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.*;
 
+
 import org.springframework.data.annotation.CreatedDate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 
 @Entity
 @Table(name="reconnaissance")
-public class Reconnaissance {
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property="idReconnaissance")
+public class Reconnaissance implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,10 +38,9 @@ public class Reconnaissance {
 	@CreatedDate
 	private Instant createdDate;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "idPremierCopie")
-	@JsonManagedReference
-	private PremierCopie premierCopie;
+	@ManyToOne
+	@JoinColumn(name="idPremierCopie")
+	private PremierCopie premierecopie;
 
 	public long getIdReconnaissance() {
 		return idReconnaissance;
@@ -76,12 +83,14 @@ public class Reconnaissance {
 	}
 
 	
-	public PremierCopie getPremierCopie() {
-		return premierCopie;
+
+    
+	public PremierCopie getPremierecopie() {
+		return premierecopie;
 	}
 
-	public void setPremierCopie(PremierCopie premierCopie) {
-		this.premierCopie = premierCopie;
+	public void setPremierecopie(PremierCopie premierecopie) {
+		this.premierecopie = premierecopie;
 	}
 
 	public Reconnaissance() {
@@ -95,8 +104,10 @@ public class Reconnaissance {
 		this.heureDeclaration = heureDeclaration;
 		this.infoPersonDeclarant = infoPersonDeclarant;
 		this.createdDate = createdDate;
-		this.premierCopie = premierCopie;
+		this.premierecopie = premierCopie;
 	}
+
+
 
 	
 }

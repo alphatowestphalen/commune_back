@@ -64,7 +64,7 @@ public class ActeDeces {
 
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idPremierCopie")
-	@JsonManagedReference
+
 	private PremierCopie premierCopie;
 	
 

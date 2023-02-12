@@ -9,5 +9,5 @@ import com.example.demo.model.Reconnaissance;
 @Repository
 public interface ReconnaissanceRepository extends JpaRepository<Reconnaissance, Long> {
 
-	//List<Reconnaissance> findReconnaissancesByIdPremierCopie(Long IdPremierCopie);
+	
 }

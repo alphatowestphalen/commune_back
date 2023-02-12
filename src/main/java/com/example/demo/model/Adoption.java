@@ -8,11 +8,14 @@ import javax.persistence.*;
 
 import org.springframework.data.annotation.CreatedDate;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name="adoption")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property="idPremierCopie")
 public class Adoption {
 	
 	@Id
@@ -37,7 +40,7 @@ public class Adoption {
 	
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idPremierCopie")
-	@JsonManagedReference
+	
 	private PremierCopie premierCopie;
 
 	public long getIdAdoption() {

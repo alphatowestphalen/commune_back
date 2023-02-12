@@ -2,15 +2,29 @@ package com.example.demo.model;
 
 
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
 import javax.persistence.*;
 
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+
+
+
 
 
 @Entity
 @Table(name="premierCopie")
-public class PremierCopie {
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property="idPremierCopie")
+public class PremierCopie implements Serializable{
 	
 	@Id
 	@Column(name = "idPremierCopie")
@@ -52,8 +66,8 @@ public class PremierCopie {
 	  @JoinColumn(name = "idPieceJustificative")
 	  private PieceJustificative pieceJustificative;
 	
-	 @OneToOne(mappedBy = "premierCopie")
-	 private Reconnaissance reconnaissance;
+	 @OneToMany(mappedBy = "premierecopie", cascade = CascadeType.ALL, orphanRemoval = true)
+	private	List<Reconnaissance> reconnaissance = new ArrayList<>();
 	
 	 @OneToOne(mappedBy = "premierCopie")
 	 private Adoption adoption;
@@ -153,12 +167,12 @@ public class PremierCopie {
 	public void setPieceJustificative(PieceJustificative pieceJustificative) {
 		this.pieceJustificative = pieceJustificative;
 	}
-
-	public Reconnaissance getReconnaissance() {
+	
+	public List<Reconnaissance> getReconnaissance() {
 		return reconnaissance;
 	}
 
-	public void setReconnaissance(Reconnaissance reconnaissance) {
+	public void setReconnaissance(List<Reconnaissance> reconnaissance) {
 		this.reconnaissance = reconnaissance;
 	}
 

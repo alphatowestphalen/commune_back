@@ -72,7 +72,8 @@ public class ReconnaissanceController {
 					reconnaissanceRequest.getCreatedDate(),
 					premierCopie
 					);
-			reconnaissanceRepository.save(reconnaissance);
+			
+		reconnaissanceRepository.save(reconnaissance);
 			return new ResponseEntity<>(reconnaissance, HttpStatus.OK);
 		}
 		catch (Exception e) {
@@ -88,12 +89,12 @@ public class ReconnaissanceController {
 		Reconnaissance reconnaissance = reconnaissanceRepository.findById(id)
 		        .orElseThrow(() -> new ResourceNotFoundException("Not found Reconnaissance with id = " + id));
 		
-		PremierCopie premierCopie = premierCopieRepository.findById(reconnaissanceRequest.getPremierCopie().getIdPremierCopie()).get();
+		PremierCopie premierCopie = premierCopieRepository.findById(reconnaissanceRequest.getPremierecopie().getIdPremierCopie()).get();
 		
 		reconnaissance.setDateDeclaration(reconnaissanceRequest.getDateDeclaration());
 		reconnaissance.setHeureDeclaration(reconnaissanceRequest.getHeureDeclaration());
 		reconnaissance.setInfoPersonDeclarant(reconnaissanceRequest.getInfoPersonDeclarant());
-		reconnaissance.setPremierCopie(premierCopie);
+		reconnaissance.setPremierecopie(premierCopie);
 		
 		reconnaissanceRepository.save(reconnaissance);
 		
