@@ -66,16 +66,19 @@ public class PremierCopie implements Serializable{
 	  @JoinColumn(name = "idPieceJustificative")
 	  private PieceJustificative pieceJustificative;
 	
+
+
+    @OneToMany(mappedBy = "premierecopie", cascade = CascadeType.ALL, orphanRemoval = true)
+	private	List<Adoption> adoption = new ArrayList<>();
+	 
 	 @OneToMany(mappedBy = "premierecopie", cascade = CascadeType.ALL, orphanRemoval = true)
 	private	List<Reconnaissance> reconnaissance = new ArrayList<>();
 	
-	 @OneToOne(mappedBy = "premierCopie")
-	 private Adoption adoption;
 	
-	 @OneToOne(mappedBy = "premierCopie")
+	 @OneToOne(mappedBy = "premierCopie", cascade = CascadeType.ALL)
 	 private Jugement jugement;
 	
-	 @OneToOne(mappedBy = "premierCopie")
+	 @OneToOne(mappedBy = "premierCopie", cascade = CascadeType.ALL)
 	 private ActeDeces acteDeces;
 
 	
@@ -176,11 +179,11 @@ public class PremierCopie implements Serializable{
 		this.reconnaissance = reconnaissance;
 	}
 
-	public Adoption getAdoption() {
+	public List<Adoption> getAdoption() {
 		return adoption;
 	}
 
-	public void setAdoption(Adoption adoption) {
+	public void setAdoption(List<Adoption> adoption) {
 		this.adoption = adoption;
 	}
 

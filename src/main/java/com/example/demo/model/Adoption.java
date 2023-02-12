@@ -1,13 +1,13 @@
 package com.example.demo.model;
 
+import java.io.Serializable;
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.*;
 
 import org.springframework.data.annotation.CreatedDate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -15,8 +15,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name="adoption")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property="idPremierCopie")
-public class Adoption {
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property="idAdoption")
+public class Adoption implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,10 +38,11 @@ public class Adoption {
 	@CreatedDate
 	private Instant createdDate;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "idPremierCopie")
+
+	@ManyToOne
+	@JoinColumn(name="idPremierCopie")
+	private PremierCopie premierecopie;
 	
-	private PremierCopie premierCopie;
 
 	public long getIdAdoption() {
 		return idAdoption;
@@ -91,31 +92,38 @@ public class Adoption {
 		this.createdDate = createdDate;
 	}
 
-	
 
-	public PremierCopie getPremierCopie() {
-		return premierCopie;
+
+
+
+	public PremierCopie getPremierecopie() {
+		return premierecopie;
 	}
 
-	public void setPremierCopie(PremierCopie premierCopie) {
-		this.premierCopie = premierCopie;
+	public void setPremierecopie(PremierCopie premierecopie) {
+		this.premierecopie = premierecopie;
 	}
 
-	
+	public Adoption() {
+		super();
+		
+	}
+
 	public Adoption(String parentAdoptif, String dateAdoption, String heureAdoption, String numAdoption,
 			Instant createdDate, PremierCopie premierCopie) {
+		super();
 		this.parentAdoptif = parentAdoptif;
 		this.dateAdoption = dateAdoption;
 		this.heureAdoption = heureAdoption;
 		this.numAdoption = numAdoption;
 		this.createdDate = createdDate;
-		this.premierCopie = premierCopie;
+		this.premierecopie = premierCopie;
 	}
 
-	public Adoption() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	
+	
+
+
 	
 	
 

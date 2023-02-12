@@ -22,6 +22,7 @@ import com.example.demo.model.Jugement;
 import com.example.demo.model.PremierCopie;
 import com.example.demo.repository.JugementRepository;
 import com.example.demo.repository.PremierCopieRepository;
+import com.example.demo.request.JugementRequest;
 
 @CrossOrigin("*")
 @RestController
@@ -56,7 +57,7 @@ public class JugementController {
 	
 	@PostMapping("/{IdPremierCopie}")
 	  public ResponseEntity<Jugement> addJugement(@PathVariable(value = "IdPremierCopie") Long IdPremierCopie, 
-			  @RequestBody Jugement jugementRequest) 
+			  @RequestBody JugementRequest jugementRequest) 
 	{
 		try {
 			PremierCopie premierCopie = premierCopieRepository.findById(IdPremierCopie).get();

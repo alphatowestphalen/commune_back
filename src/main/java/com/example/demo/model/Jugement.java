@@ -30,9 +30,8 @@ public class Jugement {
 	@CreatedDate
 	private Instant createdDate;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne
     @JoinColumn(name = "idPremierCopie")
-	
 	private PremierCopie premierCopie;
 	
 	public long getIdJugement() {
@@ -87,7 +86,7 @@ public class Jugement {
 
 	public Jugement() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	

@@ -21,6 +21,7 @@ import com.example.demo.model.Adoption;
 import com.example.demo.model.PremierCopie;
 import com.example.demo.repository.AdoptionRepository;
 import com.example.demo.repository.PremierCopieRepository;
+import com.example.demo.request.AdoptionRequest;
 
 @CrossOrigin("*")
 @RestController
@@ -53,7 +54,7 @@ public class AdoptionController {
 	  }
 	
 	@PostMapping("/{IdPremierCopie}")
-	  public ResponseEntity<Adoption> addAdoption(@PathVariable(value = "IdPremierCopie") Long IdPremierCopie, @RequestBody Adoption adoptionRequest) 
+	  public ResponseEntity<Adoption> addAdoption(@PathVariable(value = "IdPremierCopie") Long IdPremierCopie, @RequestBody AdoptionRequest adoptionRequest) 
 	{
 		try {
 			PremierCopie premierCopie = premierCopieRepository.findById(IdPremierCopie).get();
@@ -64,7 +65,8 @@ public class AdoptionController {
 					adoptionRequest.getHeureAdoption(),
 					adoptionRequest.getNumAdoption(),
 					adoptionRequest.getCreatedDate(),
-					premierCopie);
+					premierCopie
+					);
 			
 			adoptionRepository.save(adoption);
 			return new ResponseEntity<>(adoption, HttpStatus.OK);
@@ -76,25 +78,25 @@ public class AdoptionController {
 		
 	}
 	
-	@PutMapping("/{id}")
-	public ResponseEntity<Adoption> updateAdoption(@PathVariable(value = "id") Long id, @RequestBody Adoption adoptionRequest)
-	{
-		Adoption adoption = adoptionRepository.findById(id)
-		        .orElseThrow(() -> new ResourceNotFoundException("Not found Adoption with id = " + id));
-		
-		PremierCopie premierCopie = premierCopieRepository.findById(adoptionRequest.getPremierCopie().getIdPremierCopie()).get();
-		
-		adoption.setParentAdoptif(adoptionRequest.getParentAdoptif());
-		adoption.setDateAdoption(adoptionRequest.getDateAdoption());
-		adoption.setHeureAdoption(adoptionRequest.getHeureAdoption());
-		adoption.setNumAdoption(adoptionRequest.getNumAdoption());
-		adoption.setPremierCopie(premierCopie);
-		
-		
-		adoptionRepository.save(adoption);
-		
-		return new ResponseEntity<>(adoption, HttpStatus.OK);
-	}
+//	@PutMapping("/{id}")
+//	public ResponseEntity<Adoption> updateAdoption(@PathVariable(value = "id") Long id, @RequestBody Adoption adoptionRequest)
+//	{
+//		Adoption adoption = adoptionRepository.findById(id)
+//		        .orElseThrow(() -> new ResourceNotFoundException("Not found Adoption with id = " + id));
+//		
+//		PremierCopie premierCopie = premierCopieRepository.findById(adoptionRequest.getPremierecopie().getIdPremierCopie()).get();
+//		
+//		adoption.setParentAdoptif(adoptionRequest.getParentAdoptif());
+//		adoption.setDateAdoption(adoptionRequest.getDateAdoption());
+//		adoption.setHeureAdoption(adoptionRequest.getHeureAdoption());
+//		adoption.setNumAdoption(adoptionRequest.getNumAdoption());
+//		adoption.setPremierecopie(premierCopie);
+//		
+//		
+//		adoptionRepository.save(adoption);
+//		
+//		return new ResponseEntity<>(adoption, HttpStatus.OK);
+//	}
 	
 	
 	@DeleteMapping("/{id}")
