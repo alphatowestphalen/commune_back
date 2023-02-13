@@ -65,10 +65,12 @@ public class PremierCopie implements Serializable{
 	@ManyToOne()
 	  @JoinColumn(name = "idPieceJustificative")
 	  private PieceJustificative pieceJustificative;
-	
+
+	@ElementCollection
+	private List<Mention> mentions = new ArrayList<Mention>();
 
 
-    @OneToMany(mappedBy = "premierecopie", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "premierecopie", cascade = CascadeType.ALL, orphanRemoval = true)
 	private	List<Adoption> adoption = new ArrayList<>();
 	 
 	 @OneToMany(mappedBy = "premierecopie", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -203,6 +205,14 @@ public class PremierCopie implements Serializable{
 		this.acteDeces = acteDeces;
 	}
 
+
+    public List<Mention> getMentions() {
+		return mentions;
+	}
+
+	public void setMentions(List<Mention> mentions) {
+		this.mentions = mentions;
+	}
 	public PremierCopie(long idPremierCopie, String description, String mention, String datePCopie,
 			String datePremierCopie, Declarant declarant, Maire maire, Mere mere, Pere pere, Enfant enfant,
 			PieceJustificative pieceJustificative) {

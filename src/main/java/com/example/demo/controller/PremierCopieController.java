@@ -1,8 +1,14 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,13 +24,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
+import com.example.demo.model.Adoption;
 import com.example.demo.model.Declarant;
 import com.example.demo.model.Enfant;
+import com.example.demo.model.Jugement;
 import com.example.demo.model.Maire;
+import com.example.demo.model.Mention;
+import com.example.demo.model.MentionInfo;
 import com.example.demo.model.Mere;
 import com.example.demo.model.Pere;
 import com.example.demo.model.PieceJustificative;
 import com.example.demo.model.PremierCopie;
+import com.example.demo.model.Reconnaissance;
 import com.example.demo.repository.DeclarantRepository;
 import com.example.demo.repository.EnfantRepository;
 import com.example.demo.repository.MaireRepository;
@@ -148,7 +159,53 @@ public class PremierCopieController {
 		PremierCopie premierCopie = premierCopieRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Not found Premier Copie with id = " + id));;
 			  		   
-		return new ResponseEntity<>(premierCopie, HttpStatus.OK);	   
+				List<Mention> mentions = new ArrayList<>();
+		
+			    if (premierCopie.getReconnaissance() != null && !premierCopie.getReconnaissance().isEmpty()) {
+			    	for (Reconnaissance rec : premierCopie.getReconnaissance()) {
+			    		  Mention m = new Mention();
+			    		  m.setCreatedDate(rec.getCreatedDate());
+			    		  m.getInfo().add(new MentionInfo("infoDeclarant",rec.getInfoPersonDeclarant()) );
+			    		  m.getInfo().add(new MentionInfo("dateDeclarant",rec.getDateDeclaration()));
+			    		  m.getInfo().add(new MentionInfo("heureDeclarant",rec.getHeureDeclaration()));
+			    		  m.setType("reconnaissance");
+			    		  mentions.add(m);
+			    		}
+
+			    	//mentions.addAll(premierCopie.getReconnaissance());
+			    }
+
+			    if (premierCopie.getJugement() != null) {
+			    
+			    		  Mention m = new Mention();
+			    		  m.setCreatedDate(premierCopie.getJugement().getCreatedDate());
+			    		  m.getInfo().add(new MentionInfo("infoChangement",premierCopie.getJugement().getInfoChangement()));
+			    		  m.getInfo().add(new MentionInfo("numJugement",premierCopie.getJugement().getNumJugement()));
+			    		  m.setType("jugement");
+			    		  mentions.add(m);
+			    		
+			    	// mentions.add(premierCopie.getJugement());
+			    }
+
+			    if (premierCopie.getAdoption() != null && !premierCopie.getAdoption().isEmpty()) {
+			    	for (Adoption rec : premierCopie.getAdoption()) {
+			    		  Mention m = new Mention();
+			    		 m.setInfo(new ArrayList<>());
+			    		  m.setCreatedDate(rec.getCreatedDate());
+			    		  m.getInfo().add(new MentionInfo("numAdoption",rec.getNumAdoption()));
+			    		  m.getInfo().add(new MentionInfo("parentAdoptif",rec.getParentAdoptif()));
+			    		  m.getInfo().add(new MentionInfo("heureAdoption",rec.getHeureAdoption()));
+			    		  m.getInfo().add(new MentionInfo("dateAdoption",rec.getDateAdoption()));
+			    		  m.setType("adoption");
+			    		  mentions.add(m);
+			    		}
+			    	// mentions.addAll(premierCopie.getAdoption());
+			    }
+
+			    Collections.sort(mentions, (a, b) -> a.getCreatedDate().compareTo(b.getCreatedDate()));
+			    premierCopie.setMentions(mentions);
+
+				return new ResponseEntity<>(premierCopie, HttpStatus.OK);	   
 	   	   	     	   
 	 }
 	
