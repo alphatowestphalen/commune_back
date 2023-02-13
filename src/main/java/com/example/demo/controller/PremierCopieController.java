@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 
@@ -139,6 +140,7 @@ public class PremierCopieController {
 	  }
 	
 	@GetMapping
+	@RolesAllowed("Admin")
 	  public ResponseEntity<List<PremierCopie>> getAllPremierCopie() {
 	    try {
 	      List<PremierCopie> premierCopies = premierCopieRepository.findAll();
