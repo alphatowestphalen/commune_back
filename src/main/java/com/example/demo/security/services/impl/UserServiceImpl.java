@@ -64,17 +64,21 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         User nUser = user.getUserFromDto();
         nUser.setPassword(bcryptEncoder.encode(user.getPassword()));
 
+        //assign Role to user
         Role role = roleService.findByName("USER");
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(role);
 
         if(nUser.getRole().equals("admin")){
+
             role = roleService.findByName("ADMIN");
             roleSet.add(role);
+
             role = roleService.findByName("MAIRE");
             roleSet.add(role);
             
         }
+
         else if(nUser.getRole().equals("maire")){
             role = roleService.findByName("MAIRE");
             roleSet.add(role);
