@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +31,7 @@ public class MaireController {
 	MaireRepository maireRepository;
 	
 	@PostMapping
+	 @PreAuthorize("hasRole('MAIRE')")
 	  public ResponseEntity<Maire> createMaire (@RequestBody @Valid Maire maire )
 	  {
 	    
@@ -39,6 +41,7 @@ public class MaireController {
 	  }
 	
 	@GetMapping
+	 @PreAuthorize("hasRole('USER')")
 	  public ResponseEntity<List<Maire>> getAllMaires() {
 	    try {
 	      List<Maire> maires = maireRepository.findAll();
@@ -54,6 +57,7 @@ public class MaireController {
 	  }
 	
 	@GetMapping("/{id}")
+	 @PreAuthorize(" hasRole('MAIRE')")
 	  public ResponseEntity<Maire> getByIdMaire(@PathVariable("id") Long id)
 	{
 	       	Maire maire = maireRepository.findById(id).get();
@@ -66,6 +70,7 @@ public class MaireController {
 	  }
 	
 	@PutMapping("/{id}")
+	 @PreAuthorize(" hasRole('MAIRE')")
 	public ResponseEntity<Maire> updateMaire(@PathVariable("id") Long id, @RequestBody @Valid Maire maire) 
 	{
 		Maire maireData = maireRepository.findById(id).get();
@@ -88,6 +93,7 @@ public class MaireController {
 	
 
 	@DeleteMapping("/{id}")
+	 @PreAuthorize(" hasRole('MAIRE')")
 	public ResponseEntity<HttpStatus>  supprMaire(@PathVariable("id") long id) {	
 		try {
 			maireRepository.deleteById(id);			 

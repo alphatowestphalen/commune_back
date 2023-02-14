@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +35,7 @@ public class ReconnaissanceController {
 	ReconnaissanceRepository reconnaissanceRepository;
 	
 	@GetMapping
+	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<List<Reconnaissance>> getAllReconnaissances() {
 		try {
 			List<Reconnaissance> reconnaissances =  reconnaissanceRepository.findAll();
@@ -52,6 +54,7 @@ public class ReconnaissanceController {
 	
 	
 	@GetMapping("/{id}")
+	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<Reconnaissance> getReconnaissanceById(@PathVariable(value = "id") Long id) {
 		Reconnaissance reconnaissance = reconnaissanceRepository.findById(id)
 	        .orElseThrow(() -> new ResourceNotFoundException("Not found Reconnaissance with id = " + id));
@@ -60,6 +63,7 @@ public class ReconnaissanceController {
 	  }
 	
 	@PostMapping("/{IdPremierCopie}")
+	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<Reconnaissance> addReconnaissance(@PathVariable(value = "IdPremierCopie") Long IdPremierCopie, @RequestBody ReconnaissanceRequest reconnaissanceRequest) 
 	{
 		try {
@@ -84,6 +88,7 @@ public class ReconnaissanceController {
 	
 	
 	@PutMapping("/{id}")
+	 @PreAuthorize(" hasRole('MAIRE')")
 	public ResponseEntity<Reconnaissance> updateReconnaissance(@PathVariable(value = "id") Long id, @RequestBody ReconnaissanceRequest reconnaissanceRequest)
 	{
 		Reconnaissance reconnaissance = reconnaissanceRepository.findById(id)
@@ -103,6 +108,7 @@ public class ReconnaissanceController {
 	
 	
 	@DeleteMapping("/{id}")
+	 @PreAuthorize(" hasRole('MAIRE')")
 	  public ResponseEntity<HttpStatus> deleteReconnaissance(@PathVariable("id") long id) 
 	{
 		try {

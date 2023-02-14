@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +35,7 @@ public class AdoptionController {
 	AdoptionRepository adoptionRepository;
 	
 	@GetMapping
+	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<List<Adoption>> getAllAdoptions() {
 	    List<Adoption> adoptions = new ArrayList<Adoption>();
 
@@ -47,6 +49,7 @@ public class AdoptionController {
 	  }
 	
 	@GetMapping("/{id}")
+	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<Adoption> getAdoptionById(@PathVariable(value = "id") Long id) {
 		Adoption adoption = adoptionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found Jugement with id = " + id));
 ;
@@ -54,6 +57,7 @@ public class AdoptionController {
 	  }
 	
 	@PostMapping("/{IdPremierCopie}")
+	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<Adoption> addAdoption(@PathVariable(value = "IdPremierCopie") Long IdPremierCopie, @RequestBody AdoptionRequest adoptionRequest) 
 	{
 		try {
@@ -79,6 +83,7 @@ public class AdoptionController {
 	}
 	
 	@PutMapping("/{id}")
+	 @PreAuthorize(" hasRole('MAIRE')")
 	public ResponseEntity<Adoption> updateAdoption(@PathVariable(value = "id") Long id, @RequestBody AdoptionRequest adoptionRequest)
 	{
 		Adoption adoption = adoptionRepository.findById(id)
@@ -99,6 +104,7 @@ public class AdoptionController {
 
 	
 	@DeleteMapping("/{id}")
+	 @PreAuthorize(" hasRole('MAIRE')")
 	  public ResponseEntity<HttpStatus> deleteAdoption(@PathVariable("id") long id) 
 	{
 		try {

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +36,7 @@ public class JugementController {
 	JugementRepository jugementRepository;
 	
 	@GetMapping
+	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<List<Jugement>> getAllJugements() {
 	    List<Jugement> jugements = new ArrayList<Jugement>();
 
@@ -48,6 +50,7 @@ public class JugementController {
 	  }
 	
 	@GetMapping("/{id}")
+	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<Jugement> getJugementById(@PathVariable(value = "id") Long id) {
 		Jugement jugement = jugementRepository.findById(id)
 	        .orElseThrow(() -> new ResourceNotFoundException("Not found Jugement with id = " + id));
@@ -56,6 +59,7 @@ public class JugementController {
 	  }
 	
 	@PostMapping("/{IdPremierCopie}")
+	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<Jugement> addJugement(@PathVariable(value = "IdPremierCopie") Long IdPremierCopie, 
 			  @RequestBody JugementRequest jugementRequest) 
 	{
@@ -77,6 +81,7 @@ public class JugementController {
 	}
 	
 	@PutMapping("/{id}")
+	 @PreAuthorize(" hasRole('MAIRE')")
 	public ResponseEntity<Jugement> updateJugement(@PathVariable(value = "id") Long id, 
 			@RequestBody JugementRequest jugementRequest)
 	{
@@ -97,6 +102,7 @@ public class JugementController {
 	
 	
 	@DeleteMapping("/{id}")
+	 @PreAuthorize(" hasRole('MAIRE')")
 	  public ResponseEntity<HttpStatus> deleteJugement(@PathVariable("id") long id) 
 	{
 		try {

@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,6 +50,7 @@ import com.example.demo.request.PremierCopieRequest;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/premierCopies")
+
 public class PremierCopieController {
 	
 	
@@ -69,6 +71,7 @@ public class PremierCopieController {
 	PremierCopieRepository premierCopieRepository;
 	
 	@PostMapping
+	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<PremierCopie> createPremierCopie(@RequestBody @Valid PremierCopieRequest premierCopieRequest )
 	  {
 	    
@@ -140,7 +143,7 @@ public class PremierCopieController {
 	  }
 	
 	@GetMapping
-	@RolesAllowed("Admin")
+	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<List<PremierCopie>> getAllPremierCopie() {
 	    try {
 	      List<PremierCopie> premierCopies = premierCopieRepository.findAll();
@@ -212,6 +215,7 @@ public class PremierCopieController {
 	 }
 	
 	@PutMapping("/{IdPremierCopie}")
+	 @PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<PremierCopie> updatePremierCopie(@PathVariable("IdPremierCopie") Long IdPremierCopie,
 			@RequestBody PremierCopieRequest premierCopieRequest) 
 	{
@@ -288,6 +292,7 @@ public class PremierCopieController {
 	}
 	
 	@DeleteMapping("/{IdPremierCopie}")
+	 @PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<HttpStatus>  supprPremierCopie(@PathVariable("IdPremierCopie") long IdPremierCopie)
 	{	
 		try
