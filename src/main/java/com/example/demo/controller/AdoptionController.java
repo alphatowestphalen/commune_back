@@ -1,9 +1,14 @@
 package com.example.demo.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Adoption;
@@ -27,6 +33,7 @@ import com.example.demo.request.AdoptionRequest;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/adoptions")
+
 public class AdoptionController {
 
 	@Autowired
@@ -36,17 +43,32 @@ public class AdoptionController {
 	
 	@GetMapping
 	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<List<Adoption>> getAllAdoptions() {
-	    List<Adoption> adoptions = new ArrayList<Adoption>();
+	  public ResponseEntity<Map<String, Object>> getAllAdoptions(
+			     @RequestParam(required = false) String title,
+			        @RequestParam(defaultValue = "0") int page,
+			        @RequestParam(defaultValue = "3") int size) {
+	 	  
+	    try {
+	    	 List<Adoption> adoptions = new ArrayList<Adoption>();
+	        Pageable paging = PageRequest.of(page, size);
+	        
+	        Page<Adoption> pageadoption;
+	        pageadoption = adoptionRepository.findAll(paging);
 
-	    adoptionRepository.findAll().forEach(adoptions::add);
-
-	    if (adoptions.isEmpty()) {
-	      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	        if (pageadoption.hasContent())
+	        	 adoptions = pageadoption.getContent();
+	        
+	             Map<String, Object> response = new HashMap<>();
+	             response.put("adoption", adoptions);
+	             response.put("currentPage", pageadoption.getNumber());
+	             response.put("totalItems", pageadoption.getTotalElements());
+	             response.put("totalPages", pageadoption.getTotalPages());
+	      return new ResponseEntity<>(response, HttpStatus.OK);
+	    } catch (Exception e) {
+	      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
-
-	    return new ResponseEntity<>(adoptions, HttpStatus.OK);
 	  }
+	  
 	
 	@GetMapping("/{id}")
 	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
