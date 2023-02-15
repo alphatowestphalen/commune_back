@@ -1,9 +1,14 @@
 package com.example.demo.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.PremierCopie;
@@ -36,21 +42,32 @@ public class ReconnaissanceController {
 	
 	@GetMapping
 	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<List<Reconnaissance>> getAllReconnaissances() {
+	  public ResponseEntity<Map<String, Object>> getAllReconnaissances(
+			     @RequestParam(required = false) String title,
+			        @RequestParam(defaultValue = "0") int page,
+			        @RequestParam(defaultValue = "3") int size) {
 		try {
-			List<Reconnaissance> reconnaissances =  reconnaissanceRepository.findAll();
+			
+			 List<Reconnaissance> reconnaissances = new ArrayList<Reconnaissance>();
+		        Pageable paging = PageRequest.of(page, size);
+		        
+		        Page<Reconnaissance> pagereconnaissance;
+		        pagereconnaissance = reconnaissanceRepository.findAll(paging);
 
-		    if (reconnaissances.isEmpty()) {
-		      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		        if (pagereconnaissance.hasContent())
+		        	
+		        	reconnaissances = pagereconnaissance.getContent();
+
+		             Map<String, Object> response = new HashMap<>();
+		             response.put("reconnaissance", reconnaissances);
+		             response.put("currentPage", pagereconnaissance.getNumber());
+		             response.put("totalItems", pagereconnaissance.getTotalElements());
+		             response.put("totalPages", pagereconnaissance.getTotalPages());
+		      return new ResponseEntity<>(response, HttpStatus.OK);
+		    } catch (Exception e) {
+		      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		    }
-
-		    return new ResponseEntity<>(reconnaissances, HttpStatus.OK);
-		}
-		catch (Exception e) {
-		      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		    }	
-	    
-	  }
+		  }
 	
 	
 	@GetMapping("/{id}")

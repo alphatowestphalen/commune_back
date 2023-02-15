@@ -1,9 +1,14 @@
 package com.example.demo.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +21,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
 import com.example.demo.model.Jugement;
 import com.example.demo.model.PremierCopie;
+import com.example.demo.model.Reconnaissance;
+import com.example.demo.repository.AdoptionRepository;
 import com.example.demo.repository.JugementRepository;
 import com.example.demo.repository.PremierCopieRepository;
 import com.example.demo.request.JugementRequest;
@@ -37,17 +45,34 @@ public class JugementController {
 	
 	@GetMapping
 	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<List<Jugement>> getAllJugements() {
-	    List<Jugement> jugements = new ArrayList<Jugement>();
+	  public ResponseEntity<Map<String, Object>> getAllJugements(
+			   @RequestParam(required = false) String title,
+		        @RequestParam(defaultValue = "0") int page,
+		        @RequestParam(defaultValue = "3") int size) {
+		
+		try {
+			  List<Jugement> jugements = new ArrayList<Jugement>();
+			    Pageable paging = PageRequest.of(page, size);
+			    
+			    Page<Jugement> pagejugement;
+		        pagejugement = jugementRepository.findAll(paging);
 
-	    jugementRepository.findAll().forEach(jugements::add);
+		        if (pagejugement.hasContent())
+		        	
+		        	jugements = pagejugement.getContent();
 
-	    if (jugements.isEmpty()) {
-	      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	    }
+		             Map<String, Object> response = new HashMap<>();
+		             response.put("jugement", jugements);
+		             response.put("currentPage", pagejugement.getNumber());
+		             response.put("totalItems", pagejugement.getTotalElements());
+		             response.put("totalPages", pagejugement.getTotalPages());
+		      return new ResponseEntity<>(response, HttpStatus.OK);
+		    } catch (Exception e) {
+		      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		    }
+		  }
 
-	    return new ResponseEntity<>(jugements, HttpStatus.OK);
-	  }
+	 
 	
 	@GetMapping("/{id}")
 	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")

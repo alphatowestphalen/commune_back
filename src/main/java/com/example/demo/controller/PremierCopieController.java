@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +16,10 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,6 +29,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
@@ -71,7 +78,7 @@ public class PremierCopieController {
 	PremierCopieRepository premierCopieRepository;
 	
 	@PostMapping
-	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
+	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<PremierCopie> createPremierCopie(@RequestBody @Valid PremierCopieRequest premierCopieRequest )
 	  {
 	    
@@ -143,22 +150,41 @@ public class PremierCopieController {
 	  }
 	
 	@GetMapping
-	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<List<PremierCopie>> getAllPremierCopie() {
+	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
+	  public ResponseEntity<Map<String, Object>> getAllPremierCopie(
+			     @RequestParam(required = false) String title,
+			        @RequestParam(defaultValue = "0") int page,
+			        @RequestParam(defaultValue = "3") int size) {
 	    try {
-	      List<PremierCopie> premierCopies = premierCopieRepository.findAll();
+	        List<PremierCopie> premierCopies = new ArrayList<PremierCopie>();
+	        Pageable paging = PageRequest.of(page, size);
+	        
+	        Page<PremierCopie> pagecopie;
+	        pagecopie = premierCopieRepository.findAll(paging);
 
-	      if (premierCopies.isEmpty()) {
-	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	      }
+	        if (title == null)
+	        	 pagecopie = premierCopieRepository.findAll(paging);
+	          else
+	            pagecopie = premierCopieRepository.findBydatePremierCopie(title, paging);
 
-	      return new ResponseEntity<>(premierCopies, HttpStatus.OK);
+	        
+	   
+	        	
+	        	premierCopies = pagecopie.getContent();
+
+	             Map<String, Object> response = new HashMap<>();
+	             response.put("premierCopies", premierCopies);
+	             response.put("currentPage", pagecopie.getNumber());
+	             response.put("totalItems", pagecopie.getTotalElements());
+	             response.put("totalPages", pagecopie.getTotalPages());
+	      return new ResponseEntity<>(response, HttpStatus.OK);
 	    } catch (Exception e) {
 	      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	  }
 
 	@GetMapping("/{id}")
+	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<PremierCopie> getByIdPremierCopie(@PathVariable("id") Long id) 
 	{
 		PremierCopie premierCopie = premierCopieRepository.findById(id)
