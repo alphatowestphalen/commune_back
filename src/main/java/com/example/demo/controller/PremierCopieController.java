@@ -78,7 +78,7 @@ public class PremierCopieController {
 	PremierCopieRepository premierCopieRepository;
 	
 	@PostMapping
-	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
+//	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<PremierCopie> createPremierCopie(@RequestBody @Valid PremierCopieRequest premierCopieRequest )
 	  {
 	    
@@ -150,7 +150,7 @@ public class PremierCopieController {
 	  }
 	
 	@GetMapping
-	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
+//	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<Map<String, Object>> getAllPremierCopie(
 			     @RequestParam(required = false) String title,
 			        @RequestParam(defaultValue = "0") int page,
@@ -184,7 +184,7 @@ public class PremierCopieController {
 	  }
 
 	@GetMapping("/{id}")
-	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
+//	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<PremierCopie> getByIdPremierCopie(@PathVariable("id") Long id) 
 	{
 		PremierCopie premierCopie = premierCopieRepository.findById(id)
@@ -241,7 +241,7 @@ public class PremierCopieController {
 	 }
 	
 	@PutMapping("/{IdPremierCopie}")
-	 @PreAuthorize("hasRole('ADMIN')")
+	// @PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<PremierCopie> updatePremierCopie(@PathVariable("IdPremierCopie") Long IdPremierCopie,
 			@RequestBody PremierCopieRequest premierCopieRequest) 
 	{
@@ -318,7 +318,7 @@ public class PremierCopieController {
 	}
 	
 	@DeleteMapping("/{IdPremierCopie}")
-	 @PreAuthorize("hasRole('ADMIN')")
+	// @PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<HttpStatus>  supprPremierCopie(@PathVariable("IdPremierCopie") long IdPremierCopie)
 	{	
 		try

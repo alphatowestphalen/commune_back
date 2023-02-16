@@ -31,7 +31,7 @@ public class MaireController {
 	MaireRepository maireRepository;
 	
 	@PostMapping
-	 @PreAuthorize("hasRole('MAIRE')")
+	// @PreAuthorize("hasRole('MAIRE')")
 	  public ResponseEntity<Maire> createMaire (@RequestBody @Valid Maire maire )
 	  {
 	    
@@ -41,7 +41,7 @@ public class MaireController {
 	  }
 	
 	@GetMapping
-	 @PreAuthorize("hasRole('USER')")
+	// @PreAuthorize("hasRole('USER')")
 	  public ResponseEntity<List<Maire>> getAllMaires() {
 	    try {
 	      List<Maire> maires = maireRepository.findAll();
@@ -57,7 +57,7 @@ public class MaireController {
 	  }
 	
 	@GetMapping("/{id}")
-	 @PreAuthorize(" hasRole('MAIRE')")
+	// @PreAuthorize(" hasRole('MAIRE')")
 	  public ResponseEntity<Maire> getByIdMaire(@PathVariable("id") Long id)
 	{
 	       	Maire maire = maireRepository.findById(id).get();
@@ -70,7 +70,7 @@ public class MaireController {
 	  }
 	
 	@PutMapping("/{id}")
-	 @PreAuthorize(" hasRole('MAIRE')")
+	// @PreAuthorize(" hasRole('MAIRE')")
 	public ResponseEntity<Maire> updateMaire(@PathVariable("id") Long id, @RequestBody @Valid Maire maire) 
 	{
 		Maire maireData = maireRepository.findById(id).get();
@@ -93,7 +93,7 @@ public class MaireController {
 	
 
 	@DeleteMapping("/{id}")
-	 @PreAuthorize(" hasRole('MAIRE')")
+	// @PreAuthorize(" hasRole('MAIRE')")
 	public ResponseEntity<HttpStatus>  supprMaire(@PathVariable("id") long id) {	
 		try {
 			maireRepository.deleteById(id);			 
