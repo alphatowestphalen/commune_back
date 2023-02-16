@@ -41,7 +41,7 @@ public class ReconnaissanceController {
 	ReconnaissanceRepository reconnaissanceRepository;
 	
 	@GetMapping
-	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
+	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<Map<String, Object>> getAllReconnaissances(
 			     @RequestParam(required = false) String title,
 			        @RequestParam(defaultValue = "0") int page,
@@ -71,7 +71,7 @@ public class ReconnaissanceController {
 	
 	
 	@GetMapping("/{id}")
-	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
+	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<Reconnaissance> getReconnaissanceById(@PathVariable(value = "id") Long id) {
 		Reconnaissance reconnaissance = reconnaissanceRepository.findById(id)
 	        .orElseThrow(() -> new ResourceNotFoundException("Not found Reconnaissance with id = " + id));
@@ -80,7 +80,7 @@ public class ReconnaissanceController {
 	  }
 	
 	@PostMapping("/{IdPremierCopie}")
-	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
+	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<Reconnaissance> addReconnaissance(@PathVariable(value = "IdPremierCopie") Long IdPremierCopie, @RequestBody ReconnaissanceRequest reconnaissanceRequest) 
 	{
 		try {
@@ -105,7 +105,7 @@ public class ReconnaissanceController {
 	
 	
 	@PutMapping("/{id}")
-	 @PreAuthorize(" hasRole('MAIRE')")
+	// @PreAuthorize(" hasRole('MAIRE')")
 	public ResponseEntity<Reconnaissance> updateReconnaissance(@PathVariable(value = "id") Long id, @RequestBody ReconnaissanceRequest reconnaissanceRequest)
 	{
 		Reconnaissance reconnaissance = reconnaissanceRepository.findById(id)
@@ -125,7 +125,7 @@ public class ReconnaissanceController {
 	
 	
 	@DeleteMapping("/{id}")
-	 @PreAuthorize(" hasRole('MAIRE')")
+	// @PreAuthorize(" hasRole('MAIRE')")
 	  public ResponseEntity<HttpStatus> deleteReconnaissance(@PathVariable("id") long id) 
 	{
 		try {

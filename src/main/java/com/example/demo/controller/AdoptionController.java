@@ -42,7 +42,7 @@ public class AdoptionController {
 	AdoptionRepository adoptionRepository;
 	
 	@GetMapping
-	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
+	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<Map<String, Object>> getAllAdoptions(
 			     @RequestParam(required = false) String title,
 			        @RequestParam(defaultValue = "0") int page,
@@ -71,7 +71,7 @@ public class AdoptionController {
 	  
 	
 	@GetMapping("/{id}")
-	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
+	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<Adoption> getAdoptionById(@PathVariable(value = "id") Long id) {
 		Adoption adoption = adoptionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found Jugement with id = " + id));
 ;
@@ -79,7 +79,7 @@ public class AdoptionController {
 	  }
 	
 	@PostMapping("/{IdPremierCopie}")
-	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
+	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<Adoption> addAdoption(@PathVariable(value = "IdPremierCopie") Long IdPremierCopie, @RequestBody AdoptionRequest adoptionRequest) 
 	{
 		try {
@@ -105,7 +105,8 @@ public class AdoptionController {
 	}
 	
 	@PutMapping("/{id}")
-	 @PreAuthorize(" hasRole('MAIRE')")
+	
+	//@PreAuthorize(" hasRole('MAIRE')")
 	public ResponseEntity<Adoption> updateAdoption(@PathVariable(value = "id") Long id, @RequestBody AdoptionRequest adoptionRequest)
 	{
 		Adoption adoption = adoptionRepository.findById(id)
@@ -126,7 +127,7 @@ public class AdoptionController {
 
 	
 	@DeleteMapping("/{id}")
-	 @PreAuthorize(" hasRole('MAIRE')")
+//	 @PreAuthorize(" hasRole('MAIRE')")
 	  public ResponseEntity<HttpStatus> deleteAdoption(@PathVariable("id") long id) 
 	{
 		try {

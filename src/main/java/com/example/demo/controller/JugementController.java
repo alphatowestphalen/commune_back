@@ -44,7 +44,7 @@ public class JugementController {
 	JugementRepository jugementRepository;
 	
 	@GetMapping
-	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
+	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<Map<String, Object>> getAllJugements(
 			   @RequestParam(required = false) String title,
 		        @RequestParam(defaultValue = "0") int page,
@@ -75,7 +75,7 @@ public class JugementController {
 	 
 	
 	@GetMapping("/{id}")
-	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
+	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<Jugement> getJugementById(@PathVariable(value = "id") Long id) {
 		Jugement jugement = jugementRepository.findById(id)
 	        .orElseThrow(() -> new ResourceNotFoundException("Not found Jugement with id = " + id));
@@ -84,7 +84,7 @@ public class JugementController {
 	  }
 	
 	@PostMapping("/{IdPremierCopie}")
-	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
+	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<Jugement> addJugement(@PathVariable(value = "IdPremierCopie") Long IdPremierCopie, 
 			  @RequestBody JugementRequest jugementRequest) 
 	{
@@ -106,7 +106,7 @@ public class JugementController {
 	}
 	
 	@PutMapping("/{id}")
-	 @PreAuthorize(" hasRole('MAIRE')")
+	// @PreAuthorize(" hasRole('MAIRE')")
 	public ResponseEntity<Jugement> updateJugement(@PathVariable(value = "id") Long id, 
 			@RequestBody JugementRequest jugementRequest)
 	{
@@ -127,7 +127,7 @@ public class JugementController {
 	
 	
 	@DeleteMapping("/{id}")
-	 @PreAuthorize(" hasRole('MAIRE')")
+	// @PreAuthorize(" hasRole('MAIRE')")
 	  public ResponseEntity<HttpStatus> deleteJugement(@PathVariable("id") long id) 
 	{
 		try {
