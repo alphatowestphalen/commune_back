@@ -1,6 +1,10 @@
 package com.example.demo.request;
 
 
+import java.time.Instant;
+
+import org.springframework.data.annotation.CreatedDate;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class PremierCopieRequest {
@@ -76,6 +80,9 @@ public class PremierCopieRequest {
 	private Boolean cinDeclarant;
 	
 	private long idMaire;
+	
+	@CreatedDate
+	private Instant createdDate;
 
 	public long getIdPremierCopie() {
 		return idPremierCopie;
@@ -355,6 +362,14 @@ public class PremierCopieRequest {
 
 	public void setIdMaire(long idMaire) {
 		this.idMaire = idMaire;
+	}
+
+	public Instant getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Instant createdDate) {
+		this.createdDate = createdDate;
 	}
 
 	

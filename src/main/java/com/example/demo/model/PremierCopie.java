@@ -3,6 +3,7 @@ package com.example.demo.model;
 
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
-
+import org.springframework.data.annotation.CreatedDate;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 
@@ -41,6 +42,10 @@ public class PremierCopie implements Serializable{
 	
 	@Column(name = "datePremierCopie")
 	private String datePremierCopie;
+	
+	@CreatedDate
+	private Instant createdDate;
+
 	
 	@ManyToOne()
 	  @JoinColumn(name ="idDeclarant")
@@ -205,8 +210,17 @@ public class PremierCopie implements Serializable{
 		this.acteDeces = acteDeces;
 	}
 
+	
 
-    public List<Mention> getMentions() {
+    public Instant getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Instant createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public List<Mention> getMentions() {
 		return mentions;
 	}
 
@@ -215,7 +229,7 @@ public class PremierCopie implements Serializable{
 	}
 	public PremierCopie(long idPremierCopie, String description, String mention, String datePCopie,
 			String datePremierCopie, Declarant declarant, Maire maire, Mere mere, Pere pere, Enfant enfant,
-			PieceJustificative pieceJustificative) {
+			PieceJustificative pieceJustificative, Instant createdDate) {
 		this.idPremierCopie = idPremierCopie;
 		this.description = description;
 		this.mention = mention;
@@ -227,6 +241,7 @@ public class PremierCopie implements Serializable{
 		this.pere = pere;
 		this.enfant = enfant;
 		this.pieceJustificative = pieceJustificative;
+		this.createdDate = createdDate;
 	}
 
 	public PremierCopie() {

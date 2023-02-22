@@ -31,6 +31,8 @@ public class DecesRequest {
 	
 	private long idMaire;
 	
+	private long idPremierCopie;
+	
 	private String professionDefunt;
 	
 	private String adresseDefunt;
@@ -188,6 +190,14 @@ public class DecesRequest {
 
 	public void setCreatedDate(Instant createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public long getIdPremierCopie() {
+		return idPremierCopie;
+	}
+
+	public void setIdPremierCopie(long idPremierCopie) {
+		this.idPremierCopie = idPremierCopie;
 	}
 	
 	

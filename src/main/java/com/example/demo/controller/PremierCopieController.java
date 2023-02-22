@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -21,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.demo.model.Adoption;
 import com.example.demo.model.Declarant;
@@ -52,7 +56,9 @@ import com.example.demo.repository.MereRepository;
 import com.example.demo.repository.PereRepository;
 import com.example.demo.repository.PieceJustificativeRepository;
 import com.example.demo.repository.PremierCopieRepository;
+import com.example.demo.repository.TypeRepository;
 import com.example.demo.request.PremierCopieRequest;
+import com.example.demo.service.HistoriqueService;
 
 @CrossOrigin("*")
 @RestController
@@ -71,15 +77,19 @@ public class PremierCopieController {
 	MereRepository mereRepository;
 	@Autowired
 	PereRepository pereRepository;
+	@Autowired
+	HistoriqueService historiqueService;
 	
 	@Autowired
 	PieceJustificativeRepository pieceJustificativeRepository;
 	@Autowired
 	PremierCopieRepository premierCopieRepository;
+	@Autowired(required = false) 
+	TypeRepository typeRepository;
 	
 	@PostMapping
 //	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<PremierCopie> createPremierCopie(@RequestBody @Valid PremierCopieRequest premierCopieRequest )
+	  public ResponseEntity<PremierCopie> createPremierCopie(@RequestBody @Valid PremierCopieRequest premierCopieRequest)
 	  {
 	    
 	   Maire maire = maireRepository.findById(premierCopieRequest.getIdMaire()).get();
@@ -139,11 +149,18 @@ public class PremierCopieController {
 			   mere,
 			   pere,
 			   enfant,
-			   pieceJustificative
+			   pieceJustificative,
+			   premierCopieRequest.getCreatedDate()
 			   );
 	   premierCopieRepository.save(premierCopie);
 	   
-	   
+	   historiqueService.ajoutHistorique(
+			   premierCopieRequest.getIdPremierCopie(),
+			   TypeRepository.PremierCopie,
+			   null,
+			   premierCopie.toString(),
+			   TypeRepository.AjoutPremierCopie,
+			   premierCopieRequest.getCreatedDate());
 	   
 	   return new ResponseEntity<>(premierCopie, HttpStatus.CREATED);
 	    
@@ -297,7 +314,7 @@ public class PremierCopieController {
 			pieceJustificative.setCinDeclarant( premierCopieRequest.getCinDeclarant());
 			pieceJustificativeRepository.save(pieceJustificative);
 			
-			premierCopie.setIdPremierCopie( premierCopieRequest.getIdPremierCopie());
+			//premierCopie.setIdPremierCopie( premierCopieRequest.getIdPremierCopie());
 			premierCopie.setDescription( premierCopieRequest.getDescription());
 			premierCopie.setMention( premierCopieRequest.getMention());
 			premierCopie.setDatePCopie( premierCopieRequest.getDatePCopie());
