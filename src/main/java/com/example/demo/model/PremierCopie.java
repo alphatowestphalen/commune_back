@@ -4,6 +4,7 @@ package com.example.demo.model;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.CreatedDate;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -29,7 +31,7 @@ public class PremierCopie implements Serializable{
 	
 	@Id
 	@Column(name = "idPremierCopie")
-	private long idPremierCopie;
+	private String idPremierCopie;
 	
 	@Column(name = "description")
 	private String description;
@@ -88,14 +90,36 @@ public class PremierCopie implements Serializable{
 	 @OneToOne(mappedBy = "premierCopie", cascade = CascadeType.ALL , orphanRemoval = true)
 	 private ActeDeces acteDeces;
 
+	 @Column(name = "numero")
+	 private Long numero;
+	 
+	 @Column(name = "anneeActuelle")
+	 private int anneeActuelle;
 	
 
-	public long getIdPremierCopie() {
+	
+	public String getIdPremierCopie() {
 		return idPremierCopie;
 	}
 
-	public void setIdPremierCopie(long idPremierCopie) {
+	public void setIdPremierCopie(String idPremierCopie) {
 		this.idPremierCopie = idPremierCopie;
+	}
+
+	public Long getNumero() {
+		return numero;
+	}
+
+	public void setNumero(Long numero) {
+		this.numero = numero;
+	}
+
+	public int getAnneeActuelle() {
+		return anneeActuelle;
+	}
+
+	public void setAnneeActuelle(int anneeActuelle) {
+		this.anneeActuelle = anneeActuelle;
 	}
 
 	public String getDescription() {
@@ -227,9 +251,9 @@ public class PremierCopie implements Serializable{
 	public void setMentions(List<Mention> mentions) {
 		this.mentions = mentions;
 	}
-	public PremierCopie(long idPremierCopie, String description, String mention, String datePCopie,
+	public PremierCopie(String idPremierCopie, String description, String mention, String datePCopie,
 			String datePremierCopie, Declarant declarant, Maire maire, Mere mere, Pere pere, Enfant enfant,
-			PieceJustificative pieceJustificative, Instant createdDate) {
+			PieceJustificative pieceJustificative, Instant createdDate, long numero, int anneeActuelle) {
 		this.idPremierCopie = idPremierCopie;
 		this.description = description;
 		this.mention = mention;
@@ -242,6 +266,8 @@ public class PremierCopie implements Serializable{
 		this.enfant = enfant;
 		this.pieceJustificative = pieceJustificative;
 		this.createdDate = createdDate;
+		this.numero = numero;
+		this.anneeActuelle = anneeActuelle;
 	}
 
 	public PremierCopie() {
@@ -249,5 +275,6 @@ public class PremierCopie implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
+	
 	
 }

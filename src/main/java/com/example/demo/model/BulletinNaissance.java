@@ -16,7 +16,7 @@ public class BulletinNaissance {
 	private long idBulletinNaissance;
 	
 	@Column(name = "idPremierCopie")
-	private long idPremierCopie;
+	private String idPremierCopie;
 	
 	@Column(name = "type")
 	private String type;
@@ -59,11 +59,11 @@ public class BulletinNaissance {
 		this.idBulletinNaissance = idBulletinNaissance;
 	}
 
-	public long getIdPremierCopie() {
+	public String getIdPremierCopie() {
 		return idPremierCopie;
 	}
 
-	public void setIdPremierCopie(long idPremierCopie) {
+	public void setIdPremierCopie(String idPremierCopie) {
 		this.idPremierCopie = idPremierCopie;
 	}
 
@@ -157,7 +157,7 @@ public class BulletinNaissance {
 	}
 
 	
-	public BulletinNaissance(long idPremierCopie, String type, String nomPersonne, String prenomsPersonne,
+	public BulletinNaissance(String idPremierCopie, String type, String nomPersonne, String prenomsPersonne,
 			String dateNaissPersonne, String lieuNaissPersonne, String nomPere, String prenomsPere, String nomMere,
 			String prenomsMere, String dateCopie, Instant createdDate) {
 		this.idPremierCopie = idPremierCopie;

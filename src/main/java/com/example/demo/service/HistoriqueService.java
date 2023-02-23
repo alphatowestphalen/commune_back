@@ -12,7 +12,7 @@ public class HistoriqueService {
 	@Autowired
 	private HistoriqueRepository historiqueRepository;
 	
-	public Historique ajoutHistorique(long idEntity, String entity,  String oldValue, String newValue, String action, Instant createdDate)
+	public Historique ajoutHistorique(String idEntity, String entity,  String oldValue, String newValue, String action, Instant createdDate)
 	{
 		Historique historique = new Historique(idEntity, entity, oldValue, newValue, action, createdDate);
 		return this.historiqueRepository.save(historique);

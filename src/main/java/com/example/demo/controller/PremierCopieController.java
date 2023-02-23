@@ -57,8 +57,10 @@ import com.example.demo.repository.PereRepository;
 import com.example.demo.repository.PieceJustificativeRepository;
 import com.example.demo.repository.PremierCopieRepository;
 import com.example.demo.repository.TypeRepository;
+import com.example.demo.request.NumeroRequest;
 import com.example.demo.request.PremierCopieRequest;
 import com.example.demo.service.HistoriqueService;
+import com.example.demo.service.PremierCopieService;
 
 @CrossOrigin("*")
 @RestController
@@ -79,6 +81,8 @@ public class PremierCopieController {
 	PereRepository pereRepository;
 	@Autowired
 	HistoriqueService historiqueService;
+	@Autowired
+	PremierCopieService premierCopieService;
 	
 	@Autowired
 	PieceJustificativeRepository pieceJustificativeRepository;
@@ -92,6 +96,7 @@ public class PremierCopieController {
 	  public ResponseEntity<PremierCopie> createPremierCopie(@RequestBody @Valid PremierCopieRequest premierCopieRequest)
 	  {
 	    
+		NumeroRequest numeroRequest = premierCopieService.numeroCopie();
 	   Maire maire = maireRepository.findById(premierCopieRequest.getIdMaire()).get();
 	   
 	   Declarant declarant = new Declarant(
@@ -139,7 +144,7 @@ public class PremierCopieController {
 	   pieceJustificativeRepository.save(pieceJustificative);
 	   
 	   PremierCopie premierCopie = new PremierCopie(
-			   premierCopieRequest.getIdPremierCopie(),
+			   numeroRequest.idPremierCopie,
 			   premierCopieRequest.getDescription(),
 			   premierCopieRequest.getMention(),
 			   premierCopieRequest.getDatePCopie(),
@@ -150,12 +155,14 @@ public class PremierCopieController {
 			   pere,
 			   enfant,
 			   pieceJustificative,
-			   premierCopieRequest.getCreatedDate()
+			   premierCopieRequest.getCreatedDate(),
+			   numeroRequest.numero,
+			   numeroRequest.annee
 			   );
 	   premierCopieRepository.save(premierCopie);
 	   
 	   historiqueService.ajoutHistorique(
-			   premierCopieRequest.getIdPremierCopie(),
+			   numeroRequest.getIdPremierCopie(),
 			   TypeRepository.PremierCopie,
 			   null,
 			   premierCopie.toString(),
@@ -202,10 +209,10 @@ public class PremierCopieController {
 
 	@GetMapping("/{id}")
 //	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<PremierCopie> getByIdPremierCopie(@PathVariable("id") Long id) 
+	  public ResponseEntity<PremierCopie> getByIdPremierCopie(@PathVariable("id") String id) 
 	{
-		PremierCopie premierCopie = premierCopieRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Not found Premier Copie with id = " + id));;
+		
+		PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(id);
 			  		   
 				List<Mention> mentions = new ArrayList<>();
 		
@@ -336,11 +343,11 @@ public class PremierCopieController {
 	
 	@DeleteMapping("/{IdPremierCopie}")
 	// @PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<HttpStatus>  supprPremierCopie(@PathVariable("IdPremierCopie") long IdPremierCopie)
+	public ResponseEntity<HttpStatus>  supprPremierCopie(@PathVariable("IdPremierCopie") String IdPremierCopie)
 	{	
 		try
 		{
-			PremierCopie premierCopie = premierCopieRepository.findById(IdPremierCopie).get();
+			PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
 			Declarant declarant  =  premierCopie.getDeclarant();
 			Mere mere  =  premierCopie.getMere();
 			Pere pere =  premierCopie.getPere();
@@ -361,4 +368,13 @@ public class PremierCopieController {
 	      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	}
+	/*
+	@GetMapping("/test")
+	public Long test()
+	{
+		PremierCopie pc = premierCopieRepository.chercherPremierCopie();
+		long a = pc.getNumero() + 1;
+		return a;
+	}
+	*/
 }

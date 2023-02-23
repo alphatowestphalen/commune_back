@@ -30,8 +30,11 @@ import com.example.demo.repository.DefuntRepository;
 import com.example.demo.repository.MaireRepository;
 import com.example.demo.repository.PieceDecesRepository;
 import com.example.demo.repository.PremierCopieRepository;
+import com.example.demo.repository.TypeRepository;
 import com.example.demo.request.DecesRequest;
+import com.example.demo.request.NumeroActeDecesRequest;
 import com.example.demo.request.ReconnaissanceRequest;
+import com.example.demo.service.ActeDecesService;
 
 @CrossOrigin("*")
 @RestController
@@ -48,13 +51,18 @@ public class ActeDecesController {
 	DefuntRepository defuntRepository;
 	@Autowired
 	PieceDecesRepository pieceDecesRepository;
+	@Autowired(required = false) 
+	TypeRepository typeRepository;
+	@Autowired
+	ActeDecesService acteDecesService;
 	
 	@PostMapping("/{IdPremierCopie}")
-	  public ResponseEntity<ActeDeces> addDeces(@PathVariable(value = "IdPremierCopie") Long IdPremierCopie, @RequestBody DecesRequest decesRequest) 
+	  public ResponseEntity<ActeDeces> addDeces(@PathVariable(value = "IdPremierCopie") String IdPremierCopie, @RequestBody DecesRequest decesRequest) 
 	{
 		try {
+			NumeroActeDecesRequest numActeDeces = acteDecesService.numeroActeDeces();
 			
-			PremierCopie premierCopie = premierCopieRepository.findById(IdPremierCopie).get();
+			PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
 				
 			Maire maire = maireRepository.findById(decesRequest.getIdMaire()).get();
 					
@@ -71,7 +79,7 @@ public class ActeDecesController {
 			pieceDecesRepository.save(pieceDeces);
 					
 			ActeDeces actedeces = new ActeDeces(
-					decesRequest.getIdActeDeces(),
+					numActeDeces.idActeDeces,
 					decesRequest.getDateDeclaration(),
 					decesRequest.getHeureDeclaration(),
 					decesRequest.getNomDeclarant(),
@@ -85,7 +93,9 @@ public class ActeDecesController {
 					defunt,
 					pieceDeces,
 					decesRequest.getCreatedDate(),
-					premierCopie
+					premierCopie,
+					numActeDeces.numero,
+					numActeDeces.annee
 					);
 			
 			acteDecesRepository.save(actedeces);
@@ -111,22 +121,20 @@ public class ActeDecesController {
 	
 	
 	@GetMapping("/{id}")
-	  public ResponseEntity<ActeDeces> getActeDecesById(@PathVariable(value = "id") Long id) {
-		ActeDeces acte = acteDecesRepository.findById(id)
-	        .orElseThrow(() -> new ResourceNotFoundException("Not found Acte de Deces with id = " + id));
+	  public ResponseEntity<ActeDeces> getActeDecesById(@PathVariable(value = "id") String id) {
+		ActeDeces acte = acteDecesRepository.findByIdActeDeces(id);
 
 	    return new ResponseEntity<>(acte, HttpStatus.OK);
 	  }
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<ActeDeces> updateActeDeces(@PathVariable(value = "id") Long id, @RequestBody DecesRequest decesRequest)
+	public ResponseEntity<ActeDeces> updateActeDeces(@PathVariable(value = "id") String id, @RequestBody DecesRequest decesRequest)
 	{
 		try {
 			
-			ActeDeces acteDeces = acteDecesRepository.findById(id)
-			        .orElseThrow(() -> new ResourceNotFoundException("Not found Acte de décès with id = " + id));
+			ActeDeces acteDeces = acteDecesRepository.findByIdActeDeces(id);
 			
-			PremierCopie premierCopie = premierCopieRepository.findById(decesRequest.getIdPremierCopie()).get();
+			PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(acteDeces.getPremierCopie().getIdPremierCopie());
 			Maire maire = maireRepository.findById(decesRequest.getIdMaire()).get();
 			
 			Defunt defunt = acteDeces.getDefunt();
@@ -167,10 +175,10 @@ public class ActeDecesController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<HttpStatus>  supprActeDeces(@PathVariable("id") long idActeDeces)
+	public ResponseEntity<HttpStatus>  supprActeDeces(@PathVariable("id") String idActeDeces)
 	{
 		try {
-			ActeDeces acteDeces = acteDecesRepository.findById(idActeDeces).get();
+			ActeDeces acteDeces = acteDecesRepository.findByIdActeDeces(idActeDeces);
 			Defunt defunt = acteDeces.getDefunt();
 			PieceDeces pieceDeces = acteDeces.getPieceDeces();
 			

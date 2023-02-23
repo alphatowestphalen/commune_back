@@ -20,7 +20,7 @@ public class ActeDeces {
 
 	@Id
 	@Column(name = "idActeDeces")
-	private long idActeDeces;
+	private String idActeDeces;
 	
 	@Column(name = "dateDeclaration")
 	private String dateDeclaration;
@@ -69,12 +69,17 @@ public class ActeDeces {
     @JoinColumn(name = "idPremierCopie")
 	private PremierCopie premierCopie;
 	
+	@Column(name = "numero")
+	 private Long numero;
+	 
+	 @Column(name = "annee")
+	 private int annee;
 
-	public long getIdActeDeces() {
+	public String getIdActeDeces() {
 		return idActeDeces;
 	}
 
-	public void setIdActeDeces(long idActeDeces) {
+	public void setIdActeDeces(String idActeDeces) {
 		this.idActeDeces = idActeDeces;
 	}
 
@@ -194,10 +199,26 @@ public class ActeDeces {
 
 	
 
-	public ActeDeces(long idActeDeces, String dateDeclaration, String heureDeclaration, String nomDeclarant,
+	public Long getNumero() {
+		return numero;
+	}
+
+	public void setNumero(Long numero) {
+		this.numero = numero;
+	}
+
+	public int getAnnee() {
+		return annee;
+	}
+
+	public void setAnnee(int annee) {
+		this.annee = annee;
+	}
+
+	public ActeDeces(String idActeDeces, String dateDeclaration, String heureDeclaration, String nomDeclarant,
 			String prenomsDeclarant, String professionDeclarant, String lieuNaissanceDeclarant, String adresseDeclarant,
 			String dateNaissanceDeclarant, String date, Maire maire, Defunt defunt, PieceDeces pieceDeces,
-			Instant createdDate, PremierCopie premierCopie) {
+			Instant createdDate, PremierCopie premierCopie, long numero, int annee) {
 		this.idActeDeces = idActeDeces;
 		this.dateDeclaration = dateDeclaration;
 		this.heureDeclaration = heureDeclaration;
@@ -213,6 +234,8 @@ public class ActeDeces {
 		this.pieceDeces = pieceDeces;
 		this.createdDate = createdDate;
 		this.premierCopie = premierCopie;
+		this.numero = numero;
+		this.annee = annee;
 	}
 
 	public ActeDeces() {

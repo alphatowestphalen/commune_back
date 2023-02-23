@@ -7,8 +7,6 @@ import org.springframework.data.annotation.CreatedDate;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class DecesRequest {
-
-	private long idActeDeces;
 	
 	private String dateDeclaration;
 	
@@ -31,8 +29,6 @@ public class DecesRequest {
 	
 	private long idMaire;
 	
-	private long idPremierCopie;
-	
 	private String professionDefunt;
 	
 	private String adresseDefunt;
@@ -48,13 +44,7 @@ public class DecesRequest {
 	@CreatedDate
 	private Instant createdDate;
 
-	public long getIdActeDeces() {
-		return idActeDeces;
-	}
-
-	public void setIdActeDeces(long idActeDeces) {
-		this.idActeDeces = idActeDeces;
-	}
+	
 
 	public String getDateDeclaration() {
 		return dateDeclaration;
@@ -192,13 +182,6 @@ public class DecesRequest {
 		this.createdDate = createdDate;
 	}
 
-	public long getIdPremierCopie() {
-		return idPremierCopie;
-	}
-
-	public void setIdPremierCopie(long idPremierCopie) {
-		this.idPremierCopie = idPremierCopie;
-	}
 	
 	
 }

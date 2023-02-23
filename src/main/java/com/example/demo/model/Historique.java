@@ -19,7 +19,7 @@ public class Historique {
 	private String entity;
 	
 	@Column(name = "idEntity")
-	private long idEntity;
+	private String idEntity;
 	
 	@Column(name = "oldValue")
 	private String oldValue;
@@ -49,11 +49,11 @@ public class Historique {
 		this.entity = entity;
 	}
 
-	public long getIdEntity() {
+	public String getIdEntity() {
 		return idEntity;
 	}
 
-	public void setIdEntity(long idEntity) {
+	public void setIdEntity(String idEntity) {
 		this.idEntity = idEntity;
 	}
 
@@ -91,7 +91,7 @@ public class Historique {
 	}
 
 	
-	public Historique(long idEntity, String entity,  String oldValue, String newValue, String action,
+	public Historique(String idEntity, String entity,  String oldValue, String newValue, String action,
 			Instant createdDate) {
 		this.entity = entity;
 		this.idEntity = idEntity;

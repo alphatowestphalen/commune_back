@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class PremierCopieRequest {
 
-	private long idPremierCopie;
+	
 	
 	private String description;
 	
@@ -84,13 +84,7 @@ public class PremierCopieRequest {
 	@CreatedDate
 	private Instant createdDate;
 
-	public long getIdPremierCopie() {
-		return idPremierCopie;
-	}
-
-	public void setIdPremierCopie(long idPremierCopie) {
-		this.idPremierCopie = idPremierCopie;
-	}
+	
 
 	public String getDescription() {
 		return description;
