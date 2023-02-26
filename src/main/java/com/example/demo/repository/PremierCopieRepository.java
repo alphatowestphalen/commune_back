@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.model.PremierCopie;
 
 @Repository
-public interface PremierCopieRepository extends JpaRepository<PremierCopie, Long> {
+public interface PremierCopieRepository extends JpaRepository<PremierCopie, String> {
 	
 	PremierCopie findByIdPremierCopie(String IdPremierCopie);
 	
@@ -27,5 +27,5 @@ public interface PremierCopieRepository extends JpaRepository<PremierCopie, Long
 	
 	Page<PremierCopie> findAll(Pageable pageable);
 	Page<PremierCopie> findBydatePremierCopie(String datePremierCopie, Pageable pageable);
-	Page<PremierCopie> findByIdPremierCopie(Long idPremierCopie , Pageable pageable );
+	Page<PremierCopie> findByIdPremierCopieContaining(String idPremierCopie , Pageable pageable );
 }

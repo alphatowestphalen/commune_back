@@ -1,0 +1,8 @@
+com/example/demo/model/Declarant.class
+com/example/demo/model/Enfant.class
+com/example/demo/model/ActeDeces.class
+com/example/demo/model/Adoption.class
+com/example/demo/model/Defunt.class
+com/example/demo/BackCommuneApplication.class
+com/example/demo/model/Jugement.class
+com/example/demo/exceptions/HandlerException.class

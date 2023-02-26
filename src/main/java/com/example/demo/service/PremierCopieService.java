@@ -22,32 +22,54 @@ public class PremierCopieService {
 		
 		PremierCopie pc = premierCopieRepository.chercherPremierCopie();
 		
-		long num = pc.getNumero();
-		int annee = pc.getAnneeActuelle();
-		/*
-		long num = premierCopieRepository.chercherNumeroCopie();
-		int annee = premierCopieRepository.chercherAnneeCopie();
-		*/
 		int currentYear = typeRepository.year;
 		
-		if(annee == currentYear)
-		{			
-			long numero = num + 1;
-			String IdPremierCopie = Long.toString(numero).concat(Integer.toString(annee));						
-			numeroRequest.idPremierCopie = IdPremierCopie;
-			numeroRequest.annee = annee;
-			numeroRequest.numero = numero;
-			
-			return numeroRequest;
-		}
 		
-			num = 1;
-			annee = currentYear;	
+				
+		
+		if (pc != null) {
+			long num = pc.getNumero();
+			int annee = pc.getAnneeActuelle();
+			/*
+			long num = premierCopieRepository.chercherNumeroCopie();
+			int annee = premierCopieRepository.chercherAnneeCopie();
+			*/
+			if(annee == currentYear)
+			{			
+				long numero = num + 1;
+				String IdPremierCopie = Long.toString(numero).concat(Integer.toString(annee));						
+				numeroRequest.idPremierCopie = IdPremierCopie;
+				numeroRequest.annee = annee;
+				numeroRequest.numero = numero;
+				
+				return numeroRequest;
+			}
+			
+				num = 1;
+				annee = currentYear;	
+				String IdPremierCopie = Long.toString(num).concat(Integer.toString(annee));
+				numeroRequest.idPremierCopie = IdPremierCopie;
+				numeroRequest.annee = annee;
+				numeroRequest.numero = num;
+				
+				return numeroRequest;
+		}
+
+		
+			long num = 1;
+			 int annee = currentYear;	
 			String IdPremierCopie = Long.toString(num).concat(Integer.toString(annee));
 			numeroRequest.idPremierCopie = IdPremierCopie;
 			numeroRequest.annee = annee;
 			numeroRequest.numero = num;
 			
 			return numeroRequest;
-	}
-}
+
+		
+			
+		}
+		
+		
+		
+		}
+	

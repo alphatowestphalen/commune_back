@@ -272,7 +272,7 @@ public class PremierCopieController {
 	 @GetMapping("/")
 	 //	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 		   public ResponseEntity<Map<String, Object>> findByIdPremiereCopie(
-		   @RequestParam(required = true) Long idPremierCopie, 
+		   @RequestParam(required = true) String idPremierCopie, 
 		   @RequestParam(defaultValue = "0") int page,
 		   @RequestParam(defaultValue = "3") int size) 
 		 {
@@ -290,54 +290,9 @@ public class PremierCopieController {
 					
 					// else 
 						System.out.println(idPremierCopie);
-						pagecopie = premierCopieRepository.findByIdPremierCopie(idPremierCopie,paging);
+						pagecopie = premierCopieRepository.findByIdPremierCopieContaining(idPremierCopie,paging);
 								 
-						// List<Mention> mentions = new ArrayList<>();
-				
-						// if (((PremierCopie) pagecopie).getReconnaissance() != null && !((PremierCopie) pagecopie).getReconnaissance().isEmpty()) {
-						// 	for (Reconnaissance rec : ((PremierCopie) pagecopie).getReconnaissance()) {
-						// 		  Mention m = new Mention();
-						// 		  m.setCreatedDate(rec.getCreatedDate());
-						// 		  m.getInfo().add(new MentionInfo("infoDeclarant",rec.getInfoPersonDeclarant()) );
-						// 		  m.getInfo().add(new MentionInfo("dateDeclarant",rec.getDateDeclaration()));
-						// 		  m.getInfo().add(new MentionInfo("heureDeclarant",rec.getHeureDeclaration()));
-						// 		  m.setType("reconnaissance");
-						// 		  mentions.add(m);
-						// 		}
-		
-						// 	//mentions.addAll(premierCopie.getReconnaissance());
-						// }
-		
-						// if (((PremierCopie) pagecopie).getJugement() != null) {
 						
-						// 		  Mention m = new Mention();
-						// 		  m.setCreatedDate(((PremierCopie) pagecopie).getJugement().getCreatedDate());
-						// 		  m.getInfo().add(new MentionInfo("infoChangement",((PremierCopie) pagecopie).getJugement().getInfoChangement()));
-						// 		  m.getInfo().add(new MentionInfo("numJugement",((PremierCopie) pagecopie).getJugement().getNumJugement()));
-						// 		  m.setType("jugement");
-						// 		  mentions.add(m);
-								
-						// 	// mentions.add(premierCopie.getJugement());
-						// }
-		
-						// if (((PremierCopie) pagecopie).getAdoption() != null && !((PremierCopie) pagecopie).getAdoption().isEmpty()) {
-						// 	for (Adoption rec : ((PremierCopie) pagecopie).getAdoption()) {
-						// 		  Mention m = new Mention();
-						// 		 m.setInfo(new ArrayList<>());
-						// 		  m.setCreatedDate(rec.getCreatedDate());
-						// 		  m.getInfo().add(new MentionInfo("numAdoption",rec.getNumAdoption()));
-						// 		  m.getInfo().add(new MentionInfo("parentAdoptif",rec.getParentAdoptif()));
-						// 		  m.getInfo().add(new MentionInfo("heureAdoption",rec.getHeureAdoption()));
-						// 		  m.getInfo().add(new MentionInfo("dateAdoption",rec.getDateAdoption()));
-						// 		  m.setType("adoption");
-						// 		  mentions.add(m);
-						// 		}
-						// 	// mentions.addAll(premierCopie.getAdoption());
-						// }
-		
-						// Collections.sort(mentions, (a, b) -> a.getCreatedDate().compareTo(b.getCreatedDate()));
-						// ((PremierCopie) pagecopie).setMentions(mentions);
-		
 					
 					
 
@@ -364,7 +319,7 @@ public class PremierCopieController {
 
 	@PutMapping("/{IdPremierCopie}")
 	// @PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<PremierCopie> updatePremierCopie(@PathVariable("IdPremierCopie") Long IdPremierCopie,
+	public ResponseEntity<PremierCopie> updatePremierCopie(@PathVariable("IdPremierCopie") String IdPremierCopie,
 			@RequestBody PremierCopieRequest premierCopieRequest) 
 	{
 		try {
