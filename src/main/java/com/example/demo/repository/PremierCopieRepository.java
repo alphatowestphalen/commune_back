@@ -12,7 +12,7 @@ import com.example.demo.model.PremierCopie;
 
 @Repository
 public interface PremierCopieRepository extends JpaRepository<PremierCopie, Long> {
-	Page<PremierCopie> findAll(Pageable pageable);
+	//Page<PremierCopie> findAll(Pageable pageable);
 	Page<PremierCopie> findBydatePremierCopie(String datePremierCopie, Pageable pageable);
 	Page<PremierCopie> findByIdPremierCopie(Long idPremierCopie , Pageable pageable );
 }

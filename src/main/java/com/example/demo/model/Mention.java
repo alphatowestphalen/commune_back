@@ -16,8 +16,7 @@ public class Mention {
 	@CreatedDate
 	private Instant createdDate;
 	
-
-	private ArrayList<MentionInfo> info = new ArrayList<MentionInfo>();
+	private ArrayList<Object> info = new ArrayList<Object>();
 
 	public String getType() {
 		return type;
@@ -35,11 +34,11 @@ public class Mention {
 		this.createdDate = createdDate;
 	}
 
-	public ArrayList<MentionInfo> getInfo() {
+	public ArrayList<Object> getInfo() {
 		return info;
 	}
 
-	public void setInfo(ArrayList<MentionInfo> info) {
+	public void setInfo(ArrayList<Object> info) {
 		this.info = info;
 	}
 
