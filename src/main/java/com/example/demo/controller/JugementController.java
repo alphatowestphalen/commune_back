@@ -85,11 +85,11 @@ public class JugementController {
 	
 	@PostMapping("/{IdPremierCopie}")
 	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<Jugement> addJugement(@PathVariable(value = "IdPremierCopie") Long IdPremierCopie, 
+	  public ResponseEntity<Jugement> addJugement(@PathVariable(value = "IdPremierCopie") String IdPremierCopie, 
 			  @RequestBody JugementRequest jugementRequest) 
 	{
 		try {
-			PremierCopie premierCopie = premierCopieRepository.findById(IdPremierCopie).get();
+			PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
 			
 			Jugement jugement = new Jugement(
 					jugementRequest.getInfoChangement(),
@@ -113,7 +113,7 @@ public class JugementController {
 		Jugement jugement = jugementRepository.findById(id)
 		        .orElseThrow(() -> new ResourceNotFoundException("Not found Jugement with id = " + id));
 		
-		PremierCopie premierCopie = premierCopieRepository.findById(jugement.getPremierCopie().getIdPremierCopie()).get();
+		PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(jugement.getPremierCopie().getIdPremierCopie());
 		
 		jugement.setInfoChangement(jugementRequest.getInfoChangement());
 		jugement.setNumJugement(jugementRequest.getNumJugement());
