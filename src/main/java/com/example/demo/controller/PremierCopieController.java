@@ -175,47 +175,47 @@ public class PremierCopieController {
 	
 	@GetMapping
 
-	public ResponseEntity<List<PremierCopie>> getAllPremierCopie (){
-		try {
-			List<PremierCopie> premierecopie = new ArrayList<PremierCopie>();
-			premierecopie = premierCopieRepository.findAll();
-			return new ResponseEntity<>(premierecopie, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+	// public ResponseEntity<List<PremierCopie>> getAllPremierCopie (){
+	// 	try {
+	// 		List<PremierCopie> premierecopie = new ArrayList<PremierCopie>();
+	// 		premierecopie = premierCopieRepository.findAll();
+	// 		return new ResponseEntity<>(premierecopie, HttpStatus.OK);
+	// 	} catch (Exception e) {
+	// 		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+	// 	}
+	// }
 //	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	//   public ResponseEntity<Map<String, Object>> getAllPremierCopie(
-	// 		     @RequestParam(required = false) String title,
-	// 		        @RequestParam(defaultValue = "0") int page,
-	// 		        @RequestParam(defaultValue = "3") int size) {
-	//     try {
-	//         List<PremierCopie> premierCopies = new ArrayList<PremierCopie>();
-	//         Pageable paging = PageRequest.of(page, size);
+	  public ResponseEntity<Map<String, Object>> getAllPremierCopie(
+			     @RequestParam(required = false) String title,
+			        @RequestParam(defaultValue = "0") int page,
+			        @RequestParam(defaultValue = "10") int size) {
+	    try {
+	        List<PremierCopie> premierCopies = new ArrayList<PremierCopie>();
+	        Pageable paging = PageRequest.of(page, size);
 	        
-	//         Page<PremierCopie> pagecopie;
-	//         pagecopie = premierCopieRepository.findAll(paging);
+	        Page<PremierCopie> pagecopie;
+	        pagecopie = premierCopieRepository.findAll(paging);
 
-	//         if (title == null)
-	//         	 pagecopie = premierCopieRepository.findAll(paging);
-	//           else
-	//             pagecopie = premierCopieRepository.findBydatePremierCopie(title, paging);
+	        if (title == null)
+	        	 pagecopie = premierCopieRepository.findAll(paging);
+	          else
+	            pagecopie = premierCopieRepository.findBydatePremierCopie(title, paging);
 
 	        
 	   
 	        	
-	//         	premierCopies = pagecopie.getContent();
+	        	premierCopies = pagecopie.getContent();
 
-	//              Map<String, Object> response = new HashMap<>();
-	//              response.put("premierCopies", premierCopies);
-	//              response.put("currentPage", pagecopie.getNumber());
-	//              response.put("totalItems", pagecopie.getTotalElements());
-	//              response.put("totalPages", pagecopie.getTotalPages());
-	//       return new ResponseEntity<>(response, HttpStatus.OK);
-	//     } catch (Exception e) {
-	//       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-	//     }
-	//   }
+	             Map<String, Object> response = new HashMap<>();
+	             response.put("premierCopies", premierCopies);
+	             response.put("currentPage", pagecopie.getNumber());
+	             response.put("length", pagecopie.getTotalElements());
+	             response.put("totalPages", pagecopie.getTotalPages());
+	      return new ResponseEntity<>(response, HttpStatus.OK);
+	    } catch (Exception e) {
+	      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	  }
 
 	@GetMapping("/{id}")
 //	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
@@ -290,7 +290,7 @@ public class PremierCopieController {
 					
 					// else 
 						System.out.println(idPremierCopie);
-						pagecopie = premierCopieRepository.findByIdPremierCopieContaining(idPremierCopie,paging);
+						pagecopie = premierCopieRepository.findByIdPremierCopieStartsWith(idPremierCopie,paging);
 								 
 						
 					

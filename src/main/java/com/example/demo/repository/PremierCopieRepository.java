@@ -18,6 +18,8 @@ public interface PremierCopieRepository extends JpaRepository<PremierCopie, Stri
 	
 	@Query(value = "SELECT * FROM premier_copie p ORDER BY p.created_date DESC LIMIT 1 ", nativeQuery = true)
 	PremierCopie chercherPremierCopie(); 
+	
+	
 	/*
 	@Query(value = "SELECT p.numero FROM premier_copie p ORDER BY p.created_date DESC LIMIT 1 ", nativeQuery = true)
 	long chercherNumeroCopie(); 
@@ -27,5 +29,5 @@ public interface PremierCopieRepository extends JpaRepository<PremierCopie, Stri
 	
 	Page<PremierCopie> findAll(Pageable pageable);
 	Page<PremierCopie> findBydatePremierCopie(String datePremierCopie, Pageable pageable);
-	Page<PremierCopie> findByIdPremierCopieContaining(String idPremierCopie , Pageable pageable );
+	Page<PremierCopie> findByIdPremierCopieStartsWith(String idPremierCopie , Pageable pageable );
 }
