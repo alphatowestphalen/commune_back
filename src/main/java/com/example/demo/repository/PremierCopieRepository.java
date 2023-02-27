@@ -27,7 +27,11 @@ public interface PremierCopieRepository extends JpaRepository<PremierCopie, Stri
 	int chercherAnneeCopie(); 
 	*/
 	
+	
 	Page<PremierCopie> findAll(Pageable pageable);
 	Page<PremierCopie> findBydatePremierCopie(String datePremierCopie, Pageable pageable);
 	Page<PremierCopie> findByIdPremierCopieStartsWith(String idPremierCopie , Pageable pageable );
+	
+	//@Query(value = "SELECT * FROM premier_copie LEFT JOIN enfant ON premier_copie.id_enfant = enfant.id_enfant WHERE enfant.nom_enfant LIKE %:NomEnfant% OR enfant.prenoms_enfant %:PrenomsEnfant% ", nativeQuery = true)
+	Page<PremierCopie> findByEnfantNomEnfantStartsWithOrEnfantPrenomsEnfantStartsWith(String NomEnfant , String PrenomsEnfant, Pageable pageable );
 }
