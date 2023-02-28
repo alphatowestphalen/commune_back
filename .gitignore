@@ -18,8 +18,13 @@ yarn-error.log
 /.vscode
 
 
-
-/target/
+/target
+*.class
+*.jar
+*.war
+*.ear
+*.logs
+*.iml
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
@@ -31,3 +36,4 @@ yarn-error.log
 .settings
 .springBeans
 .sts4-cache
+.*class
