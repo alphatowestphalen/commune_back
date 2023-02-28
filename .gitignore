@@ -16,3 +16,18 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+
+
+
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.target
+.settings
+.springBeans
+.sts4-cache

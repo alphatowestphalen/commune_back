@@ -54,22 +54,18 @@ public class PremierCopieService {
 				
 				return numeroRequest;
 		}
-
-		
+		else 
+		{
 			long num = 1;
-			 int annee = currentYear;	
+			int annee = currentYear;
 			String IdPremierCopie = Long.toString(num).concat(Integer.toString(annee));
 			numeroRequest.idPremierCopie = IdPremierCopie;
 			numeroRequest.annee = annee;
 			numeroRequest.numero = num;
 			
 			return numeroRequest;
-
-		
 			
 		}
 		
-		
-		
-		}
-	
+	}
+}
