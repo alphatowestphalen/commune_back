@@ -174,11 +174,21 @@ public class PremierCopieController {
 	  }
 	
 	@GetMapping
+
+	// public ResponseEntity<List<PremierCopie>> getAllPremierCopie (){
+	// 	try {
+	// 		List<PremierCopie> premierecopie = new ArrayList<PremierCopie>();
+	// 		premierecopie = premierCopieRepository.findAll();
+	// 		return new ResponseEntity<>(premierecopie, HttpStatus.OK);
+	// 	} catch (Exception e) {
+	// 		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+	// 	}
+	// }
 //	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<Map<String, Object>> getAllPremierCopie(
 			     @RequestParam(required = false) String title,
 			        @RequestParam(defaultValue = "0") int page,
-			        @RequestParam(defaultValue = "3") int size) {
+			        @RequestParam(defaultValue = "10") int size) {
 	    try {
 	        List<PremierCopie> premierCopies = new ArrayList<PremierCopie>();
 	        Pageable paging = PageRequest.of(page, size);
@@ -199,7 +209,7 @@ public class PremierCopieController {
 	             Map<String, Object> response = new HashMap<>();
 	             response.put("premierCopies", premierCopies);
 	             response.put("currentPage", pagecopie.getNumber());
-	             response.put("totalItems", pagecopie.getTotalElements());
+	             response.put("length", pagecopie.getTotalElements());
 	             response.put("totalPages", pagecopie.getTotalPages());
 	      return new ResponseEntity<>(response, HttpStatus.OK);
 	    } catch (Exception e) {
@@ -220,9 +230,7 @@ public class PremierCopieController {
 			    	for (Reconnaissance rec : premierCopie.getReconnaissance()) {
 			    		  Mention m = new Mention();
 			    		  m.setCreatedDate(rec.getCreatedDate());
-			    		  m.getInfo().add(new MentionInfo("infoDeclarant",rec.getInfoPersonDeclarant()) );
-			    		  m.getInfo().add(new MentionInfo("dateDeclarant",rec.getDateDeclaration()));
-			    		  m.getInfo().add(new MentionInfo("heureDeclarant",rec.getHeureDeclaration()));
+			    		  m.getInfo().add(rec);
 			    		  m.setType("reconnaissance");
 			    		  mentions.add(m);
 			    		}
@@ -234,8 +242,7 @@ public class PremierCopieController {
 			    
 			    		  Mention m = new Mention();
 			    		  m.setCreatedDate(premierCopie.getJugement().getCreatedDate());
-			    		  m.getInfo().add(new MentionInfo("infoChangement",premierCopie.getJugement().getInfoChangement()));
-			    		  m.getInfo().add(new MentionInfo("numJugement",premierCopie.getJugement().getNumJugement()));
+			    		  m.getInfo().add(premierCopie.getJugement() );
 			    		  m.setType("jugement");
 			    		  mentions.add(m);
 			    		
@@ -245,12 +252,9 @@ public class PremierCopieController {
 			    if (premierCopie.getAdoption() != null && !premierCopie.getAdoption().isEmpty()) {
 			    	for (Adoption rec : premierCopie.getAdoption()) {
 			    		  Mention m = new Mention();
-			    		 m.setInfo(new ArrayList<>());
+			    		  m.setInfo(new ArrayList<>());
 			    		  m.setCreatedDate(rec.getCreatedDate());
-			    		  m.getInfo().add(new MentionInfo("numAdoption",rec.getNumAdoption()));
-			    		  m.getInfo().add(new MentionInfo("parentAdoptif",rec.getParentAdoptif()));
-			    		  m.getInfo().add(new MentionInfo("heureAdoption",rec.getHeureAdoption()));
-			    		  m.getInfo().add(new MentionInfo("dateAdoption",rec.getDateAdoption()));
+			    		  m.getInfo().add(rec);
 			    		  m.setType("adoption");
 			    		  mentions.add(m);
 			    		}
@@ -264,9 +268,103 @@ public class PremierCopieController {
 	   	   	     	   
 	 }
 	
+
+	 @GetMapping("/")
+	 //	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
+		   public ResponseEntity<Map<String, Object>> findByIdPremiereCopie(
+		   @RequestParam(required = true) String idPremierCopie, 
+		   @RequestParam(defaultValue = "0") int page,
+		   @RequestParam(defaultValue = "3") int size) 
+		 {
+				try {
+					List<PremierCopie> premierCopies = new ArrayList<PremierCopie>();
+					Pageable paging = PageRequest.of(page, size);
+					
+					Page<PremierCopie> pagecopie;
+					// pagecopie = premierCopieRepository.findAll(paging);
+					
+		
+					// if(idPremierCopie == 0)
+
+					// 	 pagecopie = premierCopieRepository.findAll(paging);
+					
+					// else 
+						System.out.println(idPremierCopie);
+						pagecopie = premierCopieRepository.findByIdPremierCopieStartsWith(idPremierCopie,paging);
+								 
+						
+					
+					
+
+					premierCopies = pagecopie.getContent();
+					
+
+						Map<String, Object> response = new HashMap<>();
+						response.put("premierCopies", premierCopies);
+						response.put("currentPage", pagecopie.getNumber());
+						response.put("totalItems", pagecopie.getTotalElements());
+						response.put("totalPages", pagecopie.getTotalPages());
+				 return new ResponseEntity<>(response, HttpStatus.OK);	   
+   
+   
+					
+
+				} catch (Exception e) {
+					return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+				}
+			
+					   
+		  }
+		 
+
+	 @GetMapping("/nomEnfant")
+	 //	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
+		   public ResponseEntity<Map<String, Object>> findByNomEnfant(
+		   @RequestParam(required = true) String NomEnfant, 
+		   @RequestParam(required = true) String PrenomsEnfant,
+		   @RequestParam(defaultValue = "0") int page,
+		   @RequestParam(defaultValue = "3") int size) 
+		 {
+				try {
+					List<PremierCopie> premierCopies = new ArrayList<PremierCopie>();
+					Pageable paging = PageRequest.of(page, size);
+					
+					Page<PremierCopie> pagecopie;
+					// pagecopie = premierCopieRepository.findAll(paging);
+					
+		
+					// if(idPremierCopie == 0)
+
+					// 	 pagecopie = premierCopieRepository.findAll(paging);
+					
+					// else 
+						
+						pagecopie = premierCopieRepository.findByEnfantNomEnfantStartsWithOrEnfantPrenomsEnfantStartsWith(NomEnfant,PrenomsEnfant,paging);
+								 
+					premierCopies = pagecopie.getContent();
+					
+
+						Map<String, Object> response = new HashMap<>();
+						response.put("premierCopies", premierCopies);
+						response.put("currentPage", pagecopie.getNumber());
+						response.put("totalItems", pagecopie.getTotalElements());
+						response.put("totalPages", pagecopie.getTotalPages());
+				 return new ResponseEntity<>(response, HttpStatus.OK);	   
+   
+   
+					
+
+				} catch (Exception e) {
+					return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+				}
+			
+					   
+		  }
+		 
+
 	@PutMapping("/{IdPremierCopie}")
 	// @PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<PremierCopie> updatePremierCopie(@PathVariable("IdPremierCopie") Long IdPremierCopie,
+	public ResponseEntity<PremierCopie> updatePremierCopie(@PathVariable("IdPremierCopie") String IdPremierCopie,
 			@RequestBody PremierCopieRequest premierCopieRequest) 
 	{
 		try {
@@ -377,4 +475,17 @@ public class PremierCopieController {
 		return a;
 	}
 	*/
+	
+	@GetMapping("LastPremiereCopie")
+	public String getLastIdPremierCopie() {
+		PremierCopie premierecopie = premierCopieRepository.findTopByOrderByIdPremierCopieDesc();
+		if( premierecopie != null && premierecopie.getIdPremierCopie() != null) {
+			 NumeroRequest numerorequest =  premierCopieService.numeroCopie();
+				return numerorequest.idPremierCopie;
+		}
+		 NumeroRequest numerorequest =  premierCopieService.numeroCopie();
+		return numerorequest.idPremierCopie;
+		
+		
+	}
 }

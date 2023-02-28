@@ -21,13 +21,19 @@ public class PremierCopieService {
 		NumeroRequest numeroRequest = new NumeroRequest();
 		
 		PremierCopie pc = premierCopieRepository.chercherPremierCopie();
+		
 		int currentYear = typeRepository.year;
 		
-		if(pc != null)
-		{
+		
+				
+		
+		if (pc != null) {
 			long num = pc.getNumero();
 			int annee = pc.getAnneeActuelle();
-			
+			/*
+			long num = premierCopieRepository.chercherNumeroCopie();
+			int annee = premierCopieRepository.chercherAnneeCopie();
+			*/
 			if(annee == currentYear)
 			{			
 				long numero = num + 1;
