@@ -475,4 +475,17 @@ public class PremierCopieController {
 		return a;
 	}
 	*/
+	
+	@GetMapping("LastPremiereCopie")
+	public String getLastIdPremierCopie() {
+		PremierCopie premierecopie = premierCopieRepository.findTopByOrderByIdPremierCopieDesc();
+		if( premierecopie != null && premierecopie.getIdPremierCopie() != null) {
+			 NumeroRequest numerorequest =  premierCopieService.numeroCopie();
+				return numerorequest.idPremierCopie;
+		}
+		 NumeroRequest numerorequest =  premierCopieService.numeroCopie();
+		return numerorequest.idPremierCopie;
+		
+		
+	}
 }
