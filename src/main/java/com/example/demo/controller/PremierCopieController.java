@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -21,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.demo.model.Adoption;
 import com.example.demo.model.Declarant;
@@ -52,7 +56,11 @@ import com.example.demo.repository.MereRepository;
 import com.example.demo.repository.PereRepository;
 import com.example.demo.repository.PieceJustificativeRepository;
 import com.example.demo.repository.PremierCopieRepository;
+import com.example.demo.repository.TypeRepository;
+import com.example.demo.request.NumeroRequest;
 import com.example.demo.request.PremierCopieRequest;
+import com.example.demo.service.HistoriqueService;
+import com.example.demo.service.PremierCopieService;
 
 @CrossOrigin("*")
 @RestController
@@ -71,17 +79,24 @@ public class PremierCopieController {
 	MereRepository mereRepository;
 	@Autowired
 	PereRepository pereRepository;
+	@Autowired
+	HistoriqueService historiqueService;
+	@Autowired
+	PremierCopieService premierCopieService;
 	
 	@Autowired
 	PieceJustificativeRepository pieceJustificativeRepository;
 	@Autowired
 	PremierCopieRepository premierCopieRepository;
+	@Autowired(required = false) 
+	TypeRepository typeRepository;
 	
 	@PostMapping
 //	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<PremierCopie> createPremierCopie(@RequestBody @Valid PremierCopieRequest premierCopieRequest )
+	  public ResponseEntity<PremierCopie> createPremierCopie(@RequestBody @Valid PremierCopieRequest premierCopieRequest)
 	  {
 	    
+		NumeroRequest numeroRequest = premierCopieService.numeroCopie();
 	   Maire maire = maireRepository.findById(premierCopieRequest.getIdMaire()).get();
 	   
 	   Declarant declarant = new Declarant(
@@ -129,7 +144,7 @@ public class PremierCopieController {
 	   pieceJustificativeRepository.save(pieceJustificative);
 	   
 	   PremierCopie premierCopie = new PremierCopie(
-			   premierCopieRequest.getIdPremierCopie(),
+			   numeroRequest.idPremierCopie,
 			   premierCopieRequest.getDescription(),
 			   premierCopieRequest.getMention(),
 			   premierCopieRequest.getDatePCopie(),
@@ -139,22 +154,41 @@ public class PremierCopieController {
 			   mere,
 			   pere,
 			   enfant,
-			   pieceJustificative
+			   pieceJustificative,
+			   premierCopieRequest.getCreatedDate(),
+			   numeroRequest.numero,
+			   numeroRequest.annee
 			   );
 	   premierCopieRepository.save(premierCopie);
 	   
-	   
+	   historiqueService.ajoutHistorique(
+			   numeroRequest.getIdPremierCopie(),
+			   TypeRepository.PremierCopie,
+			   null,
+			   premierCopie.toString(),
+			   TypeRepository.AjoutPremierCopie,
+			   premierCopieRequest.getCreatedDate());
 	   
 	   return new ResponseEntity<>(premierCopie, HttpStatus.CREATED);
 	    
 	  }
 	
 	@GetMapping
+
+	// public ResponseEntity<List<PremierCopie>> getAllPremierCopie (){
+	// 	try {
+	// 		List<PremierCopie> premierecopie = new ArrayList<PremierCopie>();
+	// 		premierecopie = premierCopieRepository.findAll();
+	// 		return new ResponseEntity<>(premierecopie, HttpStatus.OK);
+	// 	} catch (Exception e) {
+	// 		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+	// 	}
+	// }
 //	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<Map<String, Object>> getAllPremierCopie(
 			     @RequestParam(required = false) String title,
 			        @RequestParam(defaultValue = "0") int page,
-			        @RequestParam(defaultValue = "3") int size) {
+			        @RequestParam(defaultValue = "10") int size) {
 	    try {
 	        List<PremierCopie> premierCopies = new ArrayList<PremierCopie>();
 	        Pageable paging = PageRequest.of(page, size);
@@ -175,7 +209,7 @@ public class PremierCopieController {
 	             Map<String, Object> response = new HashMap<>();
 	             response.put("premierCopies", premierCopies);
 	             response.put("currentPage", pagecopie.getNumber());
-	             response.put("totalItems", pagecopie.getTotalElements());
+	             response.put("length", pagecopie.getTotalElements());
 	             response.put("totalPages", pagecopie.getTotalPages());
 	      return new ResponseEntity<>(response, HttpStatus.OK);
 	    } catch (Exception e) {
@@ -185,10 +219,10 @@ public class PremierCopieController {
 
 	@GetMapping("/{id}")
 //	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<PremierCopie> getByIdPremierCopie(@PathVariable("id") Long id) 
+	  public ResponseEntity<PremierCopie> getByIdPremierCopie(@PathVariable("id") String id) 
 	{
-		PremierCopie premierCopie = premierCopieRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Not found Premier Copie with id = " + id));;
+		
+		PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(id);
 			  		   
 				List<Mention> mentions = new ArrayList<>();
 		
@@ -196,9 +230,7 @@ public class PremierCopieController {
 			    	for (Reconnaissance rec : premierCopie.getReconnaissance()) {
 			    		  Mention m = new Mention();
 			    		  m.setCreatedDate(rec.getCreatedDate());
-			    		  m.getInfo().add(new MentionInfo("infoDeclarant",rec.getInfoPersonDeclarant()) );
-			    		  m.getInfo().add(new MentionInfo("dateDeclarant",rec.getDateDeclaration()));
-			    		  m.getInfo().add(new MentionInfo("heureDeclarant",rec.getHeureDeclaration()));
+			    		  m.getInfo().add(rec);
 			    		  m.setType("reconnaissance");
 			    		  mentions.add(m);
 			    		}
@@ -210,8 +242,7 @@ public class PremierCopieController {
 			    
 			    		  Mention m = new Mention();
 			    		  m.setCreatedDate(premierCopie.getJugement().getCreatedDate());
-			    		  m.getInfo().add(new MentionInfo("infoChangement",premierCopie.getJugement().getInfoChangement()));
-			    		  m.getInfo().add(new MentionInfo("numJugement",premierCopie.getJugement().getNumJugement()));
+			    		  m.getInfo().add(premierCopie.getJugement() );
 			    		  m.setType("jugement");
 			    		  mentions.add(m);
 			    		
@@ -221,12 +252,9 @@ public class PremierCopieController {
 			    if (premierCopie.getAdoption() != null && !premierCopie.getAdoption().isEmpty()) {
 			    	for (Adoption rec : premierCopie.getAdoption()) {
 			    		  Mention m = new Mention();
-			    		 m.setInfo(new ArrayList<>());
+			    		  m.setInfo(new ArrayList<>());
 			    		  m.setCreatedDate(rec.getCreatedDate());
-			    		  m.getInfo().add(new MentionInfo("numAdoption",rec.getNumAdoption()));
-			    		  m.getInfo().add(new MentionInfo("parentAdoptif",rec.getParentAdoptif()));
-			    		  m.getInfo().add(new MentionInfo("heureAdoption",rec.getHeureAdoption()));
-			    		  m.getInfo().add(new MentionInfo("dateAdoption",rec.getDateAdoption()));
+			    		  m.getInfo().add(rec);
 			    		  m.setType("adoption");
 			    		  mentions.add(m);
 			    		}
@@ -240,9 +268,103 @@ public class PremierCopieController {
 	   	   	     	   
 	 }
 	
+
+	 @GetMapping("/")
+	 //	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
+		   public ResponseEntity<Map<String, Object>> findByIdPremiereCopie(
+		   @RequestParam(required = true) String idPremierCopie, 
+		   @RequestParam(defaultValue = "0") int page,
+		   @RequestParam(defaultValue = "3") int size) 
+		 {
+				try {
+					List<PremierCopie> premierCopies = new ArrayList<PremierCopie>();
+					Pageable paging = PageRequest.of(page, size);
+					
+					Page<PremierCopie> pagecopie;
+					// pagecopie = premierCopieRepository.findAll(paging);
+					
+		
+					// if(idPremierCopie == 0)
+
+					// 	 pagecopie = premierCopieRepository.findAll(paging);
+					
+					// else 
+						System.out.println(idPremierCopie);
+						pagecopie = premierCopieRepository.findByIdPremierCopieStartsWith(idPremierCopie,paging);
+								 
+						
+					
+					
+
+					premierCopies = pagecopie.getContent();
+					
+
+						Map<String, Object> response = new HashMap<>();
+						response.put("premierCopies", premierCopies);
+						response.put("currentPage", pagecopie.getNumber());
+						response.put("totalItems", pagecopie.getTotalElements());
+						response.put("totalPages", pagecopie.getTotalPages());
+				 return new ResponseEntity<>(response, HttpStatus.OK);	   
+   
+   
+					
+
+				} catch (Exception e) {
+					return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+				}
+			
+					   
+		  }
+		 
+
+	 @GetMapping("/nomEnfant")
+	 //	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
+		   public ResponseEntity<Map<String, Object>> findByNomEnfant(
+		   @RequestParam(required = true) String NomEnfant, 
+		   @RequestParam(required = true) String PrenomsEnfant,
+		   @RequestParam(defaultValue = "0") int page,
+		   @RequestParam(defaultValue = "3") int size) 
+		 {
+				try {
+					List<PremierCopie> premierCopies = new ArrayList<PremierCopie>();
+					Pageable paging = PageRequest.of(page, size);
+					
+					Page<PremierCopie> pagecopie;
+					// pagecopie = premierCopieRepository.findAll(paging);
+					
+		
+					// if(idPremierCopie == 0)
+
+					// 	 pagecopie = premierCopieRepository.findAll(paging);
+					
+					// else 
+						
+						pagecopie = premierCopieRepository.findByEnfantNomEnfantStartsWithOrEnfantPrenomsEnfantStartsWith(NomEnfant,PrenomsEnfant,paging);
+								 
+					premierCopies = pagecopie.getContent();
+					
+
+						Map<String, Object> response = new HashMap<>();
+						response.put("premierCopies", premierCopies);
+						response.put("currentPage", pagecopie.getNumber());
+						response.put("totalItems", pagecopie.getTotalElements());
+						response.put("totalPages", pagecopie.getTotalPages());
+				 return new ResponseEntity<>(response, HttpStatus.OK);	   
+   
+   
+					
+
+				} catch (Exception e) {
+					return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+				}
+			
+					   
+		  }
+		 
+
 	@PutMapping("/{IdPremierCopie}")
 	// @PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<PremierCopie> updatePremierCopie(@PathVariable("IdPremierCopie") Long IdPremierCopie,
+	public ResponseEntity<PremierCopie> updatePremierCopie(@PathVariable("IdPremierCopie") String IdPremierCopie,
 			@RequestBody PremierCopieRequest premierCopieRequest) 
 	{
 		try {
@@ -297,7 +419,7 @@ public class PremierCopieController {
 			pieceJustificative.setCinDeclarant( premierCopieRequest.getCinDeclarant());
 			pieceJustificativeRepository.save(pieceJustificative);
 			
-			premierCopie.setIdPremierCopie( premierCopieRequest.getIdPremierCopie());
+			//premierCopie.setIdPremierCopie( premierCopieRequest.getIdPremierCopie());
 			premierCopie.setDescription( premierCopieRequest.getDescription());
 			premierCopie.setMention( premierCopieRequest.getMention());
 			premierCopie.setDatePCopie( premierCopieRequest.getDatePCopie());
@@ -319,11 +441,11 @@ public class PremierCopieController {
 	
 	@DeleteMapping("/{IdPremierCopie}")
 	// @PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<HttpStatus>  supprPremierCopie(@PathVariable("IdPremierCopie") long IdPremierCopie)
+	public ResponseEntity<HttpStatus>  supprPremierCopie(@PathVariable("IdPremierCopie") String IdPremierCopie)
 	{	
 		try
 		{
-			PremierCopie premierCopie = premierCopieRepository.findById(IdPremierCopie).get();
+			PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
 			Declarant declarant  =  premierCopie.getDeclarant();
 			Mere mere  =  premierCopie.getMere();
 			Pere pere =  premierCopie.getPere();
@@ -343,5 +465,27 @@ public class PremierCopieController {
 		catch (Exception e) {
 	      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
+	}
+	/*
+	@GetMapping("/test")
+	public Long test()
+	{
+		PremierCopie pc = premierCopieRepository.chercherPremierCopie();
+		long a = pc.getNumero() + 1;
+		return a;
+	}
+	*/
+	
+	@GetMapping("LastPremiereCopie")
+	public String getLastIdPremierCopie() {
+		PremierCopie premierecopie = premierCopieRepository.findTopByOrderByIdPremierCopieDesc();
+		if( premierecopie != null && premierecopie.getIdPremierCopie() != null) {
+			 NumeroRequest numerorequest =  premierCopieService.numeroCopie();
+				return numerorequest.idPremierCopie;
+		}
+		 NumeroRequest numerorequest =  premierCopieService.numeroCopie();
+		return numerorequest.idPremierCopie;
+		
+		
 	}
 }

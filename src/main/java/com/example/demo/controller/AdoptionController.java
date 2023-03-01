@@ -80,10 +80,10 @@ public class AdoptionController {
 	
 	@PostMapping("/{IdPremierCopie}")
 	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<Adoption> addAdoption(@PathVariable(value = "IdPremierCopie") Long IdPremierCopie, @RequestBody AdoptionRequest adoptionRequest) 
+	  public ResponseEntity<Adoption> addAdoption(@PathVariable(value = "IdPremierCopie") String IdPremierCopie, @RequestBody AdoptionRequest adoptionRequest) 
 	{
 		try {
-			PremierCopie premierCopie = premierCopieRepository.findById(IdPremierCopie).get();
+			PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
 			
 			Adoption adoption = new Adoption(
 					adoptionRequest.getParentAdoptif(),
@@ -112,7 +112,7 @@ public class AdoptionController {
 		Adoption adoption = adoptionRepository.findById(id)
 		        .orElseThrow(() -> new ResourceNotFoundException("Not found Adoption with id = " + id));
 		
-		PremierCopie premierCopie = premierCopieRepository.findById(adoption.getPremierecopie().getIdPremierCopie()).get();
+		PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(adoption.getPremierecopie().getIdPremierCopie());
 		
 		adoption.setParentAdoptif(adoptionRequest.getParentAdoptif());
 		adoption.setDateAdoption(adoptionRequest.getDateAdoption());
