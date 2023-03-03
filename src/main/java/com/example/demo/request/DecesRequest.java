@@ -7,8 +7,6 @@ import org.springframework.data.annotation.CreatedDate;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class DecesRequest {
-
-	private long idActeDeces;
 	
 	private String dateDeclaration;
 	
@@ -46,13 +44,7 @@ public class DecesRequest {
 	@CreatedDate
 	private Instant createdDate;
 
-	public long getIdActeDeces() {
-		return idActeDeces;
-	}
-
-	public void setIdActeDeces(long idActeDeces) {
-		this.idActeDeces = idActeDeces;
-	}
+	
 
 	public String getDateDeclaration() {
 		return dateDeclaration;
@@ -189,6 +181,7 @@ public class DecesRequest {
 	public void setCreatedDate(Instant createdDate) {
 		this.createdDate = createdDate;
 	}
+
 	
 	
 }

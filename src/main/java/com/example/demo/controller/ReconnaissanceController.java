@@ -81,10 +81,10 @@ public class ReconnaissanceController {
 	
 	@PostMapping("/{IdPremierCopie}")
 	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<Reconnaissance> addReconnaissance(@PathVariable(value = "IdPremierCopie") Long IdPremierCopie, @RequestBody ReconnaissanceRequest reconnaissanceRequest) 
+	  public ResponseEntity<Reconnaissance> addReconnaissance(@PathVariable(value = "IdPremierCopie") String IdPremierCopie, @RequestBody ReconnaissanceRequest reconnaissanceRequest) 
 	{
 		try {
-			PremierCopie premierCopie = premierCopieRepository.findById(IdPremierCopie).get();
+			PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
 			
 			Reconnaissance reconnaissance = new Reconnaissance(
 					reconnaissanceRequest.getDateDeclaration(),
@@ -111,7 +111,7 @@ public class ReconnaissanceController {
 		Reconnaissance reconnaissance = reconnaissanceRepository.findById(id)
 		        .orElseThrow(() -> new ResourceNotFoundException("Not found Reconnaissance with id = " + id));
 		
-		PremierCopie premierCopie = premierCopieRepository.findById(reconnaissance.getPremierecopie().getIdPremierCopie()).get();
+		PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(reconnaissance.getPremierecopie().getIdPremierCopie());
 		
 		reconnaissance.setDateDeclaration(reconnaissanceRequest.getDateDeclaration());
 		reconnaissance.setHeureDeclaration(reconnaissanceRequest.getHeureDeclaration());

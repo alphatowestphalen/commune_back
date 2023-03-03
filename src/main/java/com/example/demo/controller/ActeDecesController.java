@@ -10,9 +10,11 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,12 +24,17 @@ import com.example.demo.model.Defunt;
 import com.example.demo.model.Maire;
 import com.example.demo.model.PieceDeces;
 import com.example.demo.model.PremierCopie;
+import com.example.demo.model.Reconnaissance;
 import com.example.demo.repository.ActeDecesRepository;
 import com.example.demo.repository.DefuntRepository;
 import com.example.demo.repository.MaireRepository;
 import com.example.demo.repository.PieceDecesRepository;
 import com.example.demo.repository.PremierCopieRepository;
+import com.example.demo.repository.TypeRepository;
 import com.example.demo.request.DecesRequest;
+import com.example.demo.request.NumeroActeDecesRequest;
+import com.example.demo.request.ReconnaissanceRequest;
+import com.example.demo.service.ActeDecesService;
 
 @CrossOrigin("*")
 @RestController
@@ -44,13 +51,18 @@ public class ActeDecesController {
 	DefuntRepository defuntRepository;
 	@Autowired
 	PieceDecesRepository pieceDecesRepository;
+	@Autowired(required = false) 
+	TypeRepository typeRepository;
+	@Autowired
+	ActeDecesService acteDecesService;
 	
 	@PostMapping("/{IdPremierCopie}")
-	  public ResponseEntity<ActeDeces> addDeces(@PathVariable(value = "IdPremierCopie") Long IdPremierCopie, @RequestBody DecesRequest decesRequest) 
+	  public ResponseEntity<ActeDeces> addDeces(@PathVariable(value = "IdPremierCopie") String IdPremierCopie, @RequestBody DecesRequest decesRequest) 
 	{
 		try {
+			NumeroActeDecesRequest numActeDeces = acteDecesService.numeroActeDeces();
 			
-			PremierCopie premierCopie = premierCopieRepository.findById(IdPremierCopie).get();
+			PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
 				
 			Maire maire = maireRepository.findById(decesRequest.getIdMaire()).get();
 					
@@ -67,7 +79,7 @@ public class ActeDecesController {
 			pieceDecesRepository.save(pieceDeces);
 					
 			ActeDeces actedeces = new ActeDeces(
-					decesRequest.getIdActeDeces(),
+					numActeDeces.idActeDeces,
 					decesRequest.getDateDeclaration(),
 					decesRequest.getHeureDeclaration(),
 					decesRequest.getNomDeclarant(),
@@ -81,7 +93,9 @@ public class ActeDecesController {
 					defunt,
 					pieceDeces,
 					decesRequest.getCreatedDate(),
-					premierCopie
+					premierCopie,
+					numActeDeces.numero,
+					numActeDeces.annee
 					);
 			
 			acteDecesRepository.save(actedeces);
@@ -107,10 +121,76 @@ public class ActeDecesController {
 	
 	
 	@GetMapping("/{id}")
-	  public ResponseEntity<ActeDeces> getActeDecesById(@PathVariable(value = "id") Long id) {
-		ActeDeces acte = acteDecesRepository.findById(id)
-	        .orElseThrow(() -> new ResourceNotFoundException("Not found Acte de Deces with id = " + id));
+	  public ResponseEntity<ActeDeces> getActeDecesById(@PathVariable(value = "id") String id) {
+		ActeDeces acte = acteDecesRepository.findByIdActeDeces(id);
 
 	    return new ResponseEntity<>(acte, HttpStatus.OK);
 	  }
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<ActeDeces> updateActeDeces(@PathVariable(value = "id") String id, @RequestBody DecesRequest decesRequest)
+	{
+		try {
+			
+			ActeDeces acteDeces = acteDecesRepository.findByIdActeDeces(id);
+			
+			PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(acteDeces.getPremierCopie().getIdPremierCopie());
+			Maire maire = maireRepository.findById(decesRequest.getIdMaire()).get();
+			
+			Defunt defunt = acteDeces.getDefunt();
+			PieceDeces pieceDeces = acteDeces.getPieceDeces();
+			
+			defunt.setProfessionDefunt(decesRequest.getProfessionDefunt());
+			defunt.setAdresseDefunt(decesRequest.getAdresseDefunt());
+			defunt.setDateDeces(decesRequest.getDateDeces());
+			defunt.setLieuDeces(decesRequest.getLieuDeces());
+			defunt.setHeureDeces(decesRequest.getHeureDeces());
+			defuntRepository.save(defunt);
+			
+			pieceDeces.setNomPiece(decesRequest.isNomPiece());
+			pieceDecesRepository.save(pieceDeces);
+			
+			//acteDeces.setIdActeDeces(decesRequest.getIdActeDeces());
+			acteDeces.setDateDeclaration(decesRequest.getDateDeclaration());
+			acteDeces.setHeureDeclaration(decesRequest.getHeureDeclaration());
+			acteDeces.setNomDeclarant(decesRequest.getNomDeclarant());
+			acteDeces.setPrenomsDeclarant(decesRequest.getPrenomsDeclarant());
+			acteDeces.setProfessionDeclarant(decesRequest.getProfessionDeclarant());
+			acteDeces.setLieuNaissanceDeclarant(decesRequest.getLieuNaissanceDeclarant());
+			acteDeces.setAdresseDeclarant(decesRequest.getAdresseDeclarant());
+			acteDeces.setDateNaissanceDeclarant(decesRequest.getDateNaissanceDeclarant());
+			acteDeces.setDate(decesRequest.getDate());
+			acteDeces.setMaire(maire);
+			acteDeces.setDefunt(defunt);
+			acteDeces.setPieceDeces(pieceDeces);
+			acteDeces.setPremierCopie(premierCopie);
+			
+			acteDecesRepository.save(acteDeces);
+			return new ResponseEntity<>(acteDeces, HttpStatus.OK);
+		}
+		catch (Exception e) {
+		      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		    }
+			
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<HttpStatus>  supprActeDeces(@PathVariable("id") String idActeDeces)
+	{
+		try {
+			ActeDeces acteDeces = acteDecesRepository.findByIdActeDeces(idActeDeces);
+			Defunt defunt = acteDeces.getDefunt();
+			PieceDeces pieceDeces = acteDeces.getPieceDeces();
+			
+			acteDecesRepository.delete(acteDeces);
+			defuntRepository.delete(defunt);
+			pieceDecesRepository.delete(pieceDeces);
+			
+			 return new ResponseEntity<>(HttpStatus.OK);
+			
+		}
+		catch (Exception e) {
+		      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		    }
+	}
 }
