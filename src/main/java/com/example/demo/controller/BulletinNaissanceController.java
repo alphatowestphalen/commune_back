@@ -1,5 +1,8 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -47,6 +50,20 @@ public class BulletinNaissanceController {
 
 	    return new ResponseEntity<>(bulletinNaissance, HttpStatus.OK);
 	  }
+
+	@GetMapping()
+	public ResponseEntity<List<BulletinNaissance>> getAllBulletinNaissances(){
+	try {
+		List<BulletinNaissance> bulletin = new ArrayList<BulletinNaissance>();
+
+		bulletin = bulletinNaissanceRepository.findAll();
+		return new ResponseEntity<>(bulletin, HttpStatus.OK);
+		
+	} catch (Exception e) {
+		return  new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+	}	
+	}
+
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<BulletinNaissance> updateBulletinNaissance(@PathVariable(value = "id") Long id,@RequestBody BulletinNaissance bulletinNaissance)

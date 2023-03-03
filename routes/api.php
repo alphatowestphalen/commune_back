@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\FormulaireController;
 use App\Http\Controllers\API\StatistiqueController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,3 +21,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('dashboards', [StatistiqueController::class, 'index']);
+
+Route::prefix('form')->group(function () {
+    Route::get('/{title}', [FormulaireController::class, 'getByTitle']);
+    Route::post('/', [FormulaireController::class, 'store']);
+});
