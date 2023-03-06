@@ -1,6 +1,14 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.BulletinNaissance;
@@ -47,6 +56,39 @@ public class BulletinNaissanceController {
 
 	    return new ResponseEntity<>(bulletinNaissance, HttpStatus.OK);
 	  }
+
+	@GetMapping()
+	public ResponseEntity<Map<String, Object>> getAllBulletinNaissances(
+	@RequestParam(defaultValue = "0") int page,
+	@RequestParam(defaultValue = "10") int size)
+	{
+	try {
+
+		List<BulletinNaissance> bulletin = new ArrayList<BulletinNaissance>();
+		Pageable paging = PageRequest.of(page, size);
+
+		Page<BulletinNaissance> bulletinNaiss;
+
+		bulletinNaiss = bulletinNaissanceRepository.findAll(paging);
+
+
+		bulletin = bulletinNaiss.getContent();
+
+		Map<String, Object> response = new HashMap<>();
+		response.put("BulletinNaiss", bulletin);
+		response.put("currentPage", bulletinNaiss.getNumber());
+		response.put("length", bulletinNaiss.getTotalElements());
+		response.put("totalPages", bulletinNaiss.getTotalPages());
+
+		
+	   return new ResponseEntity<>(response, HttpStatus.OK);
+	   }
+	    catch (Exception e) {
+	   return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+	   }
+
+	}
+
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<BulletinNaissance> updateBulletinNaissance(@PathVariable(value = "id") Long id,@RequestBody BulletinNaissance bulletinNaissance)
