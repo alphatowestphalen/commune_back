@@ -42,6 +42,7 @@ import com.example.demo.model.Declarant;
 import com.example.demo.model.Enfant;
 import com.example.demo.model.Jugement;
 import com.example.demo.model.Maire;
+import com.example.demo.model.Mariage;
 import com.example.demo.model.Mention;
 import com.example.demo.model.MentionInfo;
 import com.example.demo.model.Mere;
@@ -117,15 +118,20 @@ public class PremierCopieController {
 			   premierCopieRequest.getAdresseMere() );
 	   mereRepository.save(mere);
 	   
-	   Pere pere = new Pere(
-			   premierCopieRequest.getNomPere(),
-			   premierCopieRequest.getPrenomsPere(), 
-			   premierCopieRequest.getDatenaissPere(), 
-			   premierCopieRequest.getLieuNaissPere(), 
-			   premierCopieRequest.getProfessionPere(),
-			   premierCopieRequest.getAdressePere() );
-	   pereRepository.save(pere);
+	   Pere pere = new Pere();
 	   
+	   if(premierCopieRequest.getAvoirPere() == true)
+	   {
+		    pere = new Pere(
+				   premierCopieRequest.getNomPere(),
+				   premierCopieRequest.getPrenomsPere(), 
+				   premierCopieRequest.getDatenaissPere(), 
+				   premierCopieRequest.getLieuNaissPere(), 
+				   premierCopieRequest.getProfessionPere(),
+				   premierCopieRequest.getAdressePere() );
+		   pereRepository.save(pere);
+	   }
+	  
 	   Enfant enfant = new Enfant(
 			   premierCopieRequest.getNomEnfant(),
 			   premierCopieRequest.getPrenomsEnfant(),
@@ -260,6 +266,51 @@ public class PremierCopieController {
 			    		}
 			    	// mentions.addAll(premierCopie.getAdoption());
 			    }
+			    
+			    if (premierCopie.getMariage() != null && !premierCopie.getMariage().isEmpty()) {
+			    	if(premierCopie.getEnfant().getSexeEnfant() == "M")
+			    	{
+			    		for (Mariage mar : premierCopie.getMariage()) {			    		
+			    			Mention m = new Mention();
+				    		 m.setInfo(new ArrayList<>());
+				    		  m.setCreatedDate(mar.getCreatedDate());
+				    		  m.getInfo().add(new MentionInfo("numMariage",mar.getIdMariage()));
+				    		  m.getInfo().add(new MentionInfo("dateMariage",mar.getDateMariage()));
+				    		  m.getInfo().add(new MentionInfo("nomCouple",mar.getFemme().getNom()));
+				    		  m.getInfo().add(new MentionInfo("prenomCouple",mar.getFemme().getPrenoms()));
+				    		  m.getInfo().add(new MentionInfo("datenaissCouple",mar.getFemme().getDatenaiss()));
+				    		  m.getInfo().add(new MentionInfo("profession",mar.getFemme().getProfession()));
+				    		  m.getInfo().add(new MentionInfo("lieunaiss",mar.getFemme().getLieunaiss()));
+				    		  m.getInfo().add(new MentionInfo("adresse",mar.getFemme().getAdresse()));
+				    		 
+				    		  m.setType("mariage");
+				    		  mentions.add(m);		    					    		  
+			    		}
+			    		
+			    	}
+			    	else {
+			    		for (Mariage mar : premierCopie.getMariage()) {			    		
+			    			Mention m = new Mention();
+				    		 m.setInfo(new ArrayList<>());
+				    		  m.setCreatedDate(mar.getCreatedDate());
+				    		  m.getInfo().add(new MentionInfo("numMariage",mar.getIdMariage()));
+				    		  m.getInfo().add(new MentionInfo("dateMariage",mar.getDateMariage()));
+				    		  m.getInfo().add(new MentionInfo("nomCouple",mar.getHomme().getNom()));
+				    		  m.getInfo().add(new MentionInfo("prenomCouple",mar.getHomme().getPrenoms()));
+				    		  m.getInfo().add(new MentionInfo("datenaissCouple",mar.getHomme().getDatenaiss()));
+				    		  m.getInfo().add(new MentionInfo("profession",mar.getHomme().getProfession()));
+				    		  m.getInfo().add(new MentionInfo("lieunaiss",mar.getHomme().getLieunaiss()));
+				    		  m.getInfo().add(new MentionInfo("adresse",mar.getHomme().getAdresse()));
+				    		 
+				    		  m.setType("mariage");
+				    		  mentions.add(m);		    					    		  
+			    		}
+			    	}
+			    	
+			    	// mentions.addAll(premierCopie.getMariage());
+			    }
+			    
+			  
 
 			    Collections.sort(mentions, (a, b) -> a.getCreatedDate().compareTo(b.getCreatedDate()));
 			    premierCopie.setMentions(mentions);

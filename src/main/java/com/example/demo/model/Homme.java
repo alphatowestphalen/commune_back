@@ -32,14 +32,19 @@ public class Homme {
 	@Column(name = "adresse")
 	private String adresse;
 	
-	@ManyToOne()
-	  @JoinColumn(name = "idMere")
-	  private Mere mere;
+	@Column(name = "type")
+	private String type;
+	
+	@Column(name = "idPere")
+	private Long idPere;
+	
+	@Column(name = "idMere")
+	private Long idMere;
 	
 	@ManyToOne()
-	  @JoinColumn(name = "idPere")
-	  private Pere pere;
-
+	  @JoinColumn(name = "idTemoin")
+	  private Temoin temoin;
+	
 	public long getIdHomme() {
 		return idHomme;
 	}
@@ -104,20 +109,36 @@ public class Homme {
 		this.adresse = adresse;
 	}
 
-	public Mere getMere() {
-		return mere;
+	public String getType() {
+		return type;
 	}
 
-	public void setMere(Mere mere) {
-		this.mere = mere;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	public Pere getPere() {
-		return pere;
+	public Long getIdPere() {
+		return idPere;
 	}
 
-	public void setPere(Pere pere) {
-		this.pere = pere;
+	public void setIdPere(Long idPere) {
+		this.idPere = idPere;
+	}
+
+	public Long getIdMere() {
+		return idMere;
+	}
+
+	public void setIdMere(Long idMere) {
+		this.idMere = idMere;
+	}
+
+	public Temoin getTemoin() {
+		return temoin;
+	}
+
+	public void setTemoin(Temoin temoin) {
+		this.temoin = temoin;
 	}
 
 	public Homme() {
@@ -126,7 +147,7 @@ public class Homme {
 	}
 
 	public Homme(String nationalite, String nom, String prenoms, String profession, String datenaiss, String lieunaiss,
-			String adresse, Mere mere, Pere pere) {
+			String adresse, String type, Long idPere, Long idMere, Temoin temoin) {
 		this.nationalite = nationalite;
 		this.nom = nom;
 		this.prenoms = prenoms;
@@ -134,9 +155,13 @@ public class Homme {
 		this.datenaiss = datenaiss;
 		this.lieunaiss = lieunaiss;
 		this.adresse = adresse;
-		this.mere = mere;
-		this.pere = pere;
+		this.type = type;
+		this.idPere = idPere;
+		this.idMere = idMere;
+		this.temoin = temoin;
 	}
+
 	
+
 	
 }

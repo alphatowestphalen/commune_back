@@ -84,7 +84,7 @@ public class PremierCopieRequest {
 	@CreatedDate
 	private Instant createdDate;
 
-	
+	private Boolean avoirPere;
 
 	public String getDescription() {
 		return description;
@@ -364,6 +364,14 @@ public class PremierCopieRequest {
 
 	public void setCreatedDate(Instant createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public Boolean getAvoirPere() {
+		return avoirPere;
+	}
+
+	public void setAvoirPere(Boolean avoirPere) {
+		this.avoirPere = avoirPere;
 	}
 
 	
