@@ -142,18 +142,31 @@ public class MariageController {
 						temoinFemme,
 						premierCopieFemme);
 				femmeRepository.save(femme);
+				
+				ArrayList<String> type = new ArrayList<>();
+						type.add(typeHomme);
+						type.add(typeFemme);
+
+				List<PremierCopie> premierecopie = new ArrayList<>();
+				  premierecopie.add(premierCopieFemme);
+				  premierecopie.add(premierCopieHomme);		
+
 
 				Mariage mariage = mariageService.ajoutMariageMixte(
 						numeroActeMariage.idMariage,
 						mariageRequest.getDescription(),
 						mariageRequest.getDateMariage(),
+						 type,
 						mariageRequest.getHeureMariage(),
 						homme,
 						femme,
 						maire,
 						mariageRequest.getCreatedDate(),
 						numeroActeMariage.numero,
-						numeroActeMariage.annee);
+						numeroActeMariage.annee,
+						premierecopie);
+
+
 
 				return new ResponseEntity<>(mariage, HttpStatus.OK);
 
@@ -243,17 +256,28 @@ public class MariageController {
 						premierCopieFemme);
 				femmeRepository.save(femme);
 
+				ArrayList<String> type = new ArrayList<>();
+				type.add(typeHomme);
+				type.add(typeFemme);
+
+				List<PremierCopie> premierecopie = new ArrayList<>();
+				  premierecopie.add(premierCopieFemme);
+				  premierecopie.add(premierCopieHomme);		
+
+
 				Mariage mariage = mariageService.ajoutMariageMixte(
 						numeroActeMariage.idMariage,
 						mariageRequest.getDescription(),
 						mariageRequest.getDateMariage(),
+						 type,
 						mariageRequest.getHeureMariage(),
 						homme,
 						femme,
 						maire,
 						mariageRequest.getCreatedDate(),
 						numeroActeMariage.numero,
-						numeroActeMariage.annee);
+						numeroActeMariage.annee,
+						premierecopie);
 
 				return new ResponseEntity<>(mariage, HttpStatus.OK);
 			} else if (typeHomme.equals("interne") && typeFemme.equals("externe")) {
@@ -340,18 +364,28 @@ public class MariageController {
 						premierCopieFemme);
 				femmeRepository.save(femme);
 
-				Mariage mariage = mariageService.ajoutMariageMixte(
-						numeroActeMariage.idMariage,
-						mariageRequest.getDescription(),
-						mariageRequest.getDateMariage(),
-						mariageRequest.getHeureMariage(),
-						homme,
-						femme,
-						maire,
-						mariageRequest.getCreatedDate(),
-						numeroActeMariage.numero,
-						numeroActeMariage.annee);
+				ArrayList<String> type = new ArrayList<>();
+				type.add(typeHomme);
+				type.add(typeFemme);
 
+				List<PremierCopie> premierecopie = new ArrayList<>();
+				premierecopie.add(premierCopieFemme);
+				premierecopie.add(premierCopieHomme);		
+
+
+			  Mariage mariage = mariageService.ajoutMariageMixte(
+					  numeroActeMariage.idMariage,
+					  mariageRequest.getDescription(),
+					  mariageRequest.getDateMariage(),
+					   type,
+					  mariageRequest.getHeureMariage(),
+					  homme,
+					  femme,
+					  maire,
+					  mariageRequest.getCreatedDate(),
+					  numeroActeMariage.numero,
+					  numeroActeMariage.annee,
+					  premierecopie);
 				return new ResponseEntity<>(mariage, HttpStatus.OK);
 
 			} else {
@@ -453,17 +487,28 @@ public class MariageController {
 						premierCopieFemme);
 				femmeRepository.save(femme);
 
-				Mariage mariage = mariageService.ajoutMariageMixte(
-						numeroActeMariage.idMariage,
-						mariageRequest.getDescription(),
-						mariageRequest.getDateMariage(),
-						mariageRequest.getHeureMariage(),
-						homme,
-						femme,
-						maire,
-						mariageRequest.getCreatedDate(),
-						numeroActeMariage.numero,
-						numeroActeMariage.annee);
+				ArrayList<String> type = new ArrayList<>();
+				type.add(typeHomme);
+				type.add(typeFemme);
+				
+				List<PremierCopie> premierecopie = new ArrayList<>();
+				premierecopie.add(premierCopieFemme);
+				premierecopie.add(premierCopieHomme);		
+
+
+			  Mariage mariage = mariageService.ajoutMariageMixte(
+					  numeroActeMariage.idMariage,
+					  mariageRequest.getDescription(),
+					  mariageRequest.getDateMariage(),
+					   type,
+					  mariageRequest.getHeureMariage(),
+					  homme,
+					  femme,
+					  maire,
+					  mariageRequest.getCreatedDate(),
+					  numeroActeMariage.numero,
+					  numeroActeMariage.annee,
+					  premierecopie);
 
 				return new ResponseEntity<>(mariage, HttpStatus.OK);
 			}
@@ -489,7 +534,7 @@ public class MariageController {
 	        	mariageList = listmariage.getContent();
 
 	             Map<String, Object> response = new HashMap<>();
-	             response.put("mariges", mariageList);
+	             response.put("mariages", mariageList);
 	             response.put("currentPage", listmariage.getNumber());
 	             response.put("length", listmariage.getTotalElements());
 	             response.put("totalPages", listmariage.getTotalPages());

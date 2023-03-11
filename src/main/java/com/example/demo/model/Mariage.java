@@ -1,13 +1,19 @@
 package com.example.demo.model;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.*;
 
 import org.springframework.data.annotation.CreatedDate;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(name="mariage")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property="idMariage")
 public class Mariage {
 
 	@Id
@@ -28,22 +34,28 @@ public class Mariage {
 	 
 	 @Column(name = "annee")
 	 private int annee;
+
+	 @Column(name= "type")
+	 private ArrayList<String> type = new ArrayList<>();
 	
 	@ManyToOne()
-	  @JoinColumn(name ="idHomme")
+	@JoinColumn(name ="idHomme")
 	private Homme homme;
 	
 	@ManyToOne()
-	  @JoinColumn(name ="idFemme")
+	@JoinColumn(name ="idFemme")
 	private Femme femme;
 	
 	@ManyToOne()
-	  @JoinColumn(name ="idMaire")
+	@JoinColumn(name ="idMaire")
 	private Maire maire;
 
 	@CreatedDate
 	private Instant createdDate;
 
+	@ManyToOne
+	@JoinColumn(name="idPremierCopie")
+	private PremierCopie premierecopie;
 
 
 	
@@ -165,31 +177,56 @@ public class Mariage {
 		this.annee = annee;
 	}
 
+	public ArrayList<String> getType() {
+		return type;
+	}
 
 
 
+	public void setType(ArrayList<String> type) {
+		this.type = type;
+	}
+	
 
-	public Mariage(String idMariage, String description, String dateMariage, String heureMariage, Homme homme,
-			Femme femme, Maire maire, Instant createdDate, long numero, int annee) {
+	public PremierCopie getPremierecopie() {
+		return premierecopie;
+	}
+
+
+
+	public void setPremierecopie(PremierCopie premierecopie) {
+		this.premierecopie = premierecopie;
+	}
+
+
+
+	public Mariage(String idMariage, String description, String dateMariage,ArrayList<String> type, String heureMariage, Homme homme,
+			Femme femme, Maire maire, Instant createdDate, long numero, int annee , PremierCopie premierecopie) {
 		this.idMariage = idMariage;
 		this.description = description;
 		this.dateMariage = dateMariage;
 		this.heureMariage = heureMariage;
+	    this.type = type;
 		this.homme = homme;
 		this.femme = femme;
 		this.maire = maire;
 		this.createdDate = createdDate;
 		this.numero = numero;
 		this.annee = annee;
+		this.premierecopie = premierecopie;
 		
 	}
 
+	
 
 
 	public Mariage() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
+
+
+
+
+
 	
 	
 }

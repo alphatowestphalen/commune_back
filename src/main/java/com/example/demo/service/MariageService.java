@@ -1,6 +1,8 @@
 package com.example.demo.service;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,20 +70,22 @@ public class MariageService {
 		}
 	}
 	
-	public Mariage ajoutMariageMixte(String idMariage, String description, String dateMariage, String heureMariage, Homme homme,
-			Femme femme, Maire maire, Instant createdDate, long numero, int annee)
+	public Mariage ajoutMariageMixte(String idMariage, String description, String dateMariage, ArrayList<String> type, String heureMariage ,Homme homme,
+			Femme femme, Maire maire, Instant createdDate, long numero, int annee , List<PremierCopie> premierCopie)
 	{
 		Mariage mariage = new Mariage(
 				idMariage,
 				description,
 				dateMariage,
+				type,
 				heureMariage,
 				homme,
 				femme,
 				maire,
 				createdDate,
 				numero,
-				annee);
+				annee,
+				premierCopie);
 		
 		mariageRepository.save(mariage);
 		
