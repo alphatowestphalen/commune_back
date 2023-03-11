@@ -31,7 +31,7 @@ class InitializeForm extends Command
       [
         'title' => 'BulletinNaissance',
         'content' => json_encode([
-          "title" => 'Bulletin de naissance',
+          "title" => 'Formulaire Bulletin de naissance',
           "logoPosition" => 'right',
           "pages" => [
             [

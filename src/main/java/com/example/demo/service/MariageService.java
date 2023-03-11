@@ -69,7 +69,7 @@ public class MariageService {
 	}
 	
 	public Mariage ajoutMariageMixte(String idMariage, String description, String dateMariage, String heureMariage, Homme homme,
-			Femme femme, Maire maire, Instant createdDate, long numero, int annee, PremierCopie premierecopie)
+			Femme femme, Maire maire, Instant createdDate, long numero, int annee)
 	{
 		Mariage mariage = new Mariage(
 				idMariage,
@@ -81,8 +81,7 @@ public class MariageService {
 				maire,
 				createdDate,
 				numero,
-				annee,
-				premierecopie);
+				annee);
 		
 		mariageRepository.save(mariage);
 		

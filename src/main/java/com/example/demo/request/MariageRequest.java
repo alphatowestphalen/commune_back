@@ -13,6 +13,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class MariageRequest {
 
+	// temoin Homme
+
 	private String nomTemoinHomme;
 	
 	private String prenomsTemoinHomme;
@@ -26,6 +28,9 @@ public class MariageRequest {
 
 	private String adresseTemoinHomme;
 
+
+	// Temoin Femme
+
 	private String nomTemoinFemme;
 	
 	private String prenomsTemoinFemme;
@@ -38,8 +43,13 @@ public class MariageRequest {
 	private String lieunaissTemoinFemme;
 
 	private String adresseTemoinFemme;
+
+
+	// Info Homme
 	
 	private String nationaliteHomme;
+
+	private String idPremierCopieHomme;
 	
 	private String nomHomme;
 	
@@ -56,10 +66,44 @@ public class MariageRequest {
 	
 	private String typeHomme;
 	
+	
+
+	// PERE HOMME
 	private long idPereHomme;
-	
+	 
+	private String nomPere;
+
+	private String prenomsPere;
+
+	private String datenaissPere;
+
+	private String  lieuNaissPere;
+
+	private String professionPere;
+
+	private String adressPere;
+
+
+	//MERE HOMME
+
 	private long idMereHomme;
+
+	private String nomMere;
+
+	private String prenomsMere;
+
+	private String datenaissMere;
+
+	private String lieunaissMere;
+
+	private String professionMere;
+
+  private String adresseMere;
+
+
+	// Info Femme
 	
+	private String idPremierCopieFemme;
 	
 	private String nationaliteFemme;
 	
@@ -78,9 +122,38 @@ public class MariageRequest {
 
 	private String typeFemme;
 
+
+	// PERE HOMME
 	private long idPereFemme;
+	 
+	private String nomPereFemme;
+
+	private String prenomsPereFemme;
+
+	private String datenaissPereFemme;
+
+	private String  lieuNaissPereFemme;
+
+	private String professionPereFemme;
+
+	private String adressPereFemme;
+
+
+	//MERE HOMME
 
 	private long idMereFemme;
+
+	private String nomMereFemme;
+
+	private String prenomsMereFemme;
+
+	private String datenaissMereFemme;
+
+	private String lieunaissMereFemme;
+
+	private String professionMereFemme;
+
+  private String adresseMereFemme;
 	
 
 	private String description;
@@ -190,6 +263,16 @@ public class MariageRequest {
 	public void setAdresseTemoinFemme(String adresseTemoinFemme) {
 		this.adresseTemoinFemme = adresseTemoinFemme;
 	}
+	
+	
+
+	public String getIdPremierCopieHomme() {
+		return idPremierCopieHomme;
+	}
+
+	public void setIdPremierCopieHomme(String idPremierCopieHomme) {
+		this.idPremierCopieHomme = idPremierCopieHomme;
+	}
 
 	public String getNationaliteHomme() {
 		return nationaliteHomme;
@@ -275,6 +358,31 @@ public class MariageRequest {
 		return nationaliteFemme;
 	}
 
+	
+	public long getIdPereFemme() {
+		return idPereFemme;
+	}
+
+	public void setIdPereFemme(long idPereFemme) {
+		this.idPereFemme = idPereFemme;
+	}
+
+	public long getIdMereFemme() {
+		return idMereFemme;
+	}
+
+	public void setIdMereFemme(long idMereFemme) {
+		this.idMereFemme = idMereFemme;
+	}
+
+	public String getIdPremierCopieFemme() {
+		return idPremierCopieFemme;
+	}
+
+	public void setIdPremierCopieFemme(String idPremierCopieFemme) {
+		this.idPremierCopieFemme = idPremierCopieFemme;
+	}
+
 	public void setNationaliteFemme(String nationaliteFemme) {
 		this.nationaliteFemme = nationaliteFemme;
 	}
@@ -335,22 +443,200 @@ public class MariageRequest {
 		this.typeFemme = typeFemme;
 	}
 
-	public long getIdPereFemme() {
-		return idPereFemme;
+
+	
+
+	public String getNomPere() {
+		return nomPere;
 	}
 
-	public void setIdPereFemme(long idPereFemme) {
-		this.idPereFemme = idPereFemme;
+	public void setNomPere(String nomPere) {
+		this.nomPere = nomPere;
 	}
 
-	public long getIdMereFemme() {
-		return idMereFemme;
+	public String getPrenomsPere() {
+		return prenomsPere;
 	}
 
-	public void setIdMereFemme(long idMereFemme) {
-		this.idMereFemme = idMereFemme;
+	public void setPrenomsPere(String prenomsPere) {
+		this.prenomsPere = prenomsPere;
 	}
 
+	public String getDatenaissPere() {
+		return datenaissPere;
+	}
+
+	public void setDatenaissPere(String datenaissPere) {
+		this.datenaissPere = datenaissPere;
+	}
+
+	public String getLieuNaissPere() {
+		return lieuNaissPere;
+	}
+
+	public void setLieuNaissPere(String lieuNaissPere) {
+		this.lieuNaissPere = lieuNaissPere;
+	}
+
+	public String getProfessionPere() {
+		return professionPere;
+	}
+
+	public void setProfessionPere(String professionPere) {
+		this.professionPere = professionPere;
+	}
+
+	public String getAdressPere() {
+		return adressPere;
+	}
+
+	public void setAdressPere(String adressPere) {
+		this.adressPere = adressPere;
+	}
+
+	public String getNomMere() {
+		return nomMere;
+	}
+
+	public void setNomMere(String nomMere) {
+		this.nomMere = nomMere;
+	}
+
+	public String getPrenomsMere() {
+		return prenomsMere;
+	}
+
+	public void setPrenomsMere(String prenomsMere) {
+		this.prenomsMere = prenomsMere;
+	}
+
+	public String getDatenaissMere() {
+		return datenaissMere;
+	}
+
+	public void setDatenaissMere(String datenaissMere) {
+		this.datenaissMere = datenaissMere;
+	}
+
+	public String getLieunaissMere() {
+		return lieunaissMere;
+	}
+
+	public void setLieunaissMere(String lieunaissMere) {
+		this.lieunaissMere = lieunaissMere;
+	}
+
+	public String getProfessionMere() {
+		return professionMere;
+	}
+
+	public void setProfessionMere(String professionMere) {
+		this.professionMere = professionMere;
+	}
+
+	public String getAdresseMere() {
+		return adresseMere;
+	}
+
+	public void setAdresseMere(String adresseMere) {
+		this.adresseMere = adresseMere;
+	}
+
+	public String getNomPereFemme() {
+		return nomPereFemme;
+	}
+
+	public void setNomPereFemme(String nomPereFemme) {
+		this.nomPereFemme = nomPereFemme;
+	}
+
+	public String getPrenomsPereFemme() {
+		return prenomsPereFemme;
+	}
+
+	public void setPrenomsPereFemme(String prenomsPereFemme) {
+		this.prenomsPereFemme = prenomsPereFemme;
+	}
+
+	public String getDatenaissPereFemme() {
+		return datenaissPereFemme;
+	}
+
+	public void setDatenaissPereFemme(String datenaissPereFemme) {
+		this.datenaissPereFemme = datenaissPereFemme;
+	}
+
+	public String getLieuNaissPereFemme() {
+		return lieuNaissPereFemme;
+	}
+
+	public void setLieuNaissPereFemme(String lieuNaissPereFemme) {
+		this.lieuNaissPereFemme = lieuNaissPereFemme;
+	}
+
+	public String getProfessionPereFemme() {
+		return professionPereFemme;
+	}
+
+	public void setProfessionPereFemme(String professionPereFemme) {
+		this.professionPereFemme = professionPereFemme;
+	}
+
+	public String getAdressPereFemme() {
+		return adressPereFemme;
+	}
+
+	public void setAdressPereFemme(String adressPereFemme) {
+		this.adressPereFemme = adressPereFemme;
+	}
+
+	public String getNomMereFemme() {
+		return nomMereFemme;
+	}
+
+	public void setNomMereFemme(String nomMereFemme) {
+		this.nomMereFemme = nomMereFemme;
+	}
+
+	public String getPrenomsMereFemme() {
+		return prenomsMereFemme;
+	}
+
+	public void setPrenomsMereFemme(String prenomsMereFemme) {
+		this.prenomsMereFemme = prenomsMereFemme;
+	}
+
+	public String getDatenaissMereFemme() {
+		return datenaissMereFemme;
+	}
+
+	public void setDatenaissMereFemme(String datenaissMereFemme) {
+		this.datenaissMereFemme = datenaissMereFemme;
+	}
+
+	public String getLieunaissMereFemme() {
+		return lieunaissMereFemme;
+	}
+
+	public void setLieunaissMereFemme(String lieunaissMereFemme) {
+		this.lieunaissMereFemme = lieunaissMereFemme;
+	}
+
+	public String getProfessionMereFemme() {
+		return professionMereFemme;
+	}
+
+	public void setProfessionMereFemme(String professionMereFemme) {
+		this.professionMereFemme = professionMereFemme;
+	}
+
+	public String getAdresseMereFemme() {
+		return adresseMereFemme;
+	}
+
+	public void setAdresseMereFemme(String adresseMereFemme) {
+		this.adresseMereFemme = adresseMereFemme;
+	}
 
 	public String getDescription() {
 		return description;

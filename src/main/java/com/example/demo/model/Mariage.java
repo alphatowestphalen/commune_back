@@ -45,9 +45,7 @@ public class Mariage {
 	private Instant createdDate;
 
 
-	@ManyToOne
-	@JoinColumn(name="idPremierCopie")
-	private PremierCopie premierecopie;
+
 	
 	public String getIdMariage() {
 		return idMariage;
@@ -169,20 +167,10 @@ public class Mariage {
 
 
 
-	public PremierCopie getPremierecopie() {
-		return premierecopie;
-	}
-
-
-
-	public void setPremierecopie(PremierCopie premierecopie) {
-		this.premierecopie = premierecopie;
-	}
-
 
 
 	public Mariage(String idMariage, String description, String dateMariage, String heureMariage, Homme homme,
-			Femme femme, Maire maire, Instant createdDate, long numero, int annee, PremierCopie premierecopie) {
+			Femme femme, Maire maire, Instant createdDate, long numero, int annee) {
 		this.idMariage = idMariage;
 		this.description = description;
 		this.dateMariage = dateMariage;
@@ -193,7 +181,7 @@ public class Mariage {
 		this.createdDate = createdDate;
 		this.numero = numero;
 		this.annee = annee;
-		this.premierecopie = premierecopie;
+		
 	}
 
 
