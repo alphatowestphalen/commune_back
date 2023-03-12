@@ -70,14 +70,13 @@ public class MariageService {
 		}
 	}
 	
-	public Mariage ajoutMariageMixte(String idMariage, String description, String dateMariage, ArrayList<String> type, String heureMariage ,Homme homme,
-			Femme femme, Maire maire, Instant createdDate, long numero, int annee , List<PremierCopie> premierCopie)
+	public Mariage ajoutMariageMixte(String idMariage, String description, String dateMariage, String heureMariage ,Homme homme,
+			Femme femme, Maire maire, Instant createdDate, long numero, int annee , PremierCopie premiereCopieHomme, PremierCopie premiereCopieFemme)
 	{
 		Mariage mariage = new Mariage(
 				idMariage,
 				description,
 				dateMariage,
-				type,
 				heureMariage,
 				homme,
 				femme,
@@ -85,7 +84,8 @@ public class MariageService {
 				createdDate,
 				numero,
 				annee,
-				premierCopie);
+				premiereCopieHomme,
+				premiereCopieFemme);
 		
 		mariageRepository.save(mariage);
 		

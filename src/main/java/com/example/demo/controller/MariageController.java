@@ -156,7 +156,6 @@ public class MariageController {
 						numeroActeMariage.idMariage,
 						mariageRequest.getDescription(),
 						mariageRequest.getDateMariage(),
-						 type,
 						mariageRequest.getHeureMariage(),
 						homme,
 						femme,
@@ -164,7 +163,9 @@ public class MariageController {
 						mariageRequest.getCreatedDate(),
 						numeroActeMariage.numero,
 						numeroActeMariage.annee,
-						premierecopie);
+						premierCopieHomme,
+						premierCopieFemme
+						);
 
 
 
@@ -256,20 +257,17 @@ public class MariageController {
 						premierCopieFemme);
 				femmeRepository.save(femme);
 
-				ArrayList<String> type = new ArrayList<>();
-				type.add(typeHomme);
-				type.add(typeFemme);
+			
 
-				List<PremierCopie> premierecopie = new ArrayList<>();
-				  premierecopie.add(premierCopieFemme);
-				  premierecopie.add(premierCopieHomme);		
+				// List<PremierCopie> premierecopie = new ArrayList<>();
+				//   premierecopie.add(premierCopieFemme);
+				//   premierecopie.add(premierCopieHomme);		
 
 
 				Mariage mariage = mariageService.ajoutMariageMixte(
 						numeroActeMariage.idMariage,
 						mariageRequest.getDescription(),
 						mariageRequest.getDateMariage(),
-						 type,
 						mariageRequest.getHeureMariage(),
 						homme,
 						femme,
@@ -277,7 +275,9 @@ public class MariageController {
 						mariageRequest.getCreatedDate(),
 						numeroActeMariage.numero,
 						numeroActeMariage.annee,
-						premierecopie);
+						premierCopieHomme,
+						premierCopieFemme
+						);
 
 				return new ResponseEntity<>(mariage, HttpStatus.OK);
 			} else if (typeHomme.equals("interne") && typeFemme.equals("externe")) {
@@ -377,7 +377,6 @@ public class MariageController {
 					  numeroActeMariage.idMariage,
 					  mariageRequest.getDescription(),
 					  mariageRequest.getDateMariage(),
-					   type,
 					  mariageRequest.getHeureMariage(),
 					  homme,
 					  femme,
@@ -385,7 +384,8 @@ public class MariageController {
 					  mariageRequest.getCreatedDate(),
 					  numeroActeMariage.numero,
 					  numeroActeMariage.annee,
-					  premierecopie);
+					  premierCopieHomme,
+					  premierCopieFemme);
 				return new ResponseEntity<>(mariage, HttpStatus.OK);
 
 			} else {
@@ -500,7 +500,6 @@ public class MariageController {
 					  numeroActeMariage.idMariage,
 					  mariageRequest.getDescription(),
 					  mariageRequest.getDateMariage(),
-					   type,
 					  mariageRequest.getHeureMariage(),
 					  homme,
 					  femme,
@@ -508,7 +507,8 @@ public class MariageController {
 					  mariageRequest.getCreatedDate(),
 					  numeroActeMariage.numero,
 					  numeroActeMariage.annee,
-					  premierecopie);
+					  premierCopieHomme,
+					  premierCopieFemme);
 
 				return new ResponseEntity<>(mariage, HttpStatus.OK);
 			}

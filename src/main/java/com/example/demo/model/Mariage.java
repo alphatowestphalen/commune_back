@@ -35,8 +35,8 @@ public class Mariage {
 	 @Column(name = "annee")
 	 private int annee;
 
-	 @Column(name= "type")
-	 private ArrayList<String> type = new ArrayList<>();
+	//  @Column(name= "type")
+	//  private ArrayList<String> type = new ArrayList<>();
 	
 	@ManyToOne()
 	@JoinColumn(name ="idHomme")
@@ -54,8 +54,13 @@ public class Mariage {
 	private Instant createdDate;
 
 	@ManyToOne
-	@JoinColumn(name="idPremierCopie")
-	private PremierCopie premierecopie;
+	@JoinColumn(name="idPremierCopieHomme")
+	private PremierCopie premierecopieHomme;
+
+	@ManyToOne
+	@JoinColumn(name="idPremierCopieFemme")
+	private PremierCopie premierecopieFemme;
+
 
 
 	
@@ -177,47 +182,63 @@ public class Mariage {
 		this.annee = annee;
 	}
 
-	public ArrayList<String> getType() {
-		return type;
-	}
+	// public ArrayList<String> getType() {
+	// 	return type;
+	// }
 
 
 
-	public void setType(ArrayList<String> type) {
-		this.type = type;
-	}
+	// public void setType(ArrayList<String> type) {
+	// 	this.type = type;
+	// }
 	
 
-	public PremierCopie getPremierecopie() {
-		return premierecopie;
-	}
+	
 
 
-
-	public void setPremierecopie(PremierCopie premierecopie) {
-		this.premierecopie = premierecopie;
-	}
-
-
-
-	public Mariage(String idMariage, String description, String dateMariage,ArrayList<String> type, String heureMariage, Homme homme,
-			Femme femme, Maire maire, Instant createdDate, long numero, int annee , PremierCopie premierecopie) {
+	public Mariage(String idMariage, String description, String dateMariage, String heureMariage, Homme homme,
+			Femme femme, Maire maire, Instant createdDate, long numero, int annee , PremierCopie premierecopieHomme, PremierCopie premierecopieFemme) {
 		this.idMariage = idMariage;
 		this.description = description;
 		this.dateMariage = dateMariage;
 		this.heureMariage = heureMariage;
-	    this.type = type;
+	 //   this.type = type;
 		this.homme = homme;
 		this.femme = femme;
 		this.maire = maire;
 		this.createdDate = createdDate;
 		this.numero = numero;
 		this.annee = annee;
-		this.premierecopie = premierecopie;
+		this.premierecopieHomme = premierecopieHomme;
+		this.premierecopieFemme = premierecopieFemme;
 		
 	}
 
 	
+
+
+	public PremierCopie getPremierecopieHomme() {
+		return premierecopieHomme;
+	}
+
+
+
+	public void setPremierecopieHomme(PremierCopie premierecopieHomme) {
+		this.premierecopieHomme = premierecopieHomme;
+	}
+
+
+
+	public PremierCopie getPremierecopieFemme() {
+		return premierecopieFemme;
+	}
+
+
+
+	public void setPremierecopieFemme(PremierCopie premierecopieFemme) {
+		this.premierecopieFemme = premierecopieFemme;
+	}
+
 
 
 	public Mariage() {
