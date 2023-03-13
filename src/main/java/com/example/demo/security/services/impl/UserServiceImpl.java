@@ -62,25 +62,38 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         User nUser = new User();
         nUser.setUsername(user.getUsername());
         nUser.setPassword(bcryptEncoder.encode(user.getPassword()));
-        nUser.setRole(user.getRole());
         nUser.setPhone(user.getPhone());
         nUser.setName(user.getName());
         nUser.setPoste(user.getPoste());
 
         // assign Role to user
+         String chef = "chef";
+         String adjoint = "adjoint";
+         String maire = "maire";
+         String simple = "simple";
+
         Role role = roleService.findByName("USER");
 
         Role roleSet = new Role();
 
-        if (user.getRole().equals("admin")) {
+        if (user.getPoste().equals(chef)) {
 
             role = roleService.findByName("ADMIN");
             roleSet = role;
-
+            
         }
 
-        else if (nUser.getRole().equals("maire")) {
+        else if (nUser.getPoste().equals(adjoint)) {
             role = roleService.findByName("MAIRE");
+            roleSet = role;
+        }
+
+        else if(user.getPoste().equals(maire)) {
+            role = roleService.findByName("MAIRE");
+            roleSet = role;
+        }
+        else if(user.getPoste().equals(simple)) {
+            role = roleService.findByName("USER");
             roleSet = role;
         }
 

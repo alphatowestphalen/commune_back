@@ -15,11 +15,8 @@ public class User {
     private String username;
 
     @Column
-  //  @JsonIgnore
+    @JsonIgnore
     private String password;
-
-    @Column
-    private String role;
 
     @Column
     private String phone;
@@ -29,17 +26,6 @@ public class User {
 
     @Column
     private String poste;
-
-    // @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    // @JoinTable(name = "USER_ROLES",
-    //         joinColumns = {
-    //         @JoinColumn(name = "USER_ID")
-    //         },
-    //         inverseJoinColumns = {
-    //         @JoinColumn(name = "ROLE_ID") })
-
-
-//    private Set<Role> roles;
 
     @OneToOne
     @JoinColumn(name = "idRoles")
@@ -67,14 +53,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     public String getPhone() {
