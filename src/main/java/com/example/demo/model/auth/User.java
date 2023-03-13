@@ -15,7 +15,7 @@ public class User {
     private String username;
 
     @Column
-    @JsonIgnore
+  //  @JsonIgnore
     private String password;
 
     @Column
@@ -30,14 +30,20 @@ public class User {
     @Column
     private String poste;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "USER_ROLES",
-            joinColumns = {
-            @JoinColumn(name = "USER_ID")
-            },
-            inverseJoinColumns = {
-            @JoinColumn(name = "ROLE_ID") })
-    private Set<Role> roles;
+    // @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    // @JoinTable(name = "USER_ROLES",
+    //         joinColumns = {
+    //         @JoinColumn(name = "USER_ID")
+    //         },
+    //         inverseJoinColumns = {
+    //         @JoinColumn(name = "ROLE_ID") })
+
+
+//    private Set<Role> roles;
+
+    @OneToOne
+    @JoinColumn(name = "idRoles")
+    public Role roles;
 
     public long getId() {
         return id;
@@ -95,11 +101,13 @@ public class User {
         this.poste = poste;
     }
 
-    public Set<Role> getRoles() {
+    public Role getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(Role roles) {
         this.roles = roles;
     }
+
+    
 }

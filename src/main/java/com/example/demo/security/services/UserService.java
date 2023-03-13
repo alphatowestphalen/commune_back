@@ -3,11 +3,19 @@ package com.example.demo.security.services;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.example.demo.model.auth.User;
-import com.example.demo.model.auth.UserDto;
+
 
 public interface UserService {
-    User save(UserDto user);
+    
+    User save(User user);
+
     List<User> findAll();
+
     User findOne(String username);
+
+  
 }

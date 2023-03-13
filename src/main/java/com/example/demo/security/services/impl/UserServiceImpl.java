@@ -1,5 +1,7 @@
 package com.example.demo.security.services.impl;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.model.auth.Role;
 import com.example.demo.model.auth.User;
-import com.example.demo.model.auth.UserDto;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.security.services.RoleService;
 import com.example.demo.security.services.UserService;
@@ -30,21 +31,18 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Autowired
     private BCryptPasswordEncoder bcryptEncoder;
-
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userDao.findByUsername(username);
-        if(user == null){
+        if (user == null) {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getAuthority(user));
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+                Collections.singleton(getAuthority(user)));
     }
-
-    private Set<SimpleGrantedAuthority> getAuthority(User user) {
-        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        user.getRoles().forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
-        });
-        return authorities;
+    
+    private SimpleGrantedAuthority getAuthority(User user) {
+        String roleName = "ROLE_" + user.getRoles().getName();
+        return new SimpleGrantedAuthority(roleName);
     }
 
     public List<User> findAll() {
@@ -59,29 +57,31 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public User save(UserDto user) {
+    public User save(User user) {
 
-        User nUser = user.getUserFromDto();
+        User nUser = new User();
+        nUser.setUsername(user.getUsername());
         nUser.setPassword(bcryptEncoder.encode(user.getPassword()));
+        nUser.setRole(user.getRole());
+        nUser.setPhone(user.getPhone());
+        nUser.setName(user.getName());
+        nUser.setPoste(user.getPoste());
 
-        //assign Role to user
+        // assign Role to user
         Role role = roleService.findByName("USER");
-        Set<Role> roleSet = new HashSet<>();
-        roleSet.add(role);
 
-        if(nUser.getRole().equals("admin")){
+        Role roleSet = new Role();
+
+        if (user.getRole().equals("admin")) {
 
             role = roleService.findByName("ADMIN");
-            roleSet.add(role);
+            roleSet = role;
 
-            role = roleService.findByName("MAIRE");
-            roleSet.add(role);
-            
         }
 
-        else if(nUser.getRole().equals("maire")){
+        else if (nUser.getRole().equals("maire")) {
             role = roleService.findByName("MAIRE");
-            roleSet.add(role);
+            roleSet = role;
         }
 
         nUser.setRoles(roleSet);
