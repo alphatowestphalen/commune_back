@@ -14,6 +14,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.demo.model.Audit;
 import com.example.demo.model.auth.AuthToken;
 import com.example.demo.model.auth.LoginUser;
 import com.example.demo.model.auth.User;
@@ -21,6 +22,7 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.security.jwt.TokenProvider;
 
 import com.example.demo.security.services.UserService;
+import com.example.demo.service.AuditService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +49,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AuditService auditService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> generateToken(@RequestBody LoginUser loginUser) throws AuthenticationException {
@@ -175,4 +180,10 @@ public class UserController {
     }
         
     
+    @GetMapping("/historiques")
+    public List<Audit> getAllAudits(){
+        List<Audit> listaudit = new ArrayList<>();
+        listaudit = auditService.getAllAudits();
+        return listaudit;
+    }
 }

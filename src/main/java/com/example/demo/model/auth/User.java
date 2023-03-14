@@ -1,11 +1,15 @@
 package com.example.demo.model.auth;
 
+import com.example.demo.utils.AuditTrailListener;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
-import java.util.Set;
+
+import java.io.Serializable;
+
 
 @Entity
-public class User {
+
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
