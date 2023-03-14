@@ -2,9 +2,7 @@ package com.example.demo.security.services.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -65,8 +63,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         nUser.setPhone(user.getPhone());
         nUser.setName(user.getName());
         nUser.setPoste(user.getPoste());
-
-        // assign Role to user
+       
+       
          String chef = "chef";
          String adjoint = "adjoint";
          String maire = "maire";
@@ -76,7 +74,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         Role roleSet = new Role();
 
-        if (user.getPoste().equals(chef)) {
+        if (user.getPoste().equals("chef")) {
 
             role = roleService.findByName("ADMIN");
             roleSet = role;
@@ -88,15 +86,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             roleSet = role;
         }
 
-        else if(user.getPoste().equals(maire)) {
-            role = roleService.findByName("MAIRE");
-            roleSet = role;
-        }
-        else if(user.getPoste().equals(simple)) {
-            role = roleService.findByName("USER");
-            roleSet = role;
-        }
-
+        
         nUser.setRoles(roleSet);
         return userDao.save(nUser);
     }
