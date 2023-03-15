@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 	@Entity
 	public class Role {
 
@@ -18,6 +20,7 @@ import javax.persistence.*;
 	    private String description;
 
 		@OneToMany(mappedBy = "roles")
+		@JsonIgnore
 		private List<User> user;
 
 

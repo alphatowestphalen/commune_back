@@ -8,8 +8,8 @@ import java.io.Serializable;
 
 
 @Entity
-
-public class User implements Serializable {
+@Table(name="user")
+public class User  implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -19,7 +19,7 @@ public class User implements Serializable {
     private String username;
 
     @Column
-    @JsonIgnore
+  
     private String password;
 
     @Column
@@ -31,8 +31,7 @@ public class User implements Serializable {
     @Column
     private String poste;
 
-    @ManyToOne(cascade=CascadeType.ALL)
-    @JsonIgnore
+    @ManyToOne()
     @JoinColumn(name = "idRoles")
     public Role roles;
 
@@ -91,6 +90,9 @@ public class User implements Serializable {
     public void setRoles(Role roles) {
         this.roles = roles;
     }
+
+
+
 
     
 }

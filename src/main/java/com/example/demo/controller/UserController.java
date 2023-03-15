@@ -99,9 +99,7 @@ public class UserController {
     @PostMapping("/users")
     public ResponseEntity<User> addUser(@RequestBody User user) {
         try {
-            User adduser = new User();
-           
-            adduser = userService.save(user);
+           User adduser = userService.save(user);
 
             return new ResponseEntity<>(adduser, HttpStatus.OK);
         } catch (Exception e) {

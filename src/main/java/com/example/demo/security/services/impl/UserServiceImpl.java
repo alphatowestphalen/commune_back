@@ -70,24 +70,24 @@ public class UserServiceImpl implements UserDetailsService, UserService {
          String maire = "maire";
          String simple = "simple";
 
-        Role role = roleService.findByName("USER");
+        Role role = roleService.findByName("ADMIN");
 
-        Role roleSet = new Role();
+        // Role roleSet = new Role();
 
-        if (user.getPoste().equals("chef")) {
+        // if (user.getPoste().equals("chef")) {
 
-            role = roleService.findByName("ADMIN");
-            roleSet = role;
+        //     role = roleService.findByName("ADMIN");
+        //     roleSet = role;
             
-        }
+        // }
 
-        else if (nUser.getPoste().equals(adjoint)) {
-            role = roleService.findByName("MAIRE");
-            roleSet = role;
-        }
+        // else if (nUser.getPoste().equals(adjoint)) {
+        //     role = roleService.findByName("MAIRE");
+        //     roleSet = role;
+        // }
 
         
-        nUser.setRoles(roleSet);
+        nUser.setRoles(role);
         return userDao.save(nUser);
     }
 }
