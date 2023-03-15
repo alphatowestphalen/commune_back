@@ -31,7 +31,8 @@ public class User implements Serializable {
     @Column
     private String poste;
 
-    @OneToOne
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JsonIgnore
     @JoinColumn(name = "idRoles")
     public Role roles;
 

@@ -100,6 +100,7 @@ public class UserController {
     public ResponseEntity<User> addUser(@RequestBody User user) {
         try {
             User adduser = new User();
+           
             adduser = userService.save(user);
 
             return new ResponseEntity<>(adduser, HttpStatus.OK);
