@@ -72,9 +72,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
          String maire = "maire";
          String simple = "simple";
 
-        Role role = roleService.findByName("USER");
+        Role role = roleService.findByName("ADMIN");
 
-        Role roleSet = new Role();
+      /*  Role roleSet = new Role();
 
         if (user.getPoste().equals(chef)) {
 
@@ -96,8 +96,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             role = roleService.findByName("USER");
             roleSet = role;
         }
-
-        nUser.setRoles(roleSet);
+*/
+        nUser.setRoles(role);
         return userDao.save(nUser);
     }
 }
