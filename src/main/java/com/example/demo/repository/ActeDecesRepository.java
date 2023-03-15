@@ -11,4 +11,8 @@ public interface ActeDecesRepository extends JpaRepository<ActeDeces, Long>{
 	
 	@Query(value = "SELECT * FROM acte_deces a ORDER BY a.created_date DESC LIMIT 1 ", nativeQuery = true)
 	ActeDeces chercherActeDeces(); 
+	
+
+	@Query(value = "SELECT count(a.id_acte_deces) FROM acte_deces a", nativeQuery = true)
+	long countByIdDeces();
 }

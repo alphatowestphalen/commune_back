@@ -17,4 +17,7 @@ import com.example.demo.model.PremierCopie;
 public interface AdoptionRepository extends JpaRepository<Adoption, Long> {
 
 	Page<Adoption> findAll(Pageable pageable);
+	
+	@Query(value = "SELECT count(a.id_adoption) FROM adoption a", nativeQuery = true)
+	long countByIdAdoption();
 }

@@ -60,7 +60,6 @@ import com.example.demo.repository.PremierCopieRepository;
 import com.example.demo.repository.TypeRepository;
 import com.example.demo.request.NumeroRequest;
 import com.example.demo.request.PremierCopieRequest;
-import com.example.demo.service.HistoriqueService;
 import com.example.demo.service.PremierCopieService;
 
 @CrossOrigin("*")
@@ -80,8 +79,7 @@ public class PremierCopieController {
 	MereRepository mereRepository;
 	@Autowired
 	PereRepository pereRepository;
-	@Autowired
-	HistoriqueService historiqueService;
+	
 	@Autowired
 	PremierCopieService premierCopieService;
 	
@@ -166,14 +164,6 @@ public class PremierCopieController {
 			   numeroRequest.annee
 			   );
 	   premierCopieRepository.save(premierCopie);
-	   
-	   historiqueService.ajoutHistorique(
-			   numeroRequest.getIdPremierCopie(),
-			   TypeRepository.PremierCopie,
-			   null,
-			   premierCopie.toString(),
-			   TypeRepository.AjoutPremierCopie,
-			   premierCopieRequest.getCreatedDate());
 	   
 	   return new ResponseEntity<>(premierCopie, HttpStatus.CREATED);
 	    

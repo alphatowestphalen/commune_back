@@ -16,5 +16,8 @@ public interface MariageRepository extends JpaRepository<Mariage, Long> {
 	Mariage findByIdMariage(String idMariage);
 
 	Page<Mariage> findAll( Pageable pageable);
+	
+	@Query(value = "SELECT count(m.id_mariage) FROM mariage m", nativeQuery = true)
+	long countByIdMariage();
 
 }

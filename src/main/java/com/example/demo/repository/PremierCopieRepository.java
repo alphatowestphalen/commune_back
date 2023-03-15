@@ -36,4 +36,7 @@ public interface PremierCopieRepository extends JpaRepository<PremierCopie, Stri
 	
 	Page<PremierCopie> findByEnfantNomEnfantStartsWithOrEnfantPrenomsEnfantStartsWith(String NomEnfant , String PrenomsEnfant, Pageable pageable );
 	PremierCopie findTopByOrderByIdPremierCopieDesc();
+	
+	@Query(value = "SELECT count(p.id_premier_copie) FROM premier_copie p", nativeQuery = true)
+	long countByIdPC();
 }
