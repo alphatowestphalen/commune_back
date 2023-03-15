@@ -29,6 +29,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Autowired
     private BCryptPasswordEncoder bcryptEncoder;
+
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userDao.findByUsername(username);
         if (user == null) {
@@ -37,7 +38,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                 Collections.singleton(getAuthority(user)));
     }
-    
+
     private SimpleGrantedAuthority getAuthority(User user) {
         String roleName = "ROLE_" + user.getRoles().getName();
         return new SimpleGrantedAuthority(roleName);
@@ -63,30 +64,38 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         nUser.setPhone(user.getPhone());
         nUser.setName(user.getName());
         nUser.setPoste(user.getPoste());
-       
-       
-         String chef = "chef";
-         String adjoint = "adjoint";
-         String maire = "maire";
-         String simple = "simple";
+
+        String chef = "chef";
+        String adjoint = "adjoint";
+        String maire = "maire";
+        String simple = "simple";
 
         Role role = roleService.findByName("ADMIN");
 
-        // Role roleSet = new Role();
-
-        // if (user.getPoste().equals("chef")) {
-
-        //     role = roleService.findByName("ADMIN");
-        //     roleSet = role;
-            
-        // }
-
-        // else if (nUser.getPoste().equals(adjoint)) {
-        //     role = roleService.findByName("MAIRE");
-        //     roleSet = role;
-        // }
-
-        
+        /*
+         * Role roleSet = new Role();
+         * 
+         * if (user.getPoste().equals("chef")) {
+         * 
+         * role = roleService.findByName("ADMIN");
+         * roleSet = role;
+         * 
+         * }
+         * 
+         * else if (nUser.getPoste().equals(adjoint)) {
+         * role = roleService.findByName("MAIRE");
+         * roleSet = role;
+         * }
+         * 
+         * else if(user.getPoste().equals(maire)) {
+         * role = roleService.findByName("MAIRE");
+         * roleSet = role;
+         * }
+         * else if(user.getPoste().equals(simple)) {
+         * role = roleService.findByName("USER");
+         * roleSet = role;
+         * }
+         */
         nUser.setRoles(role);
         return userDao.save(nUser);
     }
