@@ -65,14 +65,11 @@ public class UserController {
         return ResponseEntity.ok(new AuthToken(token));
     }
 
-    // @RequestMapping(value="/register", method = RequestMethod.POST)
-    // public User saveUser(@RequestBody UserDto user){
-    // return userService.save(user);
-    // }
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
+        System.out.println(authorizationHeader);
         String token = authorizationHeader.substring(7); // remove "Bearer " prefix
         jwtTokenUtil.deleteToken(token);
         return ResponseEntity.ok("Logout successful");
@@ -184,5 +181,11 @@ public class UserController {
         List<Audit> listaudit = new ArrayList<>();
         listaudit = auditService.getAllAudits();
         return listaudit;
+    }
+
+    @GetMapping("/profile")
+    public User currentUserName(Authentication authentication) {
+        User user = userRepository.findByUsername(authentication.getName());
+        return user;
     }
 }
