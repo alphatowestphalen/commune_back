@@ -69,6 +69,7 @@ public class UserController {
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
+        System.out.println(authorizationHeader);
         String token = authorizationHeader.substring(7); // remove "Bearer " prefix
         jwtTokenUtil.deleteToken(token);
         return ResponseEntity.ok("Logout successful");
