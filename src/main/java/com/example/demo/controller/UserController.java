@@ -65,10 +65,6 @@ public class UserController {
         return ResponseEntity.ok(new AuthToken(token));
     }
 
-    // @RequestMapping(value="/register", method = RequestMethod.POST)
-    // public User saveUser(@RequestBody UserDto user){
-    // return userService.save(user);
-    // }
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
@@ -184,5 +180,11 @@ public class UserController {
         List<Audit> listaudit = new ArrayList<>();
         listaudit = auditService.getAllAudits();
         return listaudit;
+    }
+
+    @GetMapping("/profile")
+    public User currentUserName(Authentication authentication) {
+        User user = userRepository.findByUsername(authentication.getName());
+        return user;
     }
 }
