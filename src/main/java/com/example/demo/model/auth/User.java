@@ -91,7 +91,18 @@ public class User  implements Serializable {
         this.roles = roles;
     }
 
+	public User(String username,String name, String phone, String poste, Role roles) {
+		this.username = username;
+		this.name = name;
+		this.phone = phone;
+        this.poste = poste;
+        this.roles = roles;
+	}
 
+	public User() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 
     

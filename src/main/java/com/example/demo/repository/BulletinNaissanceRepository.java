@@ -9,5 +9,6 @@ import com.example.demo.model.BulletinNaissance;
 public interface BulletinNaissanceRepository extends JpaRepository<BulletinNaissance, Long>{
 	
  Page<BulletinNaissance> findAll(Pageable pageable);
+ BulletinNaissance findByIdPremierCopie(String idPremierCopie);
 
 }

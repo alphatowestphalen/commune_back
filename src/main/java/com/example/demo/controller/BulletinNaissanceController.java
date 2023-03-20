@@ -56,6 +56,16 @@ public class BulletinNaissanceController {
 
 	    return new ResponseEntity<>(bulletinNaissance, HttpStatus.OK);
 	  }
+	  
+
+	 @GetMapping("/numcopie/{numCopie}")
+	 public ResponseEntity<BulletinNaissance> getBulletinNaissanceByNumCopie(@PathVariable(value = "numCopie" ) String idPremierCopie) 
+	 {
+		BulletinNaissance bulletinNaissance = bulletinNaissanceRepository.findByIdPremierCopie(idPremierCopie);
+		
+	    return new ResponseEntity<>(bulletinNaissance, HttpStatus.OK);
+	 }
+
 
 	@GetMapping()
 	public ResponseEntity<Map<String, Object>> getAllBulletinNaissances(
