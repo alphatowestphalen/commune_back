@@ -75,7 +75,8 @@ public class UserController {
         return ResponseEntity.ok("Logout successful");
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    final String user = "hasRole('ADMIN')";
+    @PreAuthorize(user)
     @RequestMapping(value = "/adminping", method = RequestMethod.GET)
     public String adminPing() {
         return "Only Admins Can Read This";

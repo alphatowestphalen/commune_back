@@ -1,0 +1,33 @@
+version: "3.3"
+
+services:
+  mysqldb:
+    container_name: mysqldb
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: commune
+    volumes:
+      - db:/var/lib/mysql    
+    networks:
+      springboot-mysql-net:
+ 
+
+  backcommune-services:
+    container_name: backcommune
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysqldb
+    networks:
+      springboot-mysql-net:
+    restart: on-failure
+
+volumes:
+    db:
+
+networks:
+  springboot-mysql-net:

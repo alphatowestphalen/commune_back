@@ -41,7 +41,7 @@ public class ReconnaissanceController {
 	ReconnaissanceRepository reconnaissanceRepository;
 	
 	@GetMapping
-	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
+	 @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<Map<String, Object>> getAllReconnaissances(
 			     @RequestParam(required = false) String title,
 			        @RequestParam(defaultValue = "0") int page,

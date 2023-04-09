@@ -46,7 +46,7 @@ public class AdoptionController {
 	  public ResponseEntity<Map<String, Object>> getAllAdoptions(
 			     @RequestParam(required = false) String title,
 			        @RequestParam(defaultValue = "0") int page,
-			        @RequestParam(defaultValue = "3") int size) {
+			        @RequestParam(defaultValue = "10") int size) {
 	 	  
 	    try {
 	    	 List<Adoption> adoptions = new ArrayList<Adoption>();
