@@ -1,16 +1,20 @@
 version: "3.3"
 
 services:
-  mysqldb:
-    container_name: mysqldb
-    image: mysql
+  mysql:
+    container_name: mysql
+    image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: commune
+      MYSQL_DATABASE: database
+      MYSQL_USER: sys
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_PASSWORD: 1234
+    networks:
+      - springmysql-net
     volumes:
       - db:/var/lib/mysql    
-    networks:
-      springboot-mysql-net:
+      
+
  
 
   backcommune-services:
@@ -21,13 +25,58 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - mysqldb
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/database?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: sys
+      SPRING_DATASOURCE_PASSWORD: 1234
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL5InnoDBDialect
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
     networks:
-      springboot-mysql-net:
-    restart: on-failure
+      - springmysql-net
 
 volumes:
     db:
 
 networks:
-  springboot-mysql-net:
+  springmysql-net:
+
+
+
+# version: "3.8"
+
+# services:
+#   mysqldb:
+#     image: mysql:5.7
+#     restart: unless-stopped
+#     env_file: .env
+#     environment:
+#       - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+#       - MYSQL_DATABASE=$MYSQLDB_DATABASE
+#     ports:
+#       - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+#     volumes:
+#       - db:/var/lib/mysql
+#   app:
+#     depends_on:
+#       - mysqldb
+#     build: ./
+#     restart: on-failure
+#     env_file: .env
+#     ports:
+#       - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
+#     environment:
+#       SPRING_APPLICATION_JSON: '{
+#         "spring.datasource.url"  : "jdbc:mysql://mysqldb:$MYSQLDB_DOCKER_PORT/$MYSQLDB_DATABASE?useSSL=false",
+#         "spring.datasource.username" : "$MYSQLDB_USER",
+#         "spring.datasource.password" : "$MYSQLDB_ROOT_PASSWORD",
+#         "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQL5InnoDBDialect",
+#         "spring.jpa.hibernate.ddl-auto" : "update"  }'
+#     volumes:
+#       - .m2:/root/.m2
+#     stdin_open: true
+#     tty: true
+
+# volumes:
+#   db:
