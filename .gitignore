@@ -18,14 +18,7 @@ yarn-error.log
 /.vscode
 
 
-/target
-*.class
-*.jar
-*.war
-*.ear
-*.logs
-*.iml
-!.mvn/wrapper/maven-wrapper.jar
+
 
 ### STS ###
 .apt_generated
