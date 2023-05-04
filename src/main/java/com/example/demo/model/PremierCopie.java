@@ -19,13 +19,14 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-
+import com.example.demo.utils.AuditTrailListener;
 
 
 
 
 @Entity
 @Table(name="premierCopie")
+@EntityListeners(AuditTrailListener.class)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property="idPremierCopie")
 public class PremierCopie implements Serializable{
 	

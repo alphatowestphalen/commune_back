@@ -14,10 +14,12 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.example.demo.utils.*;
 
 
 @Entity
 @Table(name="reconnaissance")
+@EntityListeners(AuditTrailListener.class)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property="idReconnaissance")
 public class Reconnaissance implements Serializable{
 
