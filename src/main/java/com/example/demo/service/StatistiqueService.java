@@ -27,6 +27,8 @@ public class StatistiqueService {
 	@Autowired
 	ReconnaissanceRepository reconnaissanceRepository;
 	
+	static final long price = 2000 ;
+	
 	public Acte statistiqueacte()
 	{
 		Acte acte = new Acte();
@@ -35,9 +37,16 @@ public class StatistiqueService {
 		long nbrActeDeces = acteDecesRepository.countByIdDeces();
 		long nbrActeMariage = mariageRepository.countByIdMariage();
 		
+		long priceActenaissance = nbrActeNaissance * price ;
+		long priceActedeces = nbrActeDeces * price ;
+		long priceActemariage = nbrActeMariage * price ;
+		
 		acte.setNbrActeNaissance(nbrActeNaissance);
 		acte.setNbrActeDeces(nbrActeDeces);
 		acte.setNbrActeMariage(nbrActeMariage);
+		acte.setPriceActeNaissance(priceActenaissance);
+		acte.setPriceActeDeces(priceActedeces);
+		acte.setNbrActeMariage(priceActemariage);
 		
 		return acte;
 	}
@@ -58,5 +67,6 @@ public class StatistiqueService {
 		
 		return naissance;
 	}
+	
 
 }

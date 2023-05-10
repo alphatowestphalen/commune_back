@@ -9,6 +9,9 @@ public class Naissance {
 	public long nbrReconnaissance;
 	
 	public long nbrAdoption;
+	
+	public long pricePremierCopie;
+	
 
 	public long getNbrPremierCopie() {
 		return nbrPremierCopie;
@@ -41,6 +44,7 @@ public class Naissance {
 	public void setNbrAdoption(long nbrAdoption) {
 		this.nbrAdoption = nbrAdoption;
 	}
+	
 	
 	
 }
