@@ -59,7 +59,7 @@ public class TokenProvider implements Serializable {
     public String generateToken(Authentication authentication) {
          String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining("_"));
+                .collect(Collectors.joining(","));
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
