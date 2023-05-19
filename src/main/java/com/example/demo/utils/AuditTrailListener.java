@@ -8,6 +8,8 @@ import javax.persistence.PreUpdate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Auditable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.model.Audit;
@@ -50,11 +52,19 @@ public class AuditTrailListener {
 
         audit.setEntity(object.getClass().getSimpleName());
         audit.setModifiedAt(LocalDateTime.now());
-        audit.setModifiedBy("ZAZA");
+        audit.setModifiedBy(getCurrentUser());
         audit.setOperation(type);
         audit.setPayload(object.toString());
 
         return audit;
+    }
+
+    private String getCurrentUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            return authentication.getName();
+        }
+        return null;
     }
     
 }

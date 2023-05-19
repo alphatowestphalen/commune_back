@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     private SimpleGrantedAuthority getAuthority(User user) {
-        String roleName = "ROLE_" + user.getRoles().getName();
+        String roleName = "ROLE_" + user.getRoles();
         return new SimpleGrantedAuthority(roleName);
     }
 
