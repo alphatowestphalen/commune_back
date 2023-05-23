@@ -1,6 +1,7 @@
 package com.example.demo.request;
 
 import java.time.Instant;
+import java.util.ArrayList;
 
 import org.springframework.data.annotation.CreatedDate;
 
@@ -13,6 +14,10 @@ public class AdoptionRequest {
 	private String heureAdoption;
 	
 	private String numAdoption;
+	
+	private ArrayList<String> pereAdoptif = new ArrayList<>();
+	
+	private ArrayList<String> mereAdoptif = new ArrayList<>();
 	
 	@CreatedDate
 	private Instant createdDate;
@@ -55,6 +60,22 @@ public class AdoptionRequest {
 
 	public void setCreatedDate(Instant createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public ArrayList<String> getPereAdoptif() {
+		return pereAdoptif;
+	}
+
+	public void setPereAdoptif(ArrayList<String> pereAdoptif) {
+		this.pereAdoptif = pereAdoptif;
+	}
+
+	public ArrayList<String> getMereAdoptif() {
+		return mereAdoptif;
+	}
+
+	public void setMereAdoptif(ArrayList<String> mereAdoptif) {
+		this.mereAdoptif = mereAdoptif;
 	}
 	
 	

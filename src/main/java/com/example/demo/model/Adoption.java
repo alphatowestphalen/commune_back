@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 
 import javax.persistence.*;
 
@@ -37,6 +38,12 @@ public class Adoption implements Serializable{
 	
 	@CreatedDate
 	private Instant createdDate;
+	
+	@Column(name= "type")
+	private ArrayList<String> pereAdoptif = new ArrayList<>();
+	
+	@Column(name= "type")
+	private ArrayList<String> mereAdoptif = new ArrayList<>();
 	
 
 	@ManyToOne
@@ -96,6 +103,22 @@ public class Adoption implements Serializable{
 
 
 
+	public ArrayList<String> getPereAdoptif() {
+		return pereAdoptif;
+	}
+
+	public void setPereAdoptif(ArrayList<String> pereAdoptif) {
+		this.pereAdoptif = pereAdoptif;
+	}
+
+	public ArrayList<String> getMereAdoptif() {
+		return mereAdoptif;
+	}
+
+	public void setMereAdoptif(ArrayList<String> mereAdoptif) {
+		this.mereAdoptif = mereAdoptif;
+	}
+
 	public PremierCopie getPremierecopie() {
 		return premierecopie;
 	}
@@ -110,15 +133,20 @@ public class Adoption implements Serializable{
 	}
 
 	public Adoption(String parentAdoptif, String dateAdoption, String heureAdoption, String numAdoption,
-			Instant createdDate, PremierCopie premierCopie) {
+			Instant createdDate, ArrayList<String> pereAdoptif, ArrayList<String> mereAdoptif,
+			PremierCopie premierecopie) {
 		super();
 		this.parentAdoptif = parentAdoptif;
 		this.dateAdoption = dateAdoption;
 		this.heureAdoption = heureAdoption;
 		this.numAdoption = numAdoption;
 		this.createdDate = createdDate;
-		this.premierecopie = premierCopie;
+		this.pereAdoptif = pereAdoptif;
+		this.mereAdoptif = mereAdoptif;
+		this.premierecopie = premierecopie;
 	}
+
+	
 
 	
 	
