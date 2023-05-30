@@ -141,7 +141,7 @@ public class UserController {
     public ResponseEntity<User> updateUser(@PathVariable(value = "id") Long id, @RequestBody User user ){
         try {
 
-            User users = userRepository.findById(id).orElseThrow();
+            User users = userRepository.findById(id).get();
             
             
             users.setName(user.getName());
@@ -165,7 +165,7 @@ public class UserController {
     @DeleteMapping("/users")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable(value = "id") Long id){
         try {
-            User users = userRepository.findById(id).orElseThrow();
+            User users = userRepository.findById(id).get();
 
             userRepository.deleteById(users.getId());
 

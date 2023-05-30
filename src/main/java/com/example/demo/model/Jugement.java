@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import java.time.Instant;
+import java.util.ArrayList;
 
 import javax.persistence.*;
 
@@ -21,11 +22,21 @@ public class Jugement {
 	@Column(name = "idJugement")
 	private long idJugement;
 	
-	@Column(name = "infoChangement")
-	private String infoChangement;
 	
 	@Column(name = "numJugement")
 	private String numJugement;
+	
+	@Column(name = "decretJuridique")
+	public String decretJuridique;
+	
+	@Column(name = "dateDecret")
+	public String dateDecret;
+	
+	@Column(name= "typeJugement")
+	private String typeJugement;
+	
+	@Column(name= "infoChangement")
+	private ArrayList<String> infoChangement = new ArrayList<>();
 	
 	@CreatedDate
 	private Instant createdDate;
@@ -33,21 +44,13 @@ public class Jugement {
 	@OneToOne
 	@JoinColumn(name = "idPremierCopie")
 	private PremierCopie premierCopie;
-	
+
 	public long getIdJugement() {
 		return idJugement;
 	}
 
 	public void setIdJugement(long idJugement) {
 		this.idJugement = idJugement;
-	}
-
-	public String getInfoChangement() {
-		return infoChangement;
-	}
-
-	public void setInfoChangement(String infoChangement) {
-		this.infoChangement = infoChangement;
 	}
 
 	public String getNumJugement() {
@@ -58,6 +61,38 @@ public class Jugement {
 		this.numJugement = numJugement;
 	}
 
+	public String getDecretJuridique() {
+		return decretJuridique;
+	}
+
+	public void setDecretJuridique(String decretJuridique) {
+		this.decretJuridique = decretJuridique;
+	}
+
+	public String getDateDecret() {
+		return dateDecret;
+	}
+
+	public void setDateDecret(String dateDecret) {
+		this.dateDecret = dateDecret;
+	}
+
+	public String getTypeJugement() {
+		return typeJugement;
+	}
+
+	public void setTypeJugement(String typeJugement) {
+		this.typeJugement = typeJugement;
+	}
+
+	public ArrayList<String> getInfoChangement() {
+		return infoChangement;
+	}
+
+	public void setInfoChangement(ArrayList<String> infoChangement) {
+		this.infoChangement = infoChangement;
+	}
+
 	public Instant getCreatedDate() {
 		return createdDate;
 	}
@@ -65,8 +100,6 @@ public class Jugement {
 	public void setCreatedDate(Instant createdDate) {
 		this.createdDate = createdDate;
 	}
-
-	
 
 	public PremierCopie getPremierCopie() {
 		return premierCopie;
@@ -76,17 +109,20 @@ public class Jugement {
 		this.premierCopie = premierCopie;
 	}
 
-	
-	public Jugement(String infoChangement, String numJugement, Instant createdDate, PremierCopie premierCopie) {
-		this.infoChangement = infoChangement;
+	public Jugement(String numJugement, String decretJuridique, String dateDecret, String typeJugement,
+			ArrayList<String> infoChangement, Instant createdDate, PremierCopie premierCopie) {
 		this.numJugement = numJugement;
+		this.decretJuridique = decretJuridique;
+		this.dateDecret = dateDecret;
+		this.typeJugement = typeJugement;
+		this.infoChangement = infoChangement;
 		this.createdDate = createdDate;
 		this.premierCopie = premierCopie;
 	}
 
 	public Jugement() {
 		super();
-		
+		// TODO Auto-generated constructor stub
 	}
 	
 	

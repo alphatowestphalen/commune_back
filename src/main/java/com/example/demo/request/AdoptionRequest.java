@@ -8,17 +8,15 @@ import org.springframework.data.annotation.CreatedDate;
 public class AdoptionRequest {
 	
     private String parentAdoptif;
+    
+    private String parentAdoptif2;
 	
 	private String dateAdoption;
 	
 	private String heureAdoption;
 	
 	private String numAdoption;
-	
-	private ArrayList<String> pereAdoptif = new ArrayList<>();
-	
-	private ArrayList<String> mereAdoptif = new ArrayList<>();
-	
+		
 	@CreatedDate
 	private Instant createdDate;
 
@@ -62,21 +60,15 @@ public class AdoptionRequest {
 		this.createdDate = createdDate;
 	}
 
-	public ArrayList<String> getPereAdoptif() {
-		return pereAdoptif;
+	public String getParentAdoptif2() {
+		return parentAdoptif2;
 	}
 
-	public void setPereAdoptif(ArrayList<String> pereAdoptif) {
-		this.pereAdoptif = pereAdoptif;
+	public void setParentAdoptif2(String parentAdoptif2) {
+		this.parentAdoptif2 = parentAdoptif2;
 	}
 
-	public ArrayList<String> getMereAdoptif() {
-		return mereAdoptif;
-	}
-
-	public void setMereAdoptif(ArrayList<String> mereAdoptif) {
-		this.mereAdoptif = mereAdoptif;
-	}
+	
 	
 	
 	
