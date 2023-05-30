@@ -547,4 +547,16 @@ public class MariageController {
 
 
 	}
+
+
+	@GetMapping("/{idMariage}")
+	public  ResponseEntity<Mariage> getMariageById(@PathVariable("idMariage") String idMariage){
+		
+		try {
+			Mariage mariage = mariageRepository.findByIdMariage(idMariage);
+			return new ResponseEntity<Mariage>(mariage, null, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }
