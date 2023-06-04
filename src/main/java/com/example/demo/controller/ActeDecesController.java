@@ -63,6 +63,7 @@ public class ActeDecesController {
 			NumeroActeDecesRequest numActeDeces = acteDecesService.numeroActeDeces();
 			
 			PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
+
 				
 			Maire maire = maireRepository.findById(decesRequest.getIdMaire()).get();
 					
