@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 
 import javax.persistence.*;
 
@@ -37,6 +38,9 @@ public class Adoption implements Serializable{
 	
 	@CreatedDate
 	private Instant createdDate;
+	
+	@Column(name = "parentAdoptif2")
+	private String parentAdoptif2;
 	
 
 	@ManyToOne
@@ -92,9 +96,15 @@ public class Adoption implements Serializable{
 		this.createdDate = createdDate;
 	}
 
+	
 
+	public String getParentAdoptif2() {
+		return parentAdoptif2;
+	}
 
-
+	public void setParentAdoptif2(String parentAdoptif2) {
+		this.parentAdoptif2 = parentAdoptif2;
+	}
 
 	public PremierCopie getPremierecopie() {
 		return premierecopie;
@@ -110,21 +120,15 @@ public class Adoption implements Serializable{
 	}
 
 	public Adoption(String parentAdoptif, String dateAdoption, String heureAdoption, String numAdoption,
-			Instant createdDate, PremierCopie premierCopie) {
-		super();
+			Instant createdDate, String parentAdoptif2, PremierCopie premierecopie) {
 		this.parentAdoptif = parentAdoptif;
 		this.dateAdoption = dateAdoption;
 		this.heureAdoption = heureAdoption;
 		this.numAdoption = numAdoption;
 		this.createdDate = createdDate;
-		this.premierecopie = premierCopie;
+		this.parentAdoptif2 = parentAdoptif2;
+		this.premierecopie = premierecopie;
 	}
 
 	
-	
-
-
-	
-	
-
 }

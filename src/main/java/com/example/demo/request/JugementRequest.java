@@ -1,25 +1,24 @@
 package com.example.demo.request;
 
 import java.time.Instant;
+import java.util.ArrayList;
 
 import org.springframework.data.annotation.CreatedDate;
 
 public class JugementRequest {
-
-	 private String infoChangement;
 	 
 	 private String numJugement;
 	 
+	 private String decretJuridique;
+	 
+	 private String dateDecret;
+	 
+	 private String typeJugement;
+	 
+	 private ArrayList<String> infoChangement;
+	 
 	 @CreatedDate
-		private Instant createdDate;
-
-	public String getInfoChangement() {
-		return infoChangement;
-	}
-
-	public void setInfoChangement(String infoChangement) {
-		this.infoChangement = infoChangement;
-	}
+	 private Instant createdDate;
 
 	public String getNumJugement() {
 		return numJugement;
@@ -29,6 +28,38 @@ public class JugementRequest {
 		this.numJugement = numJugement;
 	}
 
+	public String getDecretJuridique() {
+		return decretJuridique;
+	}
+
+	public void setDecretJuridique(String decretJuridique) {
+		this.decretJuridique = decretJuridique;
+	}
+
+	public String getDateDecret() {
+		return dateDecret;
+	}
+
+	public void setDateDecret(String dateDecret) {
+		this.dateDecret = dateDecret;
+	}
+
+	public String getTypeJugement() {
+		return typeJugement;
+	}
+
+	public void setTypeJugement(String typeJugement) {
+		this.typeJugement = typeJugement;
+	}
+
+	public ArrayList<String> getInfoChangement() {
+		return infoChangement;
+	}
+
+	public void setInfoChangement(ArrayList<String> infoChangement) {
+		this.infoChangement = infoChangement;
+	}
+
 	public Instant getCreatedDate() {
 		return createdDate;
 	}
@@ -36,7 +67,8 @@ public class JugementRequest {
 	public void setCreatedDate(Instant createdDate) {
 		this.createdDate = createdDate;
 	}
-	 
+
+	
 	 
 	
 }

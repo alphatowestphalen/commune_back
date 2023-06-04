@@ -92,8 +92,11 @@ public class JugementController {
 			PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
 			
 			Jugement jugement = new Jugement(
-					jugementRequest.getInfoChangement(),
 					jugementRequest.getNumJugement(),
+					jugementRequest.getDecretJuridique(),
+					jugementRequest.getDateDecret(),
+					jugementRequest.getTypeJugement(),
+					jugementRequest.getInfoChangement(),
 					jugementRequest.getCreatedDate(),
 					premierCopie);
 			jugementRepository.save(jugement);
@@ -115,8 +118,12 @@ public class JugementController {
 		
 		PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(jugement.getPremierCopie().getIdPremierCopie());
 		
-		jugement.setInfoChangement(jugementRequest.getInfoChangement());
 		jugement.setNumJugement(jugementRequest.getNumJugement());
+		jugement.setDecretJuridique(jugementRequest.getDecretJuridique());
+		jugement.setDateDecret(jugementRequest.getDateDecret());
+		jugement.setTypeJugement(jugementRequest.getTypeJugement());
+		jugement.setInfoChangement(jugementRequest.getInfoChangement());
+		jugement.setCreatedDate(jugementRequest.getCreatedDate());
 		jugement.setPremierCopie(premierCopie);
 		
 		jugementRepository.save(jugement);

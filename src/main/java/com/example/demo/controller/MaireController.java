@@ -5,9 +5,11 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -90,7 +92,20 @@ public class MaireController {
 		    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+	@Transactional
+	@PutMapping("/restore/{id}")
+	// @PreAuthorize(" hasRole('MAIRE')")
+	public ResponseEntity<HttpStatus> restoreMaire(@Param("idMaire") Long idMaire) 
+	{
+		try {
+			maireRepository.restoreMaire(idMaire);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} 
+		catch (Exception e)
+		{
+		      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}		
+	}
 
 	@DeleteMapping("/{id}")
 	// @PreAuthorize(" hasRole('MAIRE')")

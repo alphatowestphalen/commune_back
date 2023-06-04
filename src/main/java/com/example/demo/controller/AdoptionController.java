@@ -91,6 +91,7 @@ public class AdoptionController {
 					adoptionRequest.getHeureAdoption(),
 					adoptionRequest.getNumAdoption(),
 					adoptionRequest.getCreatedDate(),
+					adoptionRequest.getParentAdoptif2(),
 					premierCopie
 					);
 			
@@ -118,6 +119,7 @@ public class AdoptionController {
 		adoption.setDateAdoption(adoptionRequest.getDateAdoption());
 		adoption.setHeureAdoption(adoptionRequest.getHeureAdoption());
 		adoption.setNumAdoption(adoptionRequest.getNumAdoption());
+		adoption.setParentAdoptif2(adoptionRequest.getParentAdoptif2());
 		adoption.setPremierecopie(premierCopie);
 		
 		
