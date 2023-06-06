@@ -13,4 +13,8 @@ public interface MaireRepository extends JpaRepository<Maire, Long> {
 	@Modifying
     @Query(value ="UPDATE maire SET deleted = false WHERE id_maire = :idMaire", nativeQuery = true)
     void restoreMaire(@Param("idMaire") Long idMaire);
+	
+	
+	@Query(value="DELETE FROM maire WHERE deleted = true AND id_maire=:idMaire", nativeQuery=true)
+	void supprdefinitive(@Param("idMaire") Long idMaire);
 }

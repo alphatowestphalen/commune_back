@@ -12,6 +12,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -26,6 +28,8 @@ import com.example.demo.utils.AuditTrailListener;
 
 @Entity
 @Table(name="premierCopie")
+@SQLDelete(sql = "UPDATE premier_copie SET deleted = true WHERE id_premier_copie=?")
+@Where(clause = "deleted=false")
 @EntityListeners(AuditTrailListener.class)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property="idPremierCopie")
 public class PremierCopie implements Serializable{
@@ -49,6 +53,8 @@ public class PremierCopie implements Serializable{
 	@CreatedDate
 	private Instant createdDate;
 
+	@Column(name = "deleted")
+	private boolean deleted = Boolean.FALSE;
 	
 	@ManyToOne()
 	  @JoinColumn(name ="idDeclarant")
@@ -275,6 +281,14 @@ public class PremierCopie implements Serializable{
 
 	public void setFemme(List<Mariage> femme) {
 		this.femme = femme;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 	public PremierCopie(String idPremierCopie, String description, String mention, String datePCopie,

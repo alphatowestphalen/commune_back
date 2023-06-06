@@ -27,10 +27,10 @@ public class Jugement {
 	private String numJugement;
 	
 	@Column(name = "decretJuridique")
-	public String decretJuridique;
+	private String decretJuridique;
 	
 	@Column(name = "dateDecret")
-	public String dateDecret;
+	private String dateDecret;
 	
 	@Column(name= "typeJugement")
 	private String typeJugement;
