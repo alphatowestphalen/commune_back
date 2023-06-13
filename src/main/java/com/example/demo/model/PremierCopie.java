@@ -28,8 +28,6 @@ import com.example.demo.utils.AuditTrailListener;
 
 @Entity
 @Table(name="premierCopie")
-@SQLDelete(sql = "UPDATE premier_copie SET deleted = true WHERE id_premier_copie=?")
-@Where(clause = "deleted=false")
 @EntityListeners(AuditTrailListener.class)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property="idPremierCopie")
 public class PremierCopie implements Serializable{
@@ -102,6 +100,9 @@ public class PremierCopie implements Serializable{
 
 	@OneToMany(mappedBy = "premierecopieFemme", cascade = CascadeType.ALL, orphanRemoval = true)
 	private	List<Mariage> femme = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "premierCopie", cascade = CascadeType.ALL, orphanRemoval = true)
+	private	List<ActeCelibataire> acteCelibataire = new ArrayList<>();
 
 	 @Column(name = "numero")
 	 private Long numero;
@@ -300,6 +301,15 @@ public class PremierCopie implements Serializable{
 
 	public void setIsnotSingle(boolean isnotSingle) {
 		this.isnotSingle = isnotSingle;
+	}
+
+	
+	public List<ActeCelibataire> getActeCelibataire() {
+		return acteCelibataire;
+	}
+
+	public void setActeCelibataire(List<ActeCelibataire> acteCelibataire) {
+		this.acteCelibataire = acteCelibataire;
 	}
 
 	public PremierCopie(String idPremierCopie, String description, String mention, String datePCopie,

@@ -48,4 +48,8 @@ public interface PremierCopieRepository extends JpaRepository<PremierCopie, Stri
     void restorePremierCopie(@PathVariable("idPremierCopie") String idPremierCopie);
 	
 	
+    @Query(value ="UPDATE premier_copie SET deleted = true WHERE id_premier_copie = :idPremierCopie", nativeQuery = true)
+    void deletePremierCopie(@PathVariable("idPremierCopie") String idPremierCopie);
+	
+	
 }

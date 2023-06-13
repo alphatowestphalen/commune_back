@@ -92,21 +92,7 @@ public class MaireController {
 		    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	@Transactional
-	@PutMapping("/restore/{id}")
-	// @PreAuthorize(" hasRole('MAIRE')")
-	public ResponseEntity<HttpStatus> restoreMaire(@Param("idMaire") Long idMaire) 
-	{
-		try {
-			maireRepository.restoreMaire(idMaire);
-			return new ResponseEntity<>(HttpStatus.OK);
-		} 
-		catch (Exception e)
-		{
-		      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}		
-	}
-
+	
 	@DeleteMapping("/{id}")
 	// @PreAuthorize(" hasRole('MAIRE')")
 	public ResponseEntity<HttpStatus>  supprMaire(@PathVariable("id") long id) {	
@@ -119,15 +105,4 @@ public class MaireController {
 	    }
 	}
 	
-	@DeleteMapping("/supprdefinitive/{id}")
-	// @PreAuthorize(" hasRole('MAIRE')")
-	public ResponseEntity<HttpStatus>  supprDefinitive(@PathVariable("id") long id) {	
-		try {
-			maireRepository.supprdefinitive(id);			 
-	      return new ResponseEntity<>(HttpStatus.OK);
-	      
-	    } catch (Exception e) {
-	      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-	    }
-	}
 }

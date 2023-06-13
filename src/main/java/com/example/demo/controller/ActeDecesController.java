@@ -56,6 +56,8 @@ public class ActeDecesController {
 	TypeRepository typeRepository;
 	@Autowired
 	ActeDecesService acteDecesService;
+	@Autowired
+	PremierCopieService premierCopieService;
 	
 	
 	@PostMapping("/{IdPremierCopie}")
@@ -100,10 +102,12 @@ public class ActeDecesController {
 					numActeDeces.numero,
 					numActeDeces.annee
 					);
-			
+			PremierCopie pC = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
+			//System.out.println(pC);
+			//premierCopieService.supprimerPCopie(IdPremierCopie);
+			premierCopieRepository.deletePremierCopie(pC.getIdPremierCopie());
 			acteDecesRepository.save(actedeces);
 			
-			//premierCopieRepository.personneDecede(IdPremierCopie);
 			return new ResponseEntity<>(actedeces, HttpStatus.OK);
 			
 		} catch (Exception e) {
