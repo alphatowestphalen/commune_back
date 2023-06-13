@@ -35,6 +35,7 @@ import com.example.demo.request.DecesRequest;
 import com.example.demo.request.NumeroActeDecesRequest;
 import com.example.demo.request.ReconnaissanceRequest;
 import com.example.demo.service.ActeDecesService;
+import com.example.demo.service.PremierCopieService;
 
 @CrossOrigin("*")
 @RestController
@@ -55,6 +56,7 @@ public class ActeDecesController {
 	TypeRepository typeRepository;
 	@Autowired
 	ActeDecesService acteDecesService;
+	
 	
 	@PostMapping("/{IdPremierCopie}")
 	  public ResponseEntity<ActeDeces> addDeces(@PathVariable(value = "IdPremierCopie") String IdPremierCopie, @RequestBody DecesRequest decesRequest) 
@@ -100,6 +102,8 @@ public class ActeDecesController {
 					);
 			
 			acteDecesRepository.save(actedeces);
+			
+			//premierCopieRepository.personneDecede(IdPremierCopie);
 			return new ResponseEntity<>(actedeces, HttpStatus.OK);
 			
 		} catch (Exception e) {

@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.PremierCopie;
@@ -68,4 +69,10 @@ public class PremierCopieService {
 		}
 		
 	}
+	
+/*	public void PersonDecede(@Param("idPremierCopie") String idPremierCopie)
+	{
+		premierCopieRepository.personneDecede(idPremierCopie);
+	}
+	*/
 }

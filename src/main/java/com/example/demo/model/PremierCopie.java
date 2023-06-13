@@ -108,8 +108,10 @@ public class PremierCopie implements Serializable{
 	 
 	 @Column(name = "anneeActuelle")
 	 private int anneeActuelle;
-	
-
+	 
+	 @Column(name = "isnotSingle")
+	 private boolean isnotSingle = Boolean.FALSE;
+	 
 	
 	public String getIdPremierCopie() {
 		return idPremierCopie;
@@ -289,6 +291,15 @@ public class PremierCopie implements Serializable{
 
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+
+
+	public boolean isIsnotSingle() {
+		return isnotSingle;
+	}
+
+	public void setIsnotSingle(boolean isnotSingle) {
+		this.isnotSingle = isnotSingle;
 	}
 
 	public PremierCopie(String idPremierCopie, String description, String mention, String datePCopie,
