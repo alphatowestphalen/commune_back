@@ -18,7 +18,7 @@ yarn-error.log
 /.vscode
 /bin
 
-/target/
+
 
 
 ### STS ###
@@ -33,3 +33,4 @@ yarn-error.log
 .*class
 
 target/
+
