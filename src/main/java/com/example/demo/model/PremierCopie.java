@@ -87,7 +87,10 @@ public class PremierCopie implements Serializable{
 	 
 	 @OneToMany(mappedBy = "premierecopie", cascade = CascadeType.ALL, orphanRemoval = true)
 	private	List<Reconnaissance> reconnaissance = new ArrayList<>();
-	
+	 
+	 @OneToMany(mappedBy = "premierecopie", cascade = CascadeType.ALL, orphanRemoval = true)
+		private	List<ActeCelibataire> acteCelibataire = new ArrayList<>();
+	 
 	
 	 @OneToOne(mappedBy = "premierCopie", cascade = CascadeType.ALL, orphanRemoval = true)
 	 private Jugement jugement;
@@ -101,8 +104,7 @@ public class PremierCopie implements Serializable{
 	@OneToMany(mappedBy = "premierecopieFemme", cascade = CascadeType.ALL, orphanRemoval = true)
 	private	List<Mariage> femme = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "premierCopie", cascade = CascadeType.ALL, orphanRemoval = true)
-	private	List<ActeCelibataire> acteCelibataire = new ArrayList<>();
+	
 
 	 @Column(name = "numero")
 	 private Long numero;
@@ -304,6 +306,7 @@ public class PremierCopie implements Serializable{
 	}
 
 	
+
 	public List<ActeCelibataire> getActeCelibataire() {
 		return acteCelibataire;
 	}

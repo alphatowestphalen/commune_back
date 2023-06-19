@@ -1,35 +1,47 @@
 package com.example.demo.model;
 
+import java.time.Instant;
+
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Table(name="acteCelibataire")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property="idActeCelibataire")
 public class ActeCelibataire {
 	
 	@Id
 	@Column(name = "idActeCelibataire")
 	private String idActeCelibataire;
 	
-	@ManyToOne
-	@JoinColumn(name="idPremierCopie")
-	private PremierCopie premierCopie;
+	@Column(name = "nomFkt")
+	private String nomFkt;
 	
-	@Column(name="numCin")
+	@Column(name = "numCin")
 	private String numCin;
 	
-	@Column(name="dateCin")
+	@Column(name = "dateCin")
 	private String dateCin;
 	
-	@Column(name="lieuCin")
+	@Column(name = "lieuCin")
 	private String lieuCin;
 	
-	@Column(name="dateDelivrance")
-	private String dateDelivrance;
+	@Column(name = "dateActe")
+	private String dateActe;
+	 
+	@ManyToOne
+	@JoinColumn(name="idPremierCopie")
+	private PremierCopie premierecopie;
 
+	@Column(name = "numero")
+	 private Long numero;
+	 
+	 @Column(name = "annee")
+	 private int annee;
+	 
+	@CreatedDate
+	private Instant createdDate;
+	
 	public String getIdActeCelibataire() {
 		return idActeCelibataire;
 	}
@@ -38,12 +50,12 @@ public class ActeCelibataire {
 		this.idActeCelibataire = idActeCelibataire;
 	}
 
-	public PremierCopie getPremierCopie() {
-		return premierCopie;
+	public String getNomFkt() {
+		return nomFkt;
 	}
 
-	public void setPremierCopie(PremierCopie premierCopie) {
-		this.premierCopie = premierCopie;
+	public void setNomFkt(String nomFkt) {
+		this.nomFkt = nomFkt;
 	}
 
 	public String getNumCin() {
@@ -70,22 +82,61 @@ public class ActeCelibataire {
 		this.lieuCin = lieuCin;
 	}
 
-	public String getDateDelivrance() {
-		return dateDelivrance;
+	public String getDateActe() {
+		return dateActe;
 	}
 
-	public void setDateDelivrance(String dateDelivrance) {
-		this.dateDelivrance = dateDelivrance;
+	public void setDateActe(String dateActe) {
+		this.dateActe = dateActe;
 	}
 
-	public ActeCelibataire(String idActeCelibataire, PremierCopie premierCopie, String numCin, String dateCin,
-			String lieuCin, String dateDelivrance) {
+	public PremierCopie getPremierecopie() {
+		return premierecopie;
+	}
+
+	public void setPremierecopie(PremierCopie premierecopie) {
+		this.premierecopie = premierecopie;
+	}
+
+	
+	public Instant getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Instant createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	
+	public Long getNumero() {
+		return numero;
+	}
+
+	public void setNumero(Long numero) {
+		this.numero = numero;
+	}
+
+	public int getAnnee() {
+		return annee;
+	}
+
+	public void setAnnee(int annee) {
+		this.annee = annee;
+	}
+
+
+	public ActeCelibataire(String idActeCelibataire, String nomFkt, String numCin, String dateCin, String lieuCin,
+			String dateActe, PremierCopie premierecopie, Long numero, int annee, Instant createdDate) {
 		this.idActeCelibataire = idActeCelibataire;
-		this.premierCopie = premierCopie;
+		this.nomFkt = nomFkt;
 		this.numCin = numCin;
 		this.dateCin = dateCin;
 		this.lieuCin = lieuCin;
-		this.dateDelivrance = dateDelivrance;
+		this.dateActe = dateActe;
+		this.premierecopie = premierecopie;
+		this.numero = numero;
+		this.annee = annee;
+		this.createdDate = createdDate;
 	}
 
 	public ActeCelibataire() {

@@ -1,8 +1,13 @@
 package com.example.demo.request;
 
+import java.time.Instant;
+
+import org.springframework.data.annotation.CreatedDate;
+
 public class ActeCelibataireRequest {
 	
-	private String idActeCelibataire;
+	
+	private String nomFkt;
 	
 	private String numCin;
 	
@@ -10,14 +15,19 @@ public class ActeCelibataireRequest {
 	
 	private String lieuCin;
 	
-	private String dateDelivrance;
+	private String dateActe;
 
-	public String getIdActeCelibataire() {
-		return idActeCelibataire;
+	@CreatedDate
+	private Instant createdDate;
+	
+	
+
+	public String getNomFkt() {
+		return nomFkt;
 	}
 
-	public void setIdActeCelibataire(String idActeCelibataire) {
-		this.idActeCelibataire = idActeCelibataire;
+	public void setNomFkt(String nomFkt) {
+		this.nomFkt = nomFkt;
 	}
 
 	public String getNumCin() {
@@ -44,14 +54,22 @@ public class ActeCelibataireRequest {
 		this.lieuCin = lieuCin;
 	}
 
-	public String getDateDelivrance() {
-		return dateDelivrance;
+	public String getDateActe() {
+		return dateActe;
 	}
 
-	public void setDateDelivrance(String dateDelivrance) {
-		this.dateDelivrance = dateDelivrance;
+	public void setDateActe(String dateActe) {
+		this.dateActe = dateActe;
 	}
-	
+
+	public Instant getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Instant createdDate) {
+		this.createdDate = createdDate;
+	}
+
 	
 
 }
