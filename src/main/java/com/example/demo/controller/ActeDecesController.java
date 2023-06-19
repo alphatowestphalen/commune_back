@@ -35,6 +35,7 @@ import com.example.demo.request.DecesRequest;
 import com.example.demo.request.NumeroActeDecesRequest;
 import com.example.demo.request.ReconnaissanceRequest;
 import com.example.demo.service.ActeDecesService;
+import com.example.demo.service.PremierCopieService;
 
 @CrossOrigin("*")
 @RestController
@@ -55,6 +56,9 @@ public class ActeDecesController {
 	TypeRepository typeRepository;
 	@Autowired
 	ActeDecesService acteDecesService;
+	@Autowired
+	PremierCopieService premierCopieService;
+	
 	
 	@PostMapping("/{IdPremierCopie}")
 	  public ResponseEntity<ActeDeces> addDeces(@PathVariable(value = "IdPremierCopie") String IdPremierCopie, @RequestBody DecesRequest decesRequest) 
@@ -98,8 +102,12 @@ public class ActeDecesController {
 					numActeDeces.numero,
 					numActeDeces.annee
 					);
-			
+			PremierCopie pC = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
+			//System.out.println(pC);
+			//premierCopieService.supprimerPCopie(IdPremierCopie);
+			premierCopieRepository.deletePremierCopie(pC.getIdPremierCopie());
 			acteDecesRepository.save(actedeces);
+			
 			return new ResponseEntity<>(actedeces, HttpStatus.OK);
 			
 		} catch (Exception e) {

@@ -1,7 +1,9 @@
 package com.example.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.demo.model.PremierCopie;
 import com.example.demo.repository.PremierCopieRepository;
@@ -65,6 +67,22 @@ public class PremierCopieService {
 			
 			return numeroRequest;
 			
+		}
+		
+	}
+	
+/*	public void PersonDecede(@Param("idPremierCopie") String idPremierCopie)
+	{
+		premierCopieRepository.personneDecede(idPremierCopie);
+	}
+	*/
+	
+	public void supprimerPCopie(@PathVariable("IdPremierCopie") String IdPremierCopie)
+	{
+		PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
+		if(premierCopie != null)
+		{
+			premierCopieRepository.deletePremierCopie(premierCopie.getIdPremierCopie());
 		}
 		
 	}

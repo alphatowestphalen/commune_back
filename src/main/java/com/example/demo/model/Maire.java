@@ -16,8 +16,6 @@ import com.example.demo.utils.AuditTrailListener;
 
 @Entity
 @Table(name="maire")
-@SQLDelete(sql = "UPDATE maire SET deleted = true WHERE id_maire=?")
-@Where(clause = "deleted=false")
 @EntityListeners(AuditTrailListener.class)
 public class Maire {
 	
@@ -35,8 +33,7 @@ public class Maire {
 	@Column(name = "fonction")
 	private String fonction;
 
-	@Column(name = "deleted")
-	private boolean deleted = Boolean.FALSE;
+	
 	
 	public long getIdMaire() {
 		return idMaire;
@@ -70,14 +67,6 @@ public class Maire {
 		this.fonction = fonction;
 	}
 
-	
-	public boolean deleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
 
 	public Maire(String nomMaire, String prenomsMaire, String fonction) {
 		this.nomMaire = nomMaire;

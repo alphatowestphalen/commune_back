@@ -10,7 +10,4 @@ import com.example.demo.model.Maire;
 @Repository
 public interface MaireRepository extends JpaRepository<Maire, Long> {
 
-	@Modifying
-    @Query(value ="UPDATE maire SET deleted = false WHERE id_maire = :idMaire", nativeQuery = true)
-    void restoreMaire(@Param("idMaire") Long idMaire);
 }

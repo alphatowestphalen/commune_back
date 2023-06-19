@@ -12,6 +12,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -49,6 +51,8 @@ public class PremierCopie implements Serializable{
 	@CreatedDate
 	private Instant createdDate;
 
+	@Column(name = "deleted")
+	private boolean deleted = Boolean.FALSE;
 	
 	@ManyToOne()
 	  @JoinColumn(name ="idDeclarant")
@@ -83,7 +87,10 @@ public class PremierCopie implements Serializable{
 	 
 	 @OneToMany(mappedBy = "premierecopie", cascade = CascadeType.ALL, orphanRemoval = true)
 	private	List<Reconnaissance> reconnaissance = new ArrayList<>();
-	
+	 
+	 @OneToMany(mappedBy = "premierecopie", cascade = CascadeType.ALL, orphanRemoval = true)
+		private	List<ActeCelibataire> acteCelibataire = new ArrayList<>();
+	 
 	
 	 @OneToOne(mappedBy = "premierCopie", cascade = CascadeType.ALL, orphanRemoval = true)
 	 private Jugement jugement;
@@ -96,14 +103,18 @@ public class PremierCopie implements Serializable{
 
 	@OneToMany(mappedBy = "premierecopieFemme", cascade = CascadeType.ALL, orphanRemoval = true)
 	private	List<Mariage> femme = new ArrayList<>();
+	
+	
 
 	 @Column(name = "numero")
 	 private Long numero;
 	 
 	 @Column(name = "anneeActuelle")
 	 private int anneeActuelle;
-	
-
+	 
+	 @Column(name = "isnotSingle")
+	 private boolean isnotSingle = Boolean.FALSE;
+	 
 	
 	public String getIdPremierCopie() {
 		return idPremierCopie;
@@ -275,6 +286,33 @@ public class PremierCopie implements Serializable{
 
 	public void setFemme(List<Mariage> femme) {
 		this.femme = femme;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+
+
+	public boolean isIsnotSingle() {
+		return isnotSingle;
+	}
+
+	public void setIsnotSingle(boolean isnotSingle) {
+		this.isnotSingle = isnotSingle;
+	}
+
+	
+
+	public List<ActeCelibataire> getActeCelibataire() {
+		return acteCelibataire;
+	}
+
+	public void setActeCelibataire(List<ActeCelibataire> acteCelibataire) {
+		this.acteCelibataire = acteCelibataire;
 	}
 
 	public PremierCopie(String idPremierCopie, String description, String mention, String datePCopie,
