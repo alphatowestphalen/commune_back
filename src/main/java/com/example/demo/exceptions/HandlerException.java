@@ -37,18 +37,17 @@ public class HandlerException {
 
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setErrors(errorDetails);
-
         return errorResponse;
     }
-	
-	 @ResponseBody
-	    @ExceptionHandler(ResourceNotFoundException.class)
-	    @ResponseStatus(HttpStatus.NOT_FOUND)
-	    Map<String, String> notFoundHandler(ResourceNotFoundException ex) {
-	        Map<String, String> message = new HashMap<>();
-	        message.put("detail", ex.getMessage());
-	        return message;
-	    }
+
+    @ResponseBody
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    Map<String, String> notFoundHandler(ResourceNotFoundException ex) {
+        Map<String, String> message = new HashMap<>();
+        message.put("detail", ex.getMessage());
+        return message;
+    }
 
 
 }

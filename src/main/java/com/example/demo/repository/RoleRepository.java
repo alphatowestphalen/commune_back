@@ -10,5 +10,4 @@ import com.example.demo.model.auth.Role;
 @Repository
 public interface RoleRepository extends JpaRepository <Role, Integer> {
 	 Role findRoleByName(String name);
-
 }

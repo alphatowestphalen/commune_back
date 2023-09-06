@@ -56,5 +56,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 			this.user = user;
 		}
 
-		
-	}
+        public Role(String name, String description) {
+            this.id = id;
+            this.name = name;
+            this.description = description;
+        }
+        public Role(String name) {
+            this.name = name.toUpperCase();
+            this.description = name;
+        }
+        public Role() {
+        }
+    }
