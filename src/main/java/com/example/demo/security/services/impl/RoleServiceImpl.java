@@ -10,13 +10,17 @@ import com.example.demo.repository.RoleRepository;
 import com.example.demo.security.services.RoleService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service(value = "roleService")
 public class RoleServiceImpl implements RoleService {
 
-    @Autowired
-    private RoleRepository roleDao;
+    private final RoleRepository roleDao;
 
+    @Autowired
+    public RoleServiceImpl(RoleRepository roleDao) {
+        this.roleDao = roleDao;
+    }
 
     @Override
     public Role findByName(String name) {
@@ -29,8 +33,8 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role findById(Integer id) {
-        return roleDao.findById(id).orElseThrow(()-> new NotFoundDataException("Role not found"));
+    public Role findById(Long id) {
+        return roleDao.findById(id).orElseThrow(() -> new NotFoundDataException("Role not found"));
     }
 
     @Override

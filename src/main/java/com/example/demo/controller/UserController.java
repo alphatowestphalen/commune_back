@@ -98,9 +98,9 @@ public class UserController {
     public ResponseEntity<User> addUser(@RequestBody User user) {
         try {
            User adduser = userService.save(user);
-
             return new ResponseEntity<>(adduser, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -142,8 +142,8 @@ public class UserController {
         try {
 
             User users = userRepository.findById(id).get();
-            
-            
+
+
             users.setName(user.getName());
             users.setUsername(user.getUsername());
             users.setPhone(user.getPhone());
@@ -175,8 +175,8 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-        
-    
+
+
     @GetMapping("/historiques")
     public List<Audit> getAllAudits(){
         List<Audit> listaudit = new ArrayList<>();

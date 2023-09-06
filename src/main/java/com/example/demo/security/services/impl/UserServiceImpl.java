@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.example.demo.exceptions.NotFoundDataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,15 +21,16 @@ import com.example.demo.security.services.UserService;
 
 @Service(value = "userService")
 public class UserServiceImpl implements UserDetailsService, UserService {
-
     @Autowired
     private RoleService roleService;
-
-    @Autowired
     private UserRepository userDao;
+    private BCryptPasswordEncoder bcryptEncoder;
 
     @Autowired
-    private BCryptPasswordEncoder bcryptEncoder;
+    public UserServiceImpl( UserRepository userDao, BCryptPasswordEncoder bcryptEncoder) {
+        this.userDao = userDao;
+        this.bcryptEncoder = bcryptEncoder;
+    }
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userDao.findByUsername(username);
@@ -57,7 +59,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public User save(User user) {
-
         User nUser = new User();
         nUser.setUsername(user.getUsername());
         nUser.setPassword(bcryptEncoder.encode(user.getPassword()));
@@ -65,38 +66,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         nUser.setName(user.getName());
         nUser.setPoste(user.getPoste());
 
-        String chef = "chef";
-        String adjoint = "adjoint";
-        String maire = "maire";
-        String simple = "simple";
-
-        Role role = roleService.findByName("ADMIN");
-
-        /*
-         * Role roleSet = new Role();
-         * 
-         * if (user.getPoste().equals("chef")) {
-         * 
-         * role = roleService.findByName("ADMIN");
-         * roleSet = role;
-         * 
-         * }
-         * 
-         * else if (nUser.getPoste().equals(adjoint)) {
-         * role = roleService.findByName("MAIRE");
-         * roleSet = role;
-         * }
-         * 
-         * else if(user.getPoste().equals(maire)) {
-         * role = roleService.findByName("MAIRE");
-         * roleSet = role;
-         * }
-         * else if(user.getPoste().equals(simple)) {
-         * role = roleService.findByName("USER");
-         * roleSet = role;
-         * }
-         */
-        nUser.setRoles(role);
+        if( !user.hasRole() ){
+            Role role = roleService.findByName("PERSONEL");
+            nUser.setRoles(role);
+        }else{
+            Role role = user.getRoles();
+            role = roleService.findById(role.getId());
+            nUser.setRoles(role);
+        }
         return userDao.save(nUser);
     }
 }

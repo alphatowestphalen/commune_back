@@ -30,7 +30,7 @@ public class RoleSeeder {
         List<Role> roles = new ArrayList<Role>();
         roles.add(new Role("Maire"));
         roles.add(new Role("Responsable"));
-        roles.add(new Role("Personnel"));
+        roles.add(new Role("Personel"));
         return roles;
     }
 }

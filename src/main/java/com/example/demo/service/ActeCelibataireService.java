@@ -10,20 +10,20 @@ import com.example.demo.request.NumeroActeCelibataire;
 
 @Service
 public class ActeCelibataireService {
-	
+
 	@Autowired
 	ActeCelibataireRepository acteCelibataireRepository;
 	@Autowired(required = false)
 	TypeRepository typeRepository;
-	
+
 	public NumeroActeCelibataire numeroActeCelibataire()
 	{
 		NumeroActeCelibataire numeroActeCelibataire = new NumeroActeCelibataire();
-		
+
 		ActeCelibataire acteCelibataire =  acteCelibataireRepository.chercherActeCelibataire();
-		
-		int currentYear = typeRepository.year;			
-		
+
+		int currentYear = typeRepository.year;
+
 		if (acteCelibataire != null) {
 			long num = acteCelibataire.getNumero();
 			int annee = acteCelibataire.getAnnee();
@@ -32,26 +32,26 @@ public class ActeCelibataireService {
 			int annee = premierCopieRepository.chercherAnneeCopie();
 			*/
 			if(annee == currentYear)
-			{			
+			{
 				long numero = num + 1;
-				String idActeCelibataire = Long.toString(numero).concat(Integer.toString(annee));						
+				String idActeCelibataire = Long.toString(numero).concat(Integer.toString(annee));
 				numeroActeCelibataire.idActeCelibataire = idActeCelibataire;
 				numeroActeCelibataire.annee = annee;
 				numeroActeCelibataire.numero = numero;
-				
+
 				return numeroActeCelibataire;
 			}
-			
+
 				num = 1;
-				annee = currentYear;	
+				annee = currentYear;
 				String idActeCelibataire = Long.toString(num).concat(Integer.toString(annee));
 				numeroActeCelibataire.idActeCelibataire = idActeCelibataire;
 				numeroActeCelibataire.annee = annee;
 				numeroActeCelibataire.numero = num;
-				
+
 				return numeroActeCelibataire;
 		}
-		else 
+		else
 		{
 			long num = 1;
 			int annee = currentYear;
@@ -59,12 +59,16 @@ public class ActeCelibataireService {
 			numeroActeCelibataire.idActeCelibataire = idActeCelibataire;
 			numeroActeCelibataire.annee = annee;
 			numeroActeCelibataire.numero = num;
-			
+
 			return numeroActeCelibataire;
-			
+
 		}
-		
+
 	}
+
+    public void save(ActeCelibataire acteCelibataire) {
+    	acteCelibataireRepository.save(acteCelibataire);
+    }
 
 
 }

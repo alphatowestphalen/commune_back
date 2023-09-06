@@ -13,13 +13,13 @@ public class User  implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column
     private String username;
 
     @Column
-  
+
     private String password;
 
     @Column
@@ -35,7 +35,7 @@ public class User  implements Serializable {
     @JoinColumn(name = "idRoles")
     public Role roles;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -104,6 +104,13 @@ public class User  implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
+    public boolean hasRole(){
+        if (this.roles != null){
+            return this.roles.getId() != 0;
+        }
+        return false;
+    }
 
-    
+
+
 }
