@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.example.demo.exceptions.NotFoundDataException;
+import com.example.demo.utils.ResponsePageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,130 +45,50 @@ import com.example.demo.service.ActeCelibataireService;
 @RestController
 @RequestMapping("/api/acteCelibataires")
 public class ActeCelibataireController {
-	
-	@Autowired
-	PremierCopieRepository premierCopieRepository;
-	@Autowired
-	ActeCelibataireRepository acteCelibataireRepository;
-	@Autowired
-	ActeCelibataireService acteCelibataireService;
-	
-	@GetMapping
+    private  final ActeCelibataireService acteCelibataireService;
+
+    @Autowired
+    public ActeCelibataireController( ActeCelibataireService acteCelibataireService) {
+        this.acteCelibataireService = acteCelibataireService;
+    }
+
+    @GetMapping
 	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<Map<String, Object>> getAllActeCelibataires(
-			     @RequestParam(required = false) String title,
-			        @RequestParam(defaultValue = "0") int page,
-			        @RequestParam(defaultValue = "3") int size) {
-		try {
-			
-			 List<ActeCelibataire> acteCelibataires = new ArrayList<ActeCelibataire>();
-		        Pageable paging = PageRequest.of(page, size);
-		        
-		        Page<ActeCelibataire> pageactecelibataire;
-		        pageactecelibataire = acteCelibataireRepository.findAll(paging);
+	  public ResponseEntity<ResponsePageable<ActeCelibataire>> getAllActeCelibataires
+        (
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+        )
+    {
+        Pageable pageable = PageRequest.of(page, size);
+        ResponsePageable<ActeCelibataire> response = acteCelibataireService.findAll(pageable);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
-		        if (pageactecelibataire.hasContent())
-		        	
-		        	acteCelibataires = pageactecelibataire.getContent();
-
-		             Map<String, Object> response = new HashMap<>();
-		             response.put("acteCelibataire", acteCelibataires);
-		             response.put("currentPage", pageactecelibataire.getNumber());
-		             response.put("totalItems", pageactecelibataire.getTotalElements());
-		             response.put("totalPages", pageactecelibataire.getTotalPages());
-		      return new ResponseEntity<>(response, HttpStatus.OK);
-		    } catch (Exception e) {
-		      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		    }
-		  }
-	
 	@PostMapping("/{IdPremierCopie}")
 	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<ActeCelibataire> addActeCelibataire(@PathVariable(value = "IdPremierCopie") String IdPremierCopie, @RequestBody ActeCelibataireRequest acteCelibataireRequest) 
+	  public ResponseEntity<ActeCelibataire> addActeCelibataire(@PathVariable(value = "IdPremierCopie") String IdPremierCopie, @RequestBody ActeCelibataireRequest acteCelibataireRequest)
 	{
-		try {
-			NumeroActeCelibataire numeroActeCelibataire = acteCelibataireService.numeroActeCelibataire();
-			
-			PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
-			
-			ActeCelibataire acteCelibataire = new ActeCelibataire(
-					numeroActeCelibataire.idActeCelibataire,
-					acteCelibataireRequest.getNomFkt(),
-					acteCelibataireRequest.getNumCin(),
-					acteCelibataireRequest.getDateCin(),
-					acteCelibataireRequest.getLieuCin(),
-					acteCelibataireRequest.getDateActe(),
-					premierCopie,
-					numeroActeCelibataire.numero,
-					numeroActeCelibataire.annee,
-					acteCelibataireRequest.getCreatedDate()
-					);
-			
-			acteCelibataireRepository.save(acteCelibataire);
-			return new ResponseEntity<>(acteCelibataire, HttpStatus.OK);
-		}
-		catch (Exception e) {
-		      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		    }	
-			
+        ActeCelibataire acteCelibataire = acteCelibataireService.save(acteCelibataireRequest, IdPremierCopie);
+        return new ResponseEntity<>(acteCelibataire, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/{id}")
 	  public ResponseEntity<ActeCelibataire> getActeCelibataireById(@PathVariable(value = "id") String id) {
-		
-		ActeCelibataire acteCelibataire = acteCelibataireRepository
-											.findById(id)
-											.orElseThrow(() -> new ResourceNotFoundException("Not found Jugement with id = " + id));;
-
+        ActeCelibataire acteCelibataire = acteCelibataireService.find(id);
 	    return new ResponseEntity<>(acteCelibataire, HttpStatus.OK);
 	  }
-	
+
 	@PutMapping("/{id}")
 	public ResponseEntity<ActeCelibataire> updateActeCelibataire(@PathVariable(value = "id") String id, @RequestBody ActeCelibataireRequest acteCelibataireRequest)
 	{
-		try {
-			
-			ActeCelibataire acteCelibataire = acteCelibataireRepository
-					.findById(id)
-					.orElseThrow(() -> new ResourceNotFoundException("Not found Jugement with id = " + id));;
-			
-			PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(acteCelibataire.getPremierecopie().getIdPremierCopie());
-			
-			
-			//acteDeces.setIdActeDeces(decesRequest.getIdActeDeces());
-			acteCelibataire.setNomFkt(acteCelibataireRequest.getNomFkt());
-			acteCelibataire.setNumCin(acteCelibataireRequest.getNumCin());
-			acteCelibataire.setDateCin(acteCelibataireRequest.getDateCin());
-			acteCelibataire.setLieuCin(acteCelibataireRequest.getLieuCin());
-			acteCelibataire.setDateActe(acteCelibataireRequest.getDateActe());
-			acteCelibataire.setPremierecopie(premierCopie);
-			
-			
-			acteCelibataireRepository.save(acteCelibataire);
-			return new ResponseEntity<>(acteCelibataire, HttpStatus.OK);
-		}
-		catch (Exception e) {
-		      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		    }
-			
+        ActeCelibataire acteCelibataire = acteCelibataireService.update(acteCelibataireRequest, id);
+        return new ResponseEntity<>(acteCelibataire, HttpStatus.OK);
 	}
-	
 	@DeleteMapping("/{id}")
 //	 @PreAuthorize(" hasRole('MAIRE')")
-	  public ResponseEntity<HttpStatus> deleteActeCelibataire(@PathVariable("id") String id) 
-	{
-		try {
-			
-			acteCelibataireRepository.deleteById(id);
-
+	  public ResponseEntity<HttpStatus> deleteActeCelibataire(@PathVariable("id") String id) {
+            acteCelibataireService.delete(id);
 		    return new ResponseEntity<>(HttpStatus.OK);
-		}
-		catch (Exception e) {
-		      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		    }
-	    
 	  }
-	
-	
-
 }

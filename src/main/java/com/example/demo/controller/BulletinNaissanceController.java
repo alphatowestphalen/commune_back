@@ -35,20 +35,14 @@ public class BulletinNaissanceController {
 
 	@Autowired
 	BulletinNaissanceRepository bulletinNaissanceRepository;
-	
+
 	@PostMapping
-	public ResponseEntity<BulletinNaissance> addBulletinNaissance(@RequestBody BulletinNaissance bulletinNaissance) 
+	public ResponseEntity<BulletinNaissance> addBulletinNaissance(@RequestBody BulletinNaissance bulletinNaissance)
 	{
-		try {
-			BulletinNaissance bulletin = bulletinNaissanceRepository.save(bulletinNaissance);
-			return new ResponseEntity<>(bulletin, HttpStatus.CREATED);
-		    
-		}
-		catch (Exception e) {
-		      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		    }
+        BulletinNaissance bulletin = bulletinNaissanceRepository.save(bulletinNaissance);
+        return new ResponseEntity<>(bulletin, HttpStatus.CREATED);
 	}
-	
+
 	@GetMapping("/{id}")
 	  public ResponseEntity<BulletinNaissance> getBulletinNaissanceById(@PathVariable(value = "id") Long id) {
 		BulletinNaissance bulletinNaissance = bulletinNaissanceRepository.findById(id)
@@ -56,13 +50,13 @@ public class BulletinNaissanceController {
 
 	    return new ResponseEntity<>(bulletinNaissance, HttpStatus.OK);
 	  }
-	  
+
 
 	 @GetMapping("/numcopie/{numCopie}")
-	 public ResponseEntity<BulletinNaissance> getBulletinNaissanceByNumCopie(@PathVariable(value = "numCopie" ) String idPremierCopie) 
+	 public ResponseEntity<BulletinNaissance> getBulletinNaissanceByNumCopie(@PathVariable(value = "numCopie" ) String idPremierCopie)
 	 {
 		BulletinNaissance bulletinNaissance = bulletinNaissanceRepository.findByIdPremierCopie(idPremierCopie);
-		
+
 	    return new ResponseEntity<>(bulletinNaissance, HttpStatus.OK);
 	 }
 
@@ -90,7 +84,7 @@ public class BulletinNaissanceController {
 		response.put("length", bulletinNaiss.getTotalElements());
 		response.put("totalPages", bulletinNaiss.getTotalPages());
 
-		
+
 	   return new ResponseEntity<>(response, HttpStatus.OK);
 	   }
 	    catch (Exception e) {
@@ -99,14 +93,14 @@ public class BulletinNaissanceController {
 
 	}
 
-	
+
 	@PutMapping("/{id}")
 	public ResponseEntity<BulletinNaissance> updateBulletinNaissance(@PathVariable(value = "id") Long id,@RequestBody BulletinNaissance bulletinNaissance)
 	{
 		try {
 			BulletinNaissance bulletin = bulletinNaissanceRepository.findById(id)
 			        .orElseThrow(() -> new ResourceNotFoundException("Not found Acte de décès with id = " + id));
-			
+
 			bulletin.setIdPremierCopie(bulletinNaissance.getIdPremierCopie());
 			bulletin.setNomPersonne(bulletinNaissance.getNomPersonne());
 			bulletin.setPrenomsPersonne(bulletinNaissance.getPrenomsPersonne());
@@ -117,22 +111,22 @@ public class BulletinNaissanceController {
 			bulletin.setNomMere(bulletinNaissance.getNomMere());
 			bulletin.setPrenomsMere(bulletinNaissance.getPrenomsMere());
 			bulletin.setDateCopie(bulletinNaissance.getDateCopie());
-			
+
 			bulletinNaissanceRepository.save(bulletin);
-			
+
 			return new ResponseEntity<>(bulletin, HttpStatus.OK);
 		}
 		catch (Exception e) {
 		      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		    }
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<HttpStatus>  supprBulletinNaissance(@PathVariable("id") long idBulletinNaissance)
 	{
 		try {
 			BulletinNaissance bulletin= bulletinNaissanceRepository.findById(idBulletinNaissance).get();
-			
+
 			bulletinNaissanceRepository.delete(bulletin);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}

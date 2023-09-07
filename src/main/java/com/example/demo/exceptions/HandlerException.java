@@ -1,5 +1,7 @@
 package com.example.demo.exceptions;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,6 +9,7 @@ import java.util.Map;
 
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -49,5 +52,26 @@ public class HandlerException {
         return message;
     }
 
-
+    @ExceptionHandler(NotFoundDataException.class)
+    ResponseEntity<ApiException> handleResponseNotFound(NotFoundDataException e){
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        ApiException apiException = new ApiException(
+                e.getMessage(),
+                e,
+                httpStatus,
+                ZonedDateTime.now(ZoneId.of("Z"))
+        );
+        return new ResponseEntity<>(apiException, httpStatus);
+    }
+    @ExceptionHandler(Exception.class)
+    ResponseEntity<ApiException> handleResponseNotFound(Exception e){
+        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        ApiException apiException = new ApiException(
+            e.getMessage(),
+            e,
+            httpStatus,
+            ZonedDateTime.now(ZoneId.of("Z"))
+        );
+        return new ResponseEntity<>(apiException, httpStatus);
+    }
 }

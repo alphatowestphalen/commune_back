@@ -1,12 +1,24 @@
 package com.example.demo.service;
 
+import com.example.demo.exceptions.NotFoundDataException;
+import com.example.demo.model.PremierCopie;
+import com.example.demo.repository.PremierCopieRepository;
+import com.example.demo.request.ActeCelibataireRequest;
+import com.example.demo.utils.ResponsePageable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.ActeCelibataire;
 import com.example.demo.repository.ActeCelibataireRepository;
 import com.example.demo.repository.TypeRepository;
 import com.example.demo.request.NumeroActeCelibataire;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class ActeCelibataireService {
@@ -15,6 +27,8 @@ public class ActeCelibataireService {
 	ActeCelibataireRepository acteCelibataireRepository;
 	@Autowired(required = false)
 	TypeRepository typeRepository;
+    @Autowired
+    PremierCopieRepository premierCopieRepository;
 
 	public NumeroActeCelibataire numeroActeCelibataire()
 	{
@@ -66,9 +80,55 @@ public class ActeCelibataireService {
 
 	}
 
-    public void save(ActeCelibataire acteCelibataire) {
-    	acteCelibataireRepository.save(acteCelibataire);
+    public ActeCelibataire save(ActeCelibataireRequest acteCelibataireRequest, String IdPremierCopie) {
+        NumeroActeCelibataire numeroActeCelibataire = numeroActeCelibataire();
+        PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
+        ActeCelibataire acteCelibataire = new ActeCelibataire(
+            numeroActeCelibataire.idActeCelibataire,
+            acteCelibataireRequest.getNomFkt(),
+            acteCelibataireRequest.getNumCin(),
+            acteCelibataireRequest.getDateCin(),
+            acteCelibataireRequest.getLieuCin(),
+            acteCelibataireRequest.getDateActe(),
+            premierCopie,
+            numeroActeCelibataire.numero,
+            numeroActeCelibataire.annee,
+            acteCelibataireRequest.getCreatedDate()
+        );
+
+        return acteCelibataireRepository.save(acteCelibataire);
     }
 
 
+    public void delete(String id) {
+        acteCelibataireRepository.deleteById(id);
+    }
+
+    public ActeCelibataire update(ActeCelibataireRequest acteCelibataireRequest, String id) {
+        ActeCelibataire acteCelibataire = acteCelibataireRepository
+            .findById(id)
+            .orElseThrow(() -> new NotFoundDataException("Not found Jugement with id = " + id));;
+
+        PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(acteCelibataire.getPremierecopie().getIdPremierCopie());
+
+        acteCelibataire.setNomFkt(acteCelibataireRequest.getNomFkt());
+        acteCelibataire.setNumCin(acteCelibataireRequest.getNumCin());
+        acteCelibataire.setDateCin(acteCelibataireRequest.getDateCin());
+        acteCelibataire.setLieuCin(acteCelibataireRequest.getLieuCin());
+        acteCelibataire.setDateActe(acteCelibataireRequest.getDateActe());
+        acteCelibataire.setPremierecopie(premierCopie);
+
+        return acteCelibataireRepository.save(acteCelibataire);
+    }
+
+    public ActeCelibataire find(String id) {
+       return acteCelibataireRepository
+            .findById(id)
+            .orElseThrow(() -> new NotFoundDataException("Not found Jugement with id = " + id));
+    }
+
+    public ResponsePageable<ActeCelibataire> findAll(Pageable pageable) {
+        Page<ActeCelibataire> pageactecelibataire = acteCelibataireRepository.findAll(pageable);
+        return new ResponsePageable<>(pageactecelibataire);
+    }
 }

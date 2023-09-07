@@ -20,7 +20,7 @@ public class RoleSeeder {
     public void loadRolesData(){
         List<Role> roles = roleService.getAllRoles();
         System.out.println("Role seeder");
-        if(roles.size() == 0){
+        if(roles.size() < 3){
             System.out.println("add all Roles");
             roleService.saveAll(getAllRoles());
         }

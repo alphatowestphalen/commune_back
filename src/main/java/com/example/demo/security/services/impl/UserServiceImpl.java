@@ -65,7 +65,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         nUser.setPhone(user.getPhone());
         nUser.setName(user.getName());
         nUser.setPoste(user.getPoste());
-
         if( !user.hasRole() ){
             Role role = roleService.findByName("PERSONEL");
             nUser.setRoles(role);
