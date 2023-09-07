@@ -8,14 +8,14 @@ import javax.persistence.Embeddable;
 
 import org.springframework.data.annotation.CreatedDate;
 
-@Embeddable  
+@Embeddable
 public class Mention {
-	
+
 	private String type;
-	
+
 	@CreatedDate
 	private Instant createdDate;
-	
+
 	private ArrayList<Object> info = new ArrayList<Object>();
 
 	public String getType() {
@@ -52,9 +52,4 @@ public class Mention {
 		this.type = type;
 		this.createdDate = createdDate;
 	}
-
-
-
-	
-
 }

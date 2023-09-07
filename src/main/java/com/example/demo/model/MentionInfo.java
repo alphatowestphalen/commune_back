@@ -4,9 +4,9 @@ import javax.persistence.Embeddable;
 
 
 public class MentionInfo {
-	
+
 	private String header;
-	
+
 	private String value;
 
 	public String getHeader() {
@@ -30,7 +30,4 @@ public class MentionInfo {
 		this.header = header;
 		this.value = value;
 	}
-	
-	
-
 }
