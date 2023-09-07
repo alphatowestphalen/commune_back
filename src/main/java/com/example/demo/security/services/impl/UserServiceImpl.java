@@ -53,9 +53,19 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
+    public User findById(String id) {
+        return userDao.findById(Long.parseLong(id)).orElseThrow(() -> new NotFoundDataException("User not found"));
+    }
+    @Override
+    public User findById(Long id) {
+        return userDao.findById(id).orElseThrow(() -> new NotFoundDataException("User not found"));
+    }
+
+    @Override
     public User findOne(String username) {
         return userDao.findByUsername(username);
     }
+
 
     @Override
     public User save(User user) {

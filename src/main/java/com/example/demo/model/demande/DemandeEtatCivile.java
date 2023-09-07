@@ -12,7 +12,8 @@ import java.time.Instant;
 @Table(name = "demande_etat_civile")
 public class DemandeEtatCivile {
     @Id
-    private String idDemande;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long idDemande;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idPremierCopie")
     private PremierCopie premierCopie;
@@ -47,11 +48,11 @@ public class DemandeEtatCivile {
         this.createdBy = createdBy;
     }
 
-    public String getIdDemande() {
+    public Long getIdDemande() {
         return idDemande;
     }
 
-    public void setIdDemande(String idDemande) {
+    public void setIdDemande(Long idDemande) {
         this.idDemande = idDemande;
     }
 
@@ -82,7 +83,7 @@ public class DemandeEtatCivile {
     public DemandeEtatCivile() {
     }
 
-    public DemandeEtatCivile(String idDemande, PremierCopie premierCopie, TypeDemande typeDemande, Instant createdAt, User createdBy, Maire maire) {
+    public DemandeEtatCivile(Long idDemande, PremierCopie premierCopie, TypeDemande typeDemande, Instant createdAt, User createdBy, Maire maire) {
         this.idDemande = idDemande;
         this.premierCopie = premierCopie;
         this.typeDemande = typeDemande;
