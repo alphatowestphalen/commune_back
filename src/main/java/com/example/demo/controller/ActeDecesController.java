@@ -52,69 +52,21 @@ public class ActeDecesController {
 	DefuntRepository defuntRepository;
 	@Autowired
 	PieceDecesRepository pieceDecesRepository;
-	@Autowired(required = false) 
+	@Autowired(required = false)
 	TypeRepository typeRepository;
 	@Autowired
 	ActeDecesService acteDecesService;
 	@Autowired
 	PremierCopieService premierCopieService;
-	
-	
-	@PostMapping("/{IdPremierCopie}")
-	  public ResponseEntity<ActeDeces> addDeces(@PathVariable(value = "IdPremierCopie") String IdPremierCopie, @RequestBody DecesRequest decesRequest) 
-	{
-		try {
-			NumeroActeDecesRequest numActeDeces = acteDecesService.numeroActeDeces();
-			
-			PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
 
-				
-			Maire maire = maireRepository.findById(decesRequest.getIdMaire()).get();
-					
-			Defunt defunt = new Defunt(
-					decesRequest.getProfessionDefunt(),
-					decesRequest.getAdresseDefunt(),
-					decesRequest.getDateDeces(),
-					decesRequest.getLieuDeces(),
-					decesRequest.getHeureDeces());
-			defuntRepository.save(defunt);
-					
-			PieceDeces pieceDeces = new PieceDeces(
-					decesRequest.isNomPiece());
-			pieceDecesRepository.save(pieceDeces);
-					
-			ActeDeces actedeces = new ActeDeces(
-					numActeDeces.idActeDeces,
-					decesRequest.getDateDeclaration(),
-					decesRequest.getHeureDeclaration(),
-					decesRequest.getNomDeclarant(),
-					decesRequest.getPrenomsDeclarant(),
-					decesRequest.getProfessionDeclarant(),
-					decesRequest.getLieuNaissanceDeclarant(),
-					decesRequest.getAdresseDeclarant(),
-					decesRequest.getDateNaissanceDeclarant(),
-					decesRequest.getDate(),
-					maire,
-					defunt,
-					pieceDeces,
-					decesRequest.getCreatedDate(),
-					premierCopie,
-					numActeDeces.numero,
-					numActeDeces.annee
-					);
-			PremierCopie pC = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
-			//System.out.println(pC);
-			//premierCopieService.supprimerPCopie(IdPremierCopie);
-			premierCopieRepository.deletePremierCopie(pC.getIdPremierCopie());
-			acteDecesRepository.save(actedeces);
-			
-			return new ResponseEntity<>(actedeces, HttpStatus.OK);
-			
-		} catch (Exception e) {
-		      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		    }
+
+	@PostMapping("/{IdPremierCopie}")
+	  public ResponseEntity<ActeDeces> addDeces(@PathVariable(value = "IdPremierCopie") String IdPremierCopie, @RequestBody DecesRequest decesRequest)
+	{
+        ActeDeces actedeces = acteDecesService.save(decesRequest, IdPremierCopie);
+        return new ResponseEntity<>(actedeces, HttpStatus.OK);
 	}
-	
+
 	@GetMapping
 	  public ResponseEntity<List<ActeDeces>> getAllActeDeces() {
 	    List<ActeDeces> acte = new ArrayList<ActeDeces>();
@@ -127,79 +79,66 @@ public class ActeDecesController {
 
 	    return new ResponseEntity<>(acte, HttpStatus.OK);
 	  }
-	
-	
+
+
 	@GetMapping("/{id}")
 	  public ResponseEntity<ActeDeces> getActeDecesById(@PathVariable(value = "id") String id) {
 		ActeDeces acte = acteDecesRepository.findByIdActeDeces(id);
 
 	    return new ResponseEntity<>(acte, HttpStatus.OK);
 	  }
-	
+
 	@PutMapping("/{id}")
 	public ResponseEntity<ActeDeces> updateActeDeces(@PathVariable(value = "id") String id, @RequestBody DecesRequest decesRequest)
 	{
-		try {
-			
-			ActeDeces acteDeces = acteDecesRepository.findByIdActeDeces(id);
-			
-			PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(acteDeces.getPremierCopie().getIdPremierCopie());
-			Maire maire = maireRepository.findById(decesRequest.getIdMaire()).get();
-			
-			Defunt defunt = acteDeces.getDefunt();
-			PieceDeces pieceDeces = acteDeces.getPieceDeces();
-			
-			defunt.setProfessionDefunt(decesRequest.getProfessionDefunt());
-			defunt.setAdresseDefunt(decesRequest.getAdresseDefunt());
-			defunt.setDateDeces(decesRequest.getDateDeces());
-			defunt.setLieuDeces(decesRequest.getLieuDeces());
-			defunt.setHeureDeces(decesRequest.getHeureDeces());
-			defuntRepository.save(defunt);
-			
-			pieceDeces.setNomPiece(decesRequest.isNomPiece());
-			pieceDecesRepository.save(pieceDeces);
-			
-			//acteDeces.setIdActeDeces(decesRequest.getIdActeDeces());
-			acteDeces.setDateDeclaration(decesRequest.getDateDeclaration());
-			acteDeces.setHeureDeclaration(decesRequest.getHeureDeclaration());
-			acteDeces.setNomDeclarant(decesRequest.getNomDeclarant());
-			acteDeces.setPrenomsDeclarant(decesRequest.getPrenomsDeclarant());
-			acteDeces.setProfessionDeclarant(decesRequest.getProfessionDeclarant());
-			acteDeces.setLieuNaissanceDeclarant(decesRequest.getLieuNaissanceDeclarant());
-			acteDeces.setAdresseDeclarant(decesRequest.getAdresseDeclarant());
-			acteDeces.setDateNaissanceDeclarant(decesRequest.getDateNaissanceDeclarant());
-			acteDeces.setDate(decesRequest.getDate());
-			acteDeces.setMaire(maire);
-			acteDeces.setDefunt(defunt);
-			acteDeces.setPieceDeces(pieceDeces);
-			acteDeces.setPremierCopie(premierCopie);
-			
-			acteDecesRepository.save(acteDeces);
-			return new ResponseEntity<>(acteDeces, HttpStatus.OK);
-		}
-		catch (Exception e) {
-		      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		    }
-			
+        ActeDeces acteDeces = acteDecesRepository.findByIdActeDeces(id);
+
+        PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(acteDeces.getPremierCopie().getIdPremierCopie());
+        Maire maire = maireRepository.findById(decesRequest.getIdMaire()).get();
+
+        Defunt defunt = acteDeces.getDefunt();
+        PieceDeces pieceDeces = acteDeces.getPieceDeces();
+
+        defunt.setProfessionDefunt(decesRequest.getProfessionDefunt());
+        defunt.setAdresseDefunt(decesRequest.getAdresseDefunt());
+        defunt.setDateDeces(decesRequest.getDateDeces());
+        defunt.setLieuDeces(decesRequest.getLieuDeces());
+        defunt.setHeureDeces(decesRequest.getHeureDeces());
+        defuntRepository.save(defunt);
+
+        pieceDeces.setNomPiece(decesRequest.isNomPiece());
+        pieceDecesRepository.save(pieceDeces);
+
+        //acteDeces.setIdActeDeces(decesRequest.getIdActeDeces());
+        acteDeces.setDateDeclaration(decesRequest.getDateDeclaration());
+        acteDeces.setHeureDeclaration(decesRequest.getHeureDeclaration());
+        acteDeces.setNomDeclarant(decesRequest.getNomDeclarant());
+        acteDeces.setPrenomsDeclarant(decesRequest.getPrenomsDeclarant());
+        acteDeces.setProfessionDeclarant(decesRequest.getProfessionDeclarant());
+        acteDeces.setLieuNaissanceDeclarant(decesRequest.getLieuNaissanceDeclarant());
+        acteDeces.setAdresseDeclarant(decesRequest.getAdresseDeclarant());
+        acteDeces.setDateNaissanceDeclarant(decesRequest.getDateNaissanceDeclarant());
+        acteDeces.setDate(decesRequest.getDate());
+        acteDeces.setMaire(maire);
+        acteDeces.setDefunt(defunt);
+        acteDeces.setPieceDeces(pieceDeces);
+        acteDeces.setPremierCopie(premierCopie);
+
+        acteDecesRepository.save(acteDeces);
+        return new ResponseEntity<>(acteDeces, HttpStatus.OK);
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<HttpStatus>  supprActeDeces(@PathVariable("id") String idActeDeces)
 	{
-		try {
-			ActeDeces acteDeces = acteDecesRepository.findByIdActeDeces(idActeDeces);
-			Defunt defunt = acteDeces.getDefunt();
-			PieceDeces pieceDeces = acteDeces.getPieceDeces();
-			
-			acteDecesRepository.delete(acteDeces);
-			defuntRepository.delete(defunt);
-			pieceDecesRepository.delete(pieceDeces);
-			
-			 return new ResponseEntity<>(HttpStatus.OK);
-			
-		}
-		catch (Exception e) {
-		      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		    }
+        ActeDeces acteDeces = acteDecesRepository.findByIdActeDeces(idActeDeces);
+        Defunt defunt = acteDeces.getDefunt();
+        PieceDeces pieceDeces = acteDeces.getPieceDeces();
+
+        acteDecesRepository.delete(acteDeces);
+        defuntRepository.delete(defunt);
+        pieceDecesRepository.delete(pieceDeces);
+
+        return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

@@ -17,18 +17,18 @@ public class PremierCopieService {
 	PremierCopieRepository premierCopieRepository;
 	@Autowired(required = false)
 	TypeRepository typeRepository;
-	
+
 	public NumeroRequest numeroCopie()
 	{
 		NumeroRequest numeroRequest = new NumeroRequest();
-		
+
 		PremierCopie pc = premierCopieRepository.chercherPremierCopie();
-		
+
 		int currentYear = typeRepository.year;
-		
-		
-				
-		
+
+
+
+
 		if (pc != null) {
 			long num = pc.getNumero();
 			int annee = pc.getAnneeActuelle();
@@ -37,26 +37,26 @@ public class PremierCopieService {
 			int annee = premierCopieRepository.chercherAnneeCopie();
 			*/
 			if(annee == currentYear)
-			{			
+			{
 				long numero = num + 1;
-				String IdPremierCopie = Long.toString(numero).concat(Integer.toString(annee));						
+				String IdPremierCopie = Long.toString(numero).concat(Integer.toString(annee));
 				numeroRequest.idPremierCopie = IdPremierCopie;
 				numeroRequest.annee = annee;
 				numeroRequest.numero = numero;
-				
+
 				return numeroRequest;
 			}
-			
+
 				num = 1;
-				annee = currentYear;	
+				annee = currentYear;
 				String IdPremierCopie = Long.toString(num).concat(Integer.toString(annee));
 				numeroRequest.idPremierCopie = IdPremierCopie;
 				numeroRequest.annee = annee;
 				numeroRequest.numero = num;
-				
+
 				return numeroRequest;
 		}
-		else 
+		else
 		{
 			long num = 1;
 			int annee = currentYear;
@@ -64,19 +64,19 @@ public class PremierCopieService {
 			numeroRequest.idPremierCopie = IdPremierCopie;
 			numeroRequest.annee = annee;
 			numeroRequest.numero = num;
-			
+
 			return numeroRequest;
-			
+
 		}
-		
+
 	}
-	
+
 /*	public void PersonDecede(@Param("idPremierCopie") String idPremierCopie)
 	{
 		premierCopieRepository.personneDecede(idPremierCopie);
 	}
 	*/
-	
+
 	public void supprimerPCopie(@PathVariable("IdPremierCopie") String IdPremierCopie)
 	{
 		PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
@@ -84,6 +84,14 @@ public class PremierCopieService {
 		{
 			premierCopieRepository.deletePremierCopie(premierCopie.getIdPremierCopie());
 		}
-		
+
 	}
+
+    public PremierCopie findById(String IdPremierCopie){
+        return premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
+    }
+
+    public void setDefuntPremierCopie(String IdPremierCopie){
+        premierCopieRepository.deletePremierCopie(IdPremierCopie);
+    }
 }
