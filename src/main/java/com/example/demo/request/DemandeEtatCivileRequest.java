@@ -6,12 +6,10 @@ public class DemandeEtatCivileRequest {
     private String idPremierCopie;
     private TypeDemande typeDemande;
 
-    private Long createdBy;
 
-    public DemandeEtatCivileRequest(String idPremierCopie, TypeDemande typeDemande, Long createdBy) {
+    public DemandeEtatCivileRequest(String idPremierCopie, TypeDemande typeDemande) {
         this.idPremierCopie = idPremierCopie;
         this.typeDemande = typeDemande;
-        this.createdBy = createdBy;
     }
 
     public DemandeEtatCivileRequest() {
@@ -31,13 +29,5 @@ public class DemandeEtatCivileRequest {
 
     public void setTypeDemande(TypeDemande typeDemande) {
         this.typeDemande = typeDemande;
-    }
-
-    public Long getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Long createdBy) {
-        this.createdBy = createdBy;
     }
 }

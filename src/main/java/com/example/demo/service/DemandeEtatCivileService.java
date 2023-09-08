@@ -53,8 +53,8 @@ public class DemandeEtatCivileService {
         DemandeEtatCivile demandeEtatCivile = new DemandeEtatCivile();
         PremierCopie premierCopie = premierCopieService.findById(demandeEtatCivileRequest.getIdPremierCopie());
         if(premierCopie == null) throw new NotFoundDataException("Premier Copie Not Found");
-        User user = userService.findById(demandeEtatCivileRequest.getCreatedBy());
-        if (user == null) throw new NotFoundDataException("User Not Found");
+        User user  = userService.getAuthenticatedUser();
+        if (user == null) throw new NotFoundDataException("User who created Not Found");
         demandeEtatCivile.setPremierCopie(premierCopie);
         demandeEtatCivile.setTypeDemande(demandeEtatCivileRequest.getTypeDemande());
         demandeEtatCivile.setCreatedBy(user);
