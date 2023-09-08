@@ -58,11 +58,11 @@ public class ResponsePageable <ELEMENT> {
             this.totalElements = totalElements;
         }
 
-        public Object getContent() {
+        public List<ELEMENT> getData() {
             return data;
         }
 
-        public void setContent(List<ELEMENT> content) {
-            this.data = content;
+        public void setData(List<ELEMENT> data) {
+            this.data = data;
         }
 }
