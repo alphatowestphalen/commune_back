@@ -77,14 +77,13 @@ public class PremierCopieService {
 	}
 	*/
 
-	public void supprimerPCopie(@PathVariable("IdPremierCopie") String IdPremierCopie)
+	public void supprimerPCopie( String IdPremierCopie)
 	{
+        System.out.println("id copie "+IdPremierCopie);
 		PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
-		if(premierCopie != null)
-		{
-			premierCopieRepository.deletePremierCopie(premierCopie.getIdPremierCopie());
-		}
-
+        System.out.println("premier "+premierCopie.getIdPremierCopie());
+		if(premierCopie == null) throw new RuntimeException("Premier Copie not found");
+        premierCopieRepository.deletePremierCopie(premierCopie.getIdPremierCopie());
 	}
 
     public PremierCopie findById(String IdPremierCopie){
@@ -92,6 +91,6 @@ public class PremierCopieService {
     }
 
     public void setDefuntPremierCopie(String IdPremierCopie){
-        premierCopieRepository.deletePremierCopie(IdPremierCopie);
+        supprimerPCopie(IdPremierCopie);
     }
 }

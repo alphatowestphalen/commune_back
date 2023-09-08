@@ -11,6 +11,8 @@ import com.example.demo.repository.ActeDecesRepository;
 import com.example.demo.repository.TypeRepository;
 import com.example.demo.request.NumeroActeDecesRequest;
 
+import javax.transaction.Transactional;
+
 @Service
 public class ActeDecesService {
 
@@ -75,6 +77,7 @@ public class ActeDecesService {
 	}
 
 
+    @Transactional
     public ActeDeces save(DecesRequest decesRequest, String idPremierCopie) {
         Maire maire = maireRepository.findById( decesRequest.getIdMaire()).get();
         PremierCopie premierCopie = premierCopieService.findById(idPremierCopie);
