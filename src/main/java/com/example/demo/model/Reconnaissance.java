@@ -8,6 +8,8 @@ import java.util.Set;
 import javax.persistence.*;
 
 
+import com.example.demo.model.auth.User;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -27,24 +29,36 @@ public class Reconnaissance implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "idReconnaissance")
 	private long idReconnaissance;
-	
+
 	@Column(name = "dateDeclaration")
 	private String dateDeclaration;
-	
+
 	@Column(name = "heureDeclaration")
 	private String heureDeclaration;
-	
+
 	@Column(name = "infoPersonDeclarant")
 	private String infoPersonDeclarant;
-	
-	@CreatedDate
+
+    @ManyToOne
+    @JoinColumn(name = "created_by_id")
+    private User createdBy;
+
+	@CreationTimestamp
 	private Instant createdDate;
-	
+
 	@ManyToOne
 	@JoinColumn(name="idPremierCopie")
 	private PremierCopie premierecopie;
 
-	public long getIdReconnaissance() {
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public long getIdReconnaissance() {
 		return idReconnaissance;
 	}
 
@@ -84,9 +98,9 @@ public class Reconnaissance implements Serializable{
 		this.createdDate = createdDate;
 	}
 
-	
 
-    
+
+
 	public PremierCopie getPremierecopie() {
 		return premierecopie;
 	}
@@ -101,15 +115,14 @@ public class Reconnaissance implements Serializable{
 	}
 
 	public Reconnaissance( String dateDeclaration, String heureDeclaration,
-			String infoPersonDeclarant, Instant createdDate, PremierCopie premierCopie) {
+			String infoPersonDeclarant, PremierCopie premierCopie) {
 		this.dateDeclaration = dateDeclaration;
 		this.heureDeclaration = heureDeclaration;
 		this.infoPersonDeclarant = infoPersonDeclarant;
-		this.createdDate = createdDate;
 		this.premierecopie = premierCopie;
 	}
 
 
 
-	
+
 }

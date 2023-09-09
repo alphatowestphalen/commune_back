@@ -7,13 +7,12 @@ import org.springframework.data.annotation.CreatedDate;
 public class ReconnaissanceRequest {
 
 	private String dateDeclaration;
-	
+
+    private String idPremierCopie;
+
 	private String heureDeclaration;
-	
+
 	private String infoPersonDeclarant;
-	
-	@CreatedDate
-	private Instant createdDate;
 
 	public String getDateDeclaration() {
 		return dateDeclaration;
@@ -39,14 +38,11 @@ public class ReconnaissanceRequest {
 		this.infoPersonDeclarant = infoPersonDeclarant;
 	}
 
-	public Instant getCreatedDate() {
-		return createdDate;
-	}
+    public String getIdPremierCopie() {
+        return idPremierCopie;
+    }
 
-	public void setCreatedDate(Instant createdDate) {
-		this.createdDate = createdDate;
-	}
-	
-	
-	
+    public void setIdPremierCopie(String idPremierCopie) {
+        this.idPremierCopie = idPremierCopie;
+    }
 }
