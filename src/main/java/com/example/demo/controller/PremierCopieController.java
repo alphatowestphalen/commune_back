@@ -371,38 +371,22 @@ public class PremierCopieController {
 	// @PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<HttpStatus>  supprPremierCopie(@PathVariable("IdPremierCopie") String IdPremierCopie)
 	{
-		try
-		{
-			PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
-			Declarant declarant  =  premierCopie.getDeclarant();
-			Mere mere  =  premierCopie.getMere();
-			Pere pere =  premierCopie.getPere();
-			Enfant enfant =  premierCopie.getEnfant();
-			PieceJustificative pieceJustificative  =  premierCopie.getPieceJustificative();
+        PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
+        Declarant declarant  =  premierCopie.getDeclarant();
+        Mere mere  =  premierCopie.getMere();
+        Pere pere =  premierCopie.getPere();
+        Enfant enfant =  premierCopie.getEnfant();
+        PieceJustificative pieceJustificative  =  premierCopie.getPieceJustificative();
 
-			premierCopieRepository.delete(premierCopie);
-			pieceJustificativeRepository.delete(pieceJustificative);
-			enfantRepository.delete(enfant);
-			pereRepository.delete(pere);
-			mereRepository.delete(mere);
-			declarantRepository.delete(declarant);
+        premierCopieRepository.delete(premierCopie);
+        pieceJustificativeRepository.delete(pieceJustificative);
+        enfantRepository.delete(enfant);
+        pereRepository.delete(pere);
+        mereRepository.delete(mere);
+        declarantRepository.delete(declarant);
 
-		    return new ResponseEntity<>(HttpStatus.OK);
-
-	    }
-		catch (Exception e) {
-	      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-	    }
+        return new ResponseEntity<>(HttpStatus.OK);
 	}
-	/*
-	@GetMapping("/test")
-	public Long test()
-	{
-		PremierCopie pc = premierCopieRepository.chercherPremierCopie();
-		long a = pc.getNumero() + 1;
-		return a;
-	}
-	*/
 
 	@GetMapping("LastPremiereCopie")
 	public String getLastIdPremierCopie() {
@@ -414,22 +398,12 @@ public class PremierCopieController {
 		 NumeroRequest numerorequest =  premierCopieService.numeroCopie();
 		return numerorequest.idPremierCopie;
 
-
 	}
 
 	@Transactional
 	@PutMapping("/restore/{idPremierCopie}")
-	public ResponseEntity<HttpStatus> restorePremierCopie(@PathVariable("idPremierCopie") String idPremierCopie)
-	{
-		try {
-
-			premierCopieRepository.restorePremierCopie(idPremierCopie);
-			return new ResponseEntity<>(HttpStatus.OK);
-		}
-		catch (Exception e)
-		{
-		      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
+	public ResponseEntity<HttpStatus> restorePremierCopie(@PathVariable("idPremierCopie") String idPremierCopie) {
+        premierCopieRepository.restorePremierCopie(idPremierCopie);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

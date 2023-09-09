@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.request.NumeroRequest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -125,6 +126,7 @@ public class PremierCopieService {
         return new ResponsePageable<PremierCopie>(premierCopieRepository.findAll(pageable));
     }
 
+    @Transactional
     public PremierCopie save(PremierCopieRequest premierCopieRequest){
         NumeroRequest numeroRequest = numeroCopie();
         Optional<Maire> optionalMaire = maireRepository.findById(premierCopieRequest.getIdMaire());
