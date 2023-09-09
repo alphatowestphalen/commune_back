@@ -39,24 +39,28 @@ public class JugementService {
         return jugementRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found Jugement with id = " + id));
     }
 
-    @Transactional
     public Jugement save(JugementRequest jugementRequest) {
-        User user =  userService.getAuthenticatedUser();
-        if (user == null) throw new NotFoundDataException("Not found User authenticated");
-        PremierCopie premierCopie = premierCopieService.findById(jugementRequest.getIdPremierCopie());
-        if(premierCopie == null) throw new NotFoundDataException("Not found PremierCopie with id = " + jugementRequest.getIdPremierCopie());
-        Jugement jugement = new Jugement(
-            jugementRequest.getNumJugement(),
-            jugementRequest.getDecretJuridique(),
-            jugementRequest.getDateDecret(),
-            jugementRequest.getTypeJugement(),
-            jugementRequest.getInfoChangement(),
-            premierCopie);
-        jugement.setCreatedBy(user);
-        return jugementRepository.save(jugement);
+        try {
+            User user = userService.getAuthenticatedUser();
+            if (user == null) throw new NotFoundDataException("Not found User authenticated");
+            PremierCopie premierCopie = premierCopieService.findById(jugementRequest.getIdPremierCopie());
+            if (premierCopie == null)
+                throw new NotFoundDataException("Not found PremierCopie with id = " + jugementRequest.getIdPremierCopie());
+            Jugement jugement = new Jugement(
+                jugementRequest.getNumJugement(),
+                jugementRequest.getDecretJuridique(),
+                jugementRequest.getDateDecret(),
+                jugementRequest.getTypeJugement(),
+                jugementRequest.getInfoChangement(),
+                premierCopie);
+            jugement.setCreatedBy(user);
+            return jugementRepository.save(jugement);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    @Transactional
     public Jugement update(Long id ,  JugementRequest jugementRequest){
         Jugement jugement = findById(id);
         if(jugement == null) throw new NotFoundDataException("Not found Jugement with id = " + id);
@@ -72,10 +76,19 @@ public class JugementService {
         return jugementRepository.save(jugement);
     }
 
-    @Transactional
+    public ResponsePageable<PremierCopie> getAllPremierCopieNotHaveJugement(Pageable pageable){
+        Page<PremierCopie> premierCopiePage = jugementRepository.getAllPremierCopieNotHaveJugement(pageable);
+        return new ResponsePageable<>(premierCopiePage);
+    }
+
     public void delete(Long id) {
         Jugement jugement = findById(id);
         if(jugement == null) throw new NotFoundDataException("Not found Jugement with id = " + id);
         jugementRepository.delete(jugement);
+    }
+
+    public ResponsePageable<PremierCopie> getAllPremierCopieHaveJugement(Pageable pageable) {
+        Page<PremierCopie> premierCopiePage = jugementRepository.getAllPremierCopieHaveJugement(pageable);
+        return new ResponsePageable<>(premierCopiePage);
     }
 }

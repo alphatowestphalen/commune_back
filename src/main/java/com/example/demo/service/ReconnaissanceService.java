@@ -41,7 +41,6 @@ public class ReconnaissanceService {
         return reconnaissanceRepository.findById(id).orElseThrow(() -> new NotFoundDataException("Not found Reconnaissance with id = " + id));
     }
 
-    @Transactional
     public  Reconnaissance save(ReconnaissanceRequest reconnaissanceRequest) {
         PremierCopie premierCopie = premierCopieService.findById(reconnaissanceRequest.getIdPremierCopie());
         if(premierCopie == null) throw new NotFoundDataException("Not found PremierCopie with id = " + reconnaissanceRequest.getIdPremierCopie());
@@ -59,7 +58,6 @@ public class ReconnaissanceService {
         return reconnaissanceRepository.save(reconnaissance);
     }
 
-    @Transactional
     public Reconnaissance update(Long id, ReconnaissanceRequest reconnaissanceRequest){
         Reconnaissance reconnaissance = findById(id);
         if(reconnaissance == null) throw new NotFoundDataException("Not found Reconnaissance with id = " + id);
@@ -76,7 +74,6 @@ public class ReconnaissanceService {
         return reconnaissanceRepository.save(reconnaissance);
     }
 
-    @Transactional
     public void delete(Long id) {
         Reconnaissance reconnaissance = findById(id);
         if(reconnaissance == null) throw new NotFoundDataException("Not found Reconnaissance with id = " + id);

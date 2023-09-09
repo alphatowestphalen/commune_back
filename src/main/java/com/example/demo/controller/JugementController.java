@@ -42,12 +42,28 @@ public class JugementController {
 
     @GetMapping
 	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<ResponsePageable<Jugement>> getAllJugements(
+    public ResponseEntity<ResponsePageable<Jugement>> getAllJugements(
 		        @RequestParam(defaultValue = "1") int page,
 		        @RequestParam(defaultValue = "10") int size) {
-
         Pageable paging = PageRequest.of(page-1, size);
         ResponsePageable<Jugement> response = jugementService.getAll(paging);
+        return new ResponseEntity<> (response, HttpStatus.OK);
+    }
+
+    @GetMapping("/premierCopies")
+    // @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
+    public ResponseEntity<ResponsePageable<PremierCopie>> getAllPremierCopie(
+        @RequestParam(defaultValue = "true") boolean haveJugement,
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "10") int size) {
+        Pageable paging = PageRequest.of(page-1, size);
+        ResponsePageable<PremierCopie> response;
+
+        if(haveJugement)
+            response = jugementService.getAllPremierCopieHaveJugement(paging);
+        else
+            response = jugementService.getAllPremierCopieNotHaveJugement(paging);
+
         return new ResponseEntity<> (response, HttpStatus.OK);
     }
 

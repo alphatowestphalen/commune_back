@@ -41,7 +41,6 @@ public class AdoptionService {
     public Adoption getById(Long id) {
         return adoptionRepository.findById(id).orElseThrow(() -> new NotFoundDataException("Not found Adoption with id = " + id));
     }
-    @Transactional
     public Adoption save(AdoptionRequest adoptionRequest) {
         PremierCopie premierCopie = premierCopieService.findById(adoptionRequest.getIdPremierCopie());
         if(premierCopie == null) throw new NotFoundDataException("Not found PremierCopie with id = " + adoptionRequest.getIdPremierCopie());
@@ -58,7 +57,6 @@ public class AdoptionService {
         return adoptionRepository.save(adoption);
     }
 
-    @Transactional
     public Adoption update(Long id, AdoptionRequest request) {
         Adoption adoption = getById(id);
         User user = userService.getAuthenticatedUser();
@@ -70,7 +68,6 @@ public class AdoptionService {
         return adoptionRepository.save(adoption);
     }
 
-    @Transactional
     public void delete(Long id) {
         Adoption adoption = getById(id);
         if(adoption == null) throw new NotFoundDataException("Not found Adoption with id = " + id);
