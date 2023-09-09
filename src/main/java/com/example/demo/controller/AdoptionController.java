@@ -45,52 +45,31 @@ public class AdoptionController {
 
     @GetMapping
 	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<ResponsePageable<Adoption>> getAllAdoptions(
-			        @RequestParam(defaultValue = "1") int page,
-			        @RequestParam(defaultValue = "10") int size) {
-	        Pageable pageable = PageRequest.of(page-1, size);
-            ResponsePageable<Adoption> response = adoptionService.getAll(pageable);
-            return new ResponseEntity<>(response , HttpStatus.OK);
-	  }
-
+    public ResponseEntity<ResponsePageable<Adoption>> getAllAdoptions(
+                @RequestParam(defaultValue = "1") int page,
+                @RequestParam(defaultValue = "10") int size)
+    {
+        Pageable pageable = PageRequest.of(page-1, size);
+        ResponsePageable<Adoption> response = adoptionService.getAll(pageable);
+        return new ResponseEntity<>(response , HttpStatus.OK);
+    }
 
 	@GetMapping("/{id}")
 	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<Adoption> getAdoptionById(@PathVariable(value = "id") Long id) {
-		Adoption adoption = adoptionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found Jugement with id = " + id));
-;
-	    return new ResponseEntity<>(adoption, HttpStatus.OK);
-	  }
+    public ResponseEntity<Adoption> getAdoptionById(@PathVariable(value = "id") Long id) {
+        Adoption adoption = adoptionService.getById(id);
+        return new ResponseEntity<>(adoption,HttpStatus.OK);
+    }
 
-	@PostMapping("/{IdPremierCopie}")
+	@PostMapping()
 	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<Adoption> addAdoption(@PathVariable(value = "IdPremierCopie") String IdPremierCopie, @RequestBody AdoptionRequest adoptionRequest)
+    public ResponseEntity<Adoption> addAdoption(@RequestBody AdoptionRequest adoptionRequest)
 	{
-		try {
-			PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
-
-			Adoption adoption = new Adoption(
-					adoptionRequest.getParentAdoptif(),
-					adoptionRequest.getDateAdoption(),
-					adoptionRequest.getHeureAdoption(),
-					adoptionRequest.getNumAdoption(),
-					adoptionRequest.getCreatedDate(),
-					adoptionRequest.getParentAdoptif2(),
-					premierCopie
-					);
-
-			adoptionRepository.save(adoption);
-			return new ResponseEntity<>(adoption, HttpStatus.OK);
-		}
-		catch (Exception e) {
-		      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		    }
-
-
+		Adoption adoption = adoptionService.save(adoptionRequest);
+        return new ResponseEntity<>(adoption,HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
-
 	//@PreAuthorize(" hasRole('MAIRE')")
 	public ResponseEntity<Adoption> updateAdoption(@PathVariable(value = "id") Long id, @RequestBody AdoptionRequest adoptionRequest)
 	{
@@ -103,7 +82,6 @@ public class AdoptionController {
 		adoption.setDateAdoption(adoptionRequest.getDateAdoption());
 		adoption.setHeureAdoption(adoptionRequest.getHeureAdoption());
 		adoption.setNumAdoption(adoptionRequest.getNumAdoption());
-		adoption.setParentAdoptif2(adoptionRequest.getParentAdoptif2());
 		adoption.setPremierecopie(premierCopie);
 
 
