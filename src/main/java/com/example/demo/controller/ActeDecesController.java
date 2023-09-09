@@ -69,14 +69,10 @@ public class ActeDecesController {
 
 	@GetMapping
 	  public ResponseEntity<List<ActeDeces>> getAllActeDeces() {
-	    List<ActeDeces> acte = new ArrayList<ActeDeces>();
-
-	    acteDecesRepository.findAll().forEach(acte::add);
-
+        List<ActeDeces> acte = acteDecesRepository.findAll();
 	    if (acte.isEmpty()) {
 	      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	    }
-
 	    return new ResponseEntity<>(acte, HttpStatus.OK);
 	  }
 
@@ -84,7 +80,6 @@ public class ActeDecesController {
 	@GetMapping("/{id}")
 	  public ResponseEntity<ActeDeces> getActeDecesById(@PathVariable(value = "id") String id) {
 		ActeDeces acte = acteDecesRepository.findByIdActeDeces(id);
-
 	    return new ResponseEntity<>(acte, HttpStatus.OK);
 	  }
 

@@ -1,6 +1,8 @@
 package com.example.demo.service;
 
+import com.example.demo.utils.ResponsePageable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -88,6 +90,10 @@ public class PremierCopieService {
 
     public PremierCopie findById(String IdPremierCopie){
         return premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
+    }
+
+    public ResponsePageable<PremierCopie> findAll(Pageable pageable){
+        return new ResponsePageable<PremierCopie>(premierCopieRepository.findAll(pageable));
     }
 
     public void setDefuntPremierCopie(String IdPremierCopie){

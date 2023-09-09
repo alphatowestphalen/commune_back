@@ -15,6 +15,9 @@ import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 
+import com.example.demo.model.auth.User;
+import com.example.demo.security.services.UserService;
+import com.example.demo.utils.ResponsePageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -80,10 +83,10 @@ public class PremierCopieController {
 	MereRepository mereRepository;
 	@Autowired
 	PereRepository pereRepository;
-
+    @Autowired
+    UserService userService;
 	@Autowired
 	PremierCopieService premierCopieService;
-
 	@Autowired
 	PieceJustificativeRepository pieceJustificativeRepository;
 	@Autowired
@@ -164,56 +167,24 @@ public class PremierCopieController {
 			   numeroRequest.numero,
 			   numeroRequest.annee
 			   );
-	   premierCopieRepository.save(premierCopie);
 
+	   premierCopieRepository.save(premierCopie);
+       User user = userService.getAuthenticatedUser();
+       premierCopie.setCreatedBy(user);
 	   return new ResponseEntity<>(premierCopie, HttpStatus.CREATED);
 
 	  }
 
 	@GetMapping
-
-	// public ResponseEntity<List<PremierCopie>> getAllPremierCopie (){
-	// 	try {
-	// 		List<PremierCopie> premierecopie = new ArrayList<PremierCopie>();
-	// 		premierecopie = premierCopieRepository.findAll();
-	// 		return new ResponseEntity<>(premierecopie, HttpStatus.OK);
-	// 	} catch (Exception e) {
-	// 		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-	// 	}
-	// }
 //	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<Map<String, Object>> getAllPremierCopie(
-			     @RequestParam(required = false) String title,
-			        @RequestParam(defaultValue = "0") int page,
-			        @RequestParam(defaultValue = "10") int size) {
-	    try {
-	        List<PremierCopie> premierCopies = new ArrayList<PremierCopie>();
-	        Pageable paging = PageRequest.of(page, size);
-
-	        Page<PremierCopie> pagecopie;
-	        pagecopie = premierCopieRepository.findAll(paging);
-
-	        if (title == null)
-	        	 pagecopie = premierCopieRepository.findAll(paging);
-	          else
-	            pagecopie = premierCopieRepository.findBydatePremierCopie(title, paging);
-
-
-
-
-	        	premierCopies = pagecopie.getContent();
-
-	             Map<String, Object> response = new HashMap<>();
-	             response.put("premierCopies", premierCopies);
-	             response.put("currentPage", pagecopie.getNumber());
-	             response.put("length", pagecopie.getTotalElements());
-	             response.put("totalPages", pagecopie.getTotalPages());
-	      return new ResponseEntity<>(response, HttpStatus.OK);
-	    } catch (Exception e) {
-            e.printStackTrace();
-	      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-	    }
-	  }
+	  public ResponseEntity<ResponsePageable<PremierCopie>> getAllPremierCopie(
+			        @RequestParam(defaultValue = "1") int page,
+			        @RequestParam(defaultValue = "10") int size)
+    {
+	        Pageable pageable = PageRequest.of(page-1, size);
+            ResponsePageable<PremierCopie> response =  premierCopieService.findAll(pageable);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 	@GetMapping("/{id}")
 //	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")

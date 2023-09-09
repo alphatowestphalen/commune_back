@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.example.demo.model.auth.User;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,52 +32,56 @@ import com.example.demo.utils.AuditTrailListener;
 @EntityListeners(AuditTrailListener.class)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property="idPremierCopie")
 public class PremierCopie implements Serializable{
-	
+
 	@Id
 	@Column(name = "idPremierCopie")
 	private String idPremierCopie;
-	
+
 	@Column(name = "description")
 	private String description;
-	
+
 	@Column(name = "mention")
 	private String mention;
-	
+
 	@Column(name = "datePCopie")
 	private String datePCopie;
-	
+
 	@Column(name = "datePremierCopie")
 	private String datePremierCopie;
-	
+
 	@CreatedDate
 	private Instant createdDate;
 
 	@Column(name = "deleted")
 	private boolean deleted = Boolean.FALSE;
-	
+
 	@ManyToOne()
-	  @JoinColumn(name ="idDeclarant")
-	 private Declarant declarant;
-	
+    @JoinColumn(name ="idDeclarant")
+    private Declarant declarant;
+
+    @ManyToOne
+    @JoinColumn(name = "created_by_id")
+    private User createdBy;
+
 	@ManyToOne()
-	  @JoinColumn(name = "idMaire")
-	  private Maire maire;
-	
+    @JoinColumn(name = "idMaire")
+    private Maire maire;
+
 	@ManyToOne()
-	  @JoinColumn(name = "idMere")
-	  private Mere mere;
-	
+    @JoinColumn(name = "idMere")
+    private Mere mere;
+
 	@ManyToOne()
-	  @JoinColumn(name = "idPere")
-	  private Pere pere;
-	
+    @JoinColumn(name = "idPere")
+    private Pere pere;
+
 	@ManyToOne()
-	  @JoinColumn(name = "idEnfant")
-	  private Enfant enfant;
-	
+    @JoinColumn(name = "idEnfant")
+    private Enfant enfant;
+
 	@ManyToOne()
-	  @JoinColumn(name = "idPieceJustificative")
-	  private PieceJustificative pieceJustificative;
+    @JoinColumn(name = "idPieceJustificative")
+    private PieceJustificative pieceJustificative;
 
 	@ElementCollection
 	private List<Mention> mentions = new ArrayList<Mention>();
@@ -84,17 +89,17 @@ public class PremierCopie implements Serializable{
 
 	@OneToMany(mappedBy = "premierecopie", cascade = CascadeType.ALL, orphanRemoval = true)
 	private	List<Adoption> adoption = new ArrayList<>();
-	 
+
 	 @OneToMany(mappedBy = "premierecopie", cascade = CascadeType.ALL, orphanRemoval = true)
 	private	List<Reconnaissance> reconnaissance = new ArrayList<>();
-	 
+
 	 @OneToMany(mappedBy = "premierecopie", cascade = CascadeType.ALL, orphanRemoval = true)
 		private	List<ActeCelibataire> acteCelibataire = new ArrayList<>();
-	 
-	
+
+
 	 @OneToOne(mappedBy = "premierCopie", cascade = CascadeType.ALL, orphanRemoval = true)
 	 private Jugement jugement;
-	
+
 	 @OneToOne(mappedBy = "premierCopie", cascade = CascadeType.ALL , orphanRemoval = true)
 	 private ActeDeces acteDeces;
 
@@ -103,20 +108,28 @@ public class PremierCopie implements Serializable{
 
 	@OneToMany(mappedBy = "premierecopieFemme", cascade = CascadeType.ALL, orphanRemoval = true)
 	private	List<Mariage> femme = new ArrayList<>();
-	
-	
+
+
 
 	 @Column(name = "numero")
 	 private Long numero;
-	 
+
 	 @Column(name = "anneeActuelle")
 	 private int anneeActuelle;
-	 
+
 	 @Column(name = "isnotSingle")
 	 private boolean isnotSingle = Boolean.FALSE;
-	 
-	
-	public String getIdPremierCopie() {
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
+
+
+    public String getIdPremierCopie() {
 		return idPremierCopie;
 	}
 
@@ -219,7 +232,7 @@ public class PremierCopie implements Serializable{
 	public void setPieceJustificative(PieceJustificative pieceJustificative) {
 		this.pieceJustificative = pieceJustificative;
 	}
-	
+
 	public List<Reconnaissance> getReconnaissance() {
 		return reconnaissance;
 	}
@@ -252,7 +265,7 @@ public class PremierCopie implements Serializable{
 		this.acteDeces = acteDeces;
 	}
 
-	
+
 
     public Instant getCreatedDate() {
 		return createdDate;
@@ -269,7 +282,7 @@ public class PremierCopie implements Serializable{
 	public void setMentions(List<Mention> mentions) {
 		this.mentions = mentions;
 	}
-	
+
 
 
 	public List<Mariage> getHomme() {
@@ -305,7 +318,7 @@ public class PremierCopie implements Serializable{
 		this.isnotSingle = isnotSingle;
 	}
 
-	
+
 
 	public List<ActeCelibataire> getActeCelibataire() {
 		return acteCelibataire;
@@ -339,6 +352,6 @@ public class PremierCopie implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
-	
-	
+
+
 }
