@@ -31,15 +31,11 @@ import com.example.demo.request.AdoptionRequest;
 @RestController
 @RequestMapping("/api/adoptions")
 public class AdoptionController {
-	PremierCopieRepository premierCopieRepository;
-	AdoptionRepository adoptionRepository;
 
     private final AdoptionService adoptionService;
 
     @Autowired
-    public AdoptionController(PremierCopieRepository premierCopieRepository, AdoptionRepository adoptionRepository, AdoptionService adoptionService) {
-        this.premierCopieRepository = premierCopieRepository;
-        this.adoptionRepository = adoptionRepository;
+    public AdoptionController( AdoptionService adoptionService) {
         this.adoptionService = adoptionService;
     }
 
@@ -82,15 +78,8 @@ public class AdoptionController {
 //	 @PreAuthorize(" hasRole('MAIRE')")
 	  public ResponseEntity<HttpStatus> deleteAdoption(@PathVariable("id") long id)
 	{
-		try {
-			adoptionRepository.deleteById(id);
-
-		    return new ResponseEntity<>(HttpStatus.OK);
-		}
-		catch (Exception e) {
-		      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		    }
-
-	  }
+		adoptionService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }

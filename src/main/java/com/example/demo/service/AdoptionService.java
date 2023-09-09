@@ -69,4 +69,10 @@ public class AdoptionService {
         adoption.setHeureAdoption(request.getHeureAdoption());
         return adoptionRepository.save(adoption);
     }
+
+    public void delete(Long id) {
+        Adoption adoption = getById(id);
+        if(adoption == null) throw new NotFoundDataException("Not found Adoption with id = " + id);
+        adoptionRepository.delete(adoption);
+    }
 }
