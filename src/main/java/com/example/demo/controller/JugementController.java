@@ -1,18 +1,15 @@
 package com.example.demo.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import com.example.demo.service.JugementService;
+import com.example.demo.utils.ResponsePageable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,8 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Jugement;
 import com.example.demo.model.PremierCopie;
-import com.example.demo.model.Reconnaissance;
-import com.example.demo.repository.AdoptionRepository;
 import com.example.demo.repository.JugementRepository;
 import com.example.demo.repository.PremierCopieRepository;
 import com.example.demo.request.JugementRequest;
@@ -37,116 +32,57 @@ import com.example.demo.request.JugementRequest;
 @RestController
 @RequestMapping("/api/jugements")
 public class JugementController {
-	
-	@Autowired
-	PremierCopieRepository premierCopieRepository;
-	@Autowired
-	JugementRepository jugementRepository;
-	
-	@GetMapping
+
+    private final JugementService jugementService;
+	private final PremierCopieRepository premierCopieRepository;
+	private final JugementRepository jugementRepository;
+
+    @Autowired
+    public JugementController(JugementService jugementService, PremierCopieRepository premierCopieRepository, JugementRepository jugementRepository) {
+        this.jugementService = jugementService;
+        this.premierCopieRepository = premierCopieRepository;
+        this.jugementRepository = jugementRepository;
+    }
+
+    @GetMapping
 	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<Map<String, Object>> getAllJugements(
-			   @RequestParam(required = false) String title,
-		        @RequestParam(defaultValue = "0") int page,
-		        @RequestParam(defaultValue = "3") int size) {
-		
-		try {
-			  List<Jugement> jugements = new ArrayList<Jugement>();
-			    Pageable paging = PageRequest.of(page, size);
-			    
-			    Page<Jugement> pagejugement;
-		        pagejugement = jugementRepository.findAll(paging);
+	  public ResponseEntity<ResponsePageable<Jugement>> getAllJugements(
+		        @RequestParam(defaultValue = "1") int page,
+		        @RequestParam(defaultValue = "10") int size) {
 
-		        if (pagejugement.hasContent())
-		        	
-		        	jugements = pagejugement.getContent();
+        Pageable paging = PageRequest.of(page-1, size);
+        ResponsePageable<Jugement> response = jugementService.getAll(paging);
+        return new ResponseEntity<> (response, HttpStatus.OK);
+    }
 
-		             Map<String, Object> response = new HashMap<>();
-		             response.put("jugement", jugements);
-		             response.put("currentPage", pagejugement.getNumber());
-		             response.put("totalItems", pagejugement.getTotalElements());
-		             response.put("totalPages", pagejugement.getTotalPages());
-		      return new ResponseEntity<>(response, HttpStatus.OK);
-		    } catch (Exception e) {
-		      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		    }
-		  }
-
-	 
-	
 	@GetMapping("/{id}")
 	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<Jugement> getJugementById(@PathVariable(value = "id") Long id) {
-		Jugement jugement = jugementRepository.findById(id)
-	        .orElseThrow(() -> new ResourceNotFoundException("Not found Jugement with id = " + id));
-
+    public ResponseEntity<Jugement> getJugementById(@PathVariable(value = "id") Long id) {
+        Jugement jugement = jugementService.findById(id);
 	    return new ResponseEntity<>(jugement, HttpStatus.OK);
-	  }
-	
-	@PostMapping("/{IdPremierCopie}")
-	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<Jugement> addJugement(@PathVariable(value = "IdPremierCopie") String IdPremierCopie, 
-			  @RequestBody JugementRequest jugementRequest) 
-	{
-		try {
-			PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
-			
-			Jugement jugement = new Jugement(
-					jugementRequest.getNumJugement(),
-					jugementRequest.getDecretJuridique(),
-					jugementRequest.getDateDecret(),
-					jugementRequest.getTypeJugement(),
-					jugementRequest.getInfoChangement(),
-					jugementRequest.getCreatedDate(),
-					premierCopie);
-			jugementRepository.save(jugement);
-			return new ResponseEntity<>(jugement, HttpStatus.OK);
-		}
-		catch (Exception e) {
-		      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		    }
+    }
 
+	@PostMapping()
+	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
+	  public ResponseEntity<Jugement> addJugement(@RequestBody JugementRequest jugementRequest)
+	{
+        Jugement jugement = jugementService.save(jugementRequest);
+        return new ResponseEntity<>(jugement, HttpStatus.OK);
 	}
-	
+
 	@PutMapping("/{id}")
 	// @PreAuthorize(" hasRole('MAIRE')")
-	public ResponseEntity<Jugement> updateJugement(@PathVariable(value = "id") Long id, 
+	public ResponseEntity<Jugement> updateJugement(@PathVariable(value = "id") Long id,
 			@RequestBody JugementRequest jugementRequest)
 	{
-		Jugement jugement = jugementRepository.findById(id)
-		        .orElseThrow(() -> new ResourceNotFoundException("Not found Jugement with id = " + id));
-		
-		PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(jugement.getPremierCopie().getIdPremierCopie());
-		
-		jugement.setNumJugement(jugementRequest.getNumJugement());
-		jugement.setDecretJuridique(jugementRequest.getDecretJuridique());
-		jugement.setDateDecret(jugementRequest.getDateDecret());
-		jugement.setTypeJugement(jugementRequest.getTypeJugement());
-		jugement.setInfoChangement(jugementRequest.getInfoChangement());
-		jugement.setCreatedDate(jugementRequest.getCreatedDate());
-		jugement.setPremierCopie(premierCopie);
-		
-		jugementRepository.save(jugement);
-		
+        Jugement jugement = jugementService.update(id, jugementRequest);
 		return new ResponseEntity<>(jugement, HttpStatus.OK);
 	}
-	
-	
-	
 	@DeleteMapping("/{id}")
 	// @PreAuthorize(" hasRole('MAIRE')")
-	  public ResponseEntity<HttpStatus> deleteJugement(@PathVariable("id") long id) 
+	  public ResponseEntity<HttpStatus> deleteJugement(@PathVariable("id") long id)
 	{
-		try {
 			jugementRepository.deleteById(id);
-
 		    return new ResponseEntity<>(HttpStatus.OK);
-		}
-		catch (Exception e) {
-		      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		    }
-	    
-	  }
-	
-
+    }
 }

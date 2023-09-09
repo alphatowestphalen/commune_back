@@ -11,22 +11,12 @@ public class AdoptionRequest {
 
     private String idPremierCopie;
 
-    public String getIdPremierCopie() {
-        return idPremierCopie;
-    }
-
-    public void setIdPremierCopie(String idPremierCopie) {
-        this.idPremierCopie = idPremierCopie;
-    }
-
     private String dateAdoption;
 
 	private String heureAdoption;
 
 	private String numAdoption;
 
-	@CreatedDate
-	private Instant createdDate;
 
 	public String getParentAdoptif() {
 		return parentAdoptif;
@@ -55,16 +45,15 @@ public class AdoptionRequest {
 	public String getNumAdoption() {
 		return numAdoption;
 	}
+    public String getIdPremierCopie() {
+        return idPremierCopie;
+    }
+
+    public void setIdPremierCopie(String idPremierCopie) {
+        this.idPremierCopie = idPremierCopie;
+    }
 
 	public void setNumAdoption(String numAdoption) {
 		this.numAdoption = numAdoption;
-	}
-
-	public Instant getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(Instant createdDate) {
-		this.createdDate = createdDate;
 	}
 }

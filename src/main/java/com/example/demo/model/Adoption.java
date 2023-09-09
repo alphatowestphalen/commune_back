@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.persistence.*;
 
 import com.example.demo.model.auth.User;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -37,7 +38,7 @@ public class Adoption implements Serializable{
 	@Column(name = "numAdoption")
 	private String numAdoption;
 
-	@CreatedDate
+	@CreationTimestamp
 	private Instant createdDate;
 
     @ManyToOne
@@ -106,6 +107,7 @@ public class Adoption implements Serializable{
 		this.createdDate = createdDate;
 	}
 
+
 	public PremierCopie getPremierecopie() {
 		return premierecopie;
 	}
@@ -119,13 +121,11 @@ public class Adoption implements Serializable{
 
 	}
 
-	public Adoption(String parentAdoptif, String dateAdoption, String heureAdoption, String numAdoption,
-			Instant createdDate, PremierCopie premierecopie) {
+	public Adoption(String parentAdoptif, String dateAdoption, String heureAdoption, String numAdoption, PremierCopie premierecopie) {
 		this.parentAdoptif = parentAdoptif;
 		this.dateAdoption = dateAdoption;
 		this.heureAdoption = heureAdoption;
 		this.numAdoption = numAdoption;
-		this.createdDate = createdDate;
 		this.premierecopie = premierecopie;
 	}
 

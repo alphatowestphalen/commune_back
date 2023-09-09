@@ -52,10 +52,21 @@ public class AdoptionService {
             adoptionRequest.getDateAdoption(),
             adoptionRequest.getHeureAdoption(),
             adoptionRequest.getNumAdoption(),
-            adoptionRequest.getCreatedDate(),
             premierCopie
         );
         adoption.setCreatedBy(user);
+        return adoptionRepository.save(adoption);
+    }
+
+    @Transactional
+    public Adoption update(Long id, AdoptionRequest request) {
+        Adoption adoption = getById(id);
+        User user = userService.getAuthenticatedUser();
+        if (user == null) throw new NotFoundDataException("Not found User authenticated");
+        if(adoption == null) throw new NotFoundDataException("Not found Adoption with id = " + id);
+        adoption.setParentAdoptif(request.getParentAdoptif());
+        adoption.setDateAdoption(request.getDateAdoption());
+        adoption.setHeureAdoption(request.getHeureAdoption());
         return adoptionRepository.save(adoption);
     }
 }

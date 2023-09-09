@@ -73,21 +73,9 @@ public class AdoptionController {
 	//@PreAuthorize(" hasRole('MAIRE')")
 	public ResponseEntity<Adoption> updateAdoption(@PathVariable(value = "id") Long id, @RequestBody AdoptionRequest adoptionRequest)
 	{
-		Adoption adoption = adoptionRepository.findById(id)
-		        .orElseThrow(() -> new ResourceNotFoundException("Not found Adoption with id = " + id));
-
-		PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(adoption.getPremierecopie().getIdPremierCopie());
-
-		adoption.setParentAdoptif(adoptionRequest.getParentAdoptif());
-		adoption.setDateAdoption(adoptionRequest.getDateAdoption());
-		adoption.setHeureAdoption(adoptionRequest.getHeureAdoption());
-		adoption.setNumAdoption(adoptionRequest.getNumAdoption());
-		adoption.setPremierecopie(premierCopie);
-
-
-		adoptionRepository.save(adoption);
-
-		return new ResponseEntity<>(adoption, HttpStatus.OK);	}
+		Adoption adoption = adoptionService.update(id,adoptionRequest);
+        return new ResponseEntity<>(adoption,HttpStatus.CREATED);
+    }
 
 
 	@DeleteMapping("/{id}")

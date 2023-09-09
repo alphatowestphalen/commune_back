@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import javax.persistence.*;
 
+import com.example.demo.model.auth.User;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -21,31 +23,43 @@ public class Jugement {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "idJugement")
 	private long idJugement;
-	
-	
+
+
 	@Column(name = "numJugement")
 	private String numJugement;
-	
+
 	@Column(name = "decretJuridique")
 	private String decretJuridique;
-	
+
 	@Column(name = "dateDecret")
 	private String dateDecret;
-	
+
+    @ManyToOne
+    @JoinColumn(name = "created_by_id")
+    private User createdBy;
+
 	@Column(name= "typeJugement")
 	private String typeJugement;
-	
+
 	@Column(name= "infoChangement")
 	private ArrayList<String> infoChangement = new ArrayList<>();
-	
-	@CreatedDate
+
+	@CreationTimestamp
 	private Instant createdDate;
-	
+
 	@OneToOne
 	@JoinColumn(name = "idPremierCopie")
 	private PremierCopie premierCopie;
 
-	public long getIdJugement() {
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public long getIdJugement() {
 		return idJugement;
 	}
 
@@ -110,13 +124,12 @@ public class Jugement {
 	}
 
 	public Jugement(String numJugement, String decretJuridique, String dateDecret, String typeJugement,
-			ArrayList<String> infoChangement, Instant createdDate, PremierCopie premierCopie) {
+			ArrayList<String> infoChangement, PremierCopie premierCopie) {
 		this.numJugement = numJugement;
 		this.decretJuridique = decretJuridique;
 		this.dateDecret = dateDecret;
 		this.typeJugement = typeJugement;
 		this.infoChangement = infoChangement;
-		this.createdDate = createdDate;
 		this.premierCopie = premierCopie;
 	}
 
@@ -124,6 +137,6 @@ public class Jugement {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
-	
+
+
 }

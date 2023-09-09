@@ -6,19 +6,19 @@ import java.util.ArrayList;
 import org.springframework.data.annotation.CreatedDate;
 
 public class JugementRequest {
-	 
+
 	 private String numJugement;
-	 
+
+     private String idPremierCopie;
+
 	 private String decretJuridique;
-	 
+
 	 private String dateDecret;
-	 
+
 	 private String typeJugement;
-	 
+
+
 	 private ArrayList<String> infoChangement;
-	 
-	 @CreatedDate
-	 private Instant createdDate;
 
 	public String getNumJugement() {
 		return numJugement;
@@ -60,15 +60,11 @@ public class JugementRequest {
 		this.infoChangement = infoChangement;
 	}
 
-	public Instant getCreatedDate() {
-		return createdDate;
-	}
+    public String getIdPremierCopie() {
+        return idPremierCopie;
+    }
 
-	public void setCreatedDate(Instant createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	
-	 
-	
+    public void setIdPremierCopie(String idPremierCopie) {
+        this.idPremierCopie = idPremierCopie;
+    }
 }
