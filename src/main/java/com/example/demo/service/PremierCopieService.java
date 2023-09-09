@@ -1,35 +1,64 @@
 package com.example.demo.service;
 
+import com.example.demo.exceptions.NotFoundDataException;
+import com.example.demo.model.*;
+import com.example.demo.model.auth.User;
+import com.example.demo.repository.*;
+import com.example.demo.request.PremierCopieRequest;
+import com.example.demo.security.services.UserService;
 import com.example.demo.utils.ResponsePageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import com.example.demo.model.PremierCopie;
-import com.example.demo.repository.PremierCopieRepository;
-import com.example.demo.repository.TypeRepository;
 import com.example.demo.request.NumeroRequest;
+
+import java.util.Optional;
 
 @Service
 public class PremierCopieService {
+    private final PieceJustificativeRepository pieceJustificativeRepository;
+    private final EnfantRepository enfantRepository;
 
-	@Autowired
-	PremierCopieRepository premierCopieRepository;
-	@Autowired(required = false)
-	TypeRepository typeRepository;
+    private final DeclarantRepository declarantRepository;
 
-	public NumeroRequest numeroCopie()
+    private final MereRepository mereRepository;
+    private final  PereRepository pereRepository;
+	private final PremierCopieRepository premierCopieRepository;
+    private final TypeRepository typeRepository;
+    private final MaireRepository maireRepository;
+
+    private final UserService userService;
+
+    @Autowired
+    public PremierCopieService(
+        PieceJustificativeRepository pieceJustificativeRepository, EnfantRepository enfantRepository, MereRepository mereRepository,
+        PereRepository pereRepository,
+        PremierCopieRepository premierCopieRepository,
+        @Autowired(required = false) TypeRepository typeRepository,
+        MaireRepository maireRepository,
+        DeclarantRepository declarantRepository,
+        UserService userService) {
+        this.pieceJustificativeRepository = pieceJustificativeRepository;
+        this.enfantRepository = enfantRepository;
+        this.mereRepository = mereRepository;
+        this.pereRepository = pereRepository;
+        this.premierCopieRepository = premierCopieRepository;
+        this.typeRepository = typeRepository;
+        this.maireRepository = maireRepository;
+        this.declarantRepository = declarantRepository;
+        this.userService = userService;
+    }
+
+
+
+    public NumeroRequest numeroCopie()
 	{
 		NumeroRequest numeroRequest = new NumeroRequest();
 
 		PremierCopie pc = premierCopieRepository.chercherPremierCopie();
 
 		int currentYear = typeRepository.year;
-
-
-
 
 		if (pc != null) {
 			long num = pc.getNumero();
@@ -94,6 +123,78 @@ public class PremierCopieService {
 
     public ResponsePageable<PremierCopie> findAll(Pageable pageable){
         return new ResponsePageable<PremierCopie>(premierCopieRepository.findAll(pageable));
+    }
+
+    public PremierCopie save(PremierCopieRequest premierCopieRequest){
+        NumeroRequest numeroRequest = numeroCopie();
+        Optional<Maire> optionalMaire = maireRepository.findById(premierCopieRequest.getIdMaire());
+        if(!optionalMaire.isPresent()) throw new NotFoundDataException( "Maire not found");
+        User user = userService.getAuthenticatedUser();
+        if (user== null) throw new NotFoundDataException("User not found");
+        Declarant declarant = new Declarant(
+            premierCopieRequest.getNomDeclarant(),
+            premierCopieRequest.getPrenomsDeclarant(),
+            premierCopieRequest.getDatenaissDeclarant(),
+            premierCopieRequest.getLieuNaissDeclarant(),
+            premierCopieRequest.getAdressDeclarant(),
+            premierCopieRequest.getProfessionDeclarant());
+        declarantRepository.save(declarant);
+        Mere mere = new Mere(
+            premierCopieRequest.getNomMere(),
+            premierCopieRequest.getPrenomsMere(),
+            premierCopieRequest.getDatenaissMere(),
+            premierCopieRequest.getLieuNaissMere(),
+            premierCopieRequest.getProfessionMere(),
+            premierCopieRequest.getAdresseMere() );
+        mereRepository.save(mere);
+        Pere pere = new Pere();
+        if(premierCopieRequest.getAvoirPere()) {
+            pere = new Pere(
+                premierCopieRequest.getNomPere(),
+                premierCopieRequest.getPrenomsPere(),
+                premierCopieRequest.getDatenaissPere(),
+                premierCopieRequest.getLieuNaissPere(),
+                premierCopieRequest.getProfessionPere(),
+                premierCopieRequest.getAdressePere());
+            pereRepository.save(pere);
+        }
+        Enfant enfant = new Enfant(
+            premierCopieRequest.getNomEnfant(),
+            premierCopieRequest.getPrenomsEnfant(),
+            premierCopieRequest.getDatenaissEnfant(),
+            premierCopieRequest.getLieunaissEnfant(),
+            premierCopieRequest.getHeurenaissEnfant(),
+            premierCopieRequest.getSexeEnfant(),
+            premierCopieRequest.getDateEnfant());
+        enfantRepository.save(enfant);
+
+        PieceJustificative pieceJustificative = new PieceJustificative(
+            premierCopieRequest.getCertificatAccouch(),
+            premierCopieRequest.getLivretFamille(),
+            premierCopieRequest.getCinMere(),
+            premierCopieRequest.getCinDeclarant() );
+        pieceJustificativeRepository.save(pieceJustificative);
+
+        PremierCopie premierCopie = new PremierCopie(
+            numeroRequest.idPremierCopie,
+            premierCopieRequest.getDescription(),
+            premierCopieRequest.getMention(),
+            premierCopieRequest.getDatePCopie(),
+            premierCopieRequest.getDatePremierCopie(),
+            declarant,
+            optionalMaire.get(),
+            mere,
+            pere,
+            enfant,
+            pieceJustificative,
+            premierCopieRequest.getCreatedDate(),
+            numeroRequest.numero,
+            numeroRequest.annee
+        );
+        premierCopie.setCreatedBy(user);
+
+        System.out.println("user "+user.getUsername());
+        return premierCopieRepository.save(premierCopie);
     }
 
     public void setDefuntPremierCopie(String IdPremierCopie){

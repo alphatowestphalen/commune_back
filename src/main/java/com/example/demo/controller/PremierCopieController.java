@@ -1,17 +1,11 @@
 package com.example.demo.controller;
 
-
-import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 
@@ -25,8 +19,6 @@ import org.springframework.data.domain.Page;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.demo.model.Adoption;
 import com.example.demo.model.Declarant;
@@ -61,7 +52,6 @@ import com.example.demo.repository.MereRepository;
 import com.example.demo.repository.PereRepository;
 import com.example.demo.repository.PieceJustificativeRepository;
 import com.example.demo.repository.PremierCopieRepository;
-import com.example.demo.repository.TypeRepository;
 import com.example.demo.request.NumeroRequest;
 import com.example.demo.request.PremierCopieRequest;
 import com.example.demo.service.PremierCopieService;
@@ -72,107 +62,31 @@ import com.example.demo.service.PremierCopieService;
 
 public class PremierCopieController {
 
-
-	@Autowired
-	DeclarantRepository declarantRepository;
-	@Autowired
-	EnfantRepository enfantRepository;
+    @Autowired
+    PieceJustificativeRepository pieceJustificativeRepository;
+    @Autowired
+    EnfantRepository enfantRepository;
+    @Autowired
+    MereRepository mereRepository;
+    @Autowired
+    PereRepository pereRepository;
+    @Autowired
+    DeclarantRepository declarantRepository;
 	@Autowired
 	MaireRepository maireRepository;
-	@Autowired
-	MereRepository mereRepository;
-	@Autowired
-	PereRepository pereRepository;
     @Autowired
     UserService userService;
 	@Autowired
 	PremierCopieService premierCopieService;
 	@Autowired
-	PieceJustificativeRepository pieceJustificativeRepository;
-	@Autowired
 	PremierCopieRepository premierCopieRepository;
-	@Autowired(required = false)
-	TypeRepository typeRepository;
 
 	@PostMapping
 //	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<PremierCopie> createPremierCopie(@RequestBody @Valid PremierCopieRequest premierCopieRequest)
 	  {
-
-		NumeroRequest numeroRequest = premierCopieService.numeroCopie();
-	   Maire maire = maireRepository.findById(premierCopieRequest.getIdMaire()).get();
-
-	   Declarant declarant = new Declarant(
-			   premierCopieRequest.getNomDeclarant(),
-			   premierCopieRequest.getPrenomsDeclarant(),
-			   premierCopieRequest.getDatenaissDeclarant(),
-			   premierCopieRequest.getLieuNaissDeclarant(),
-			   premierCopieRequest.getAdressDeclarant(),
-			   premierCopieRequest.getProfessionDeclarant());
-	   declarantRepository.save(declarant);
-
-	   Mere mere = new Mere(
-			   premierCopieRequest.getNomMere(),
-			   premierCopieRequest.getPrenomsMere(),
-			   premierCopieRequest.getDatenaissMere(),
-			   premierCopieRequest.getLieuNaissMere(),
-			   premierCopieRequest.getProfessionMere(),
-			   premierCopieRequest.getAdresseMere() );
-	   mereRepository.save(mere);
-
-	   Pere pere = new Pere();
-
-	   if(premierCopieRequest.getAvoirPere() == true)
-	   {
-		    pere = new Pere(
-				   premierCopieRequest.getNomPere(),
-				   premierCopieRequest.getPrenomsPere(),
-				   premierCopieRequest.getDatenaissPere(),
-				   premierCopieRequest.getLieuNaissPere(),
-				   premierCopieRequest.getProfessionPere(),
-				   premierCopieRequest.getAdressePere() );
-		   pereRepository.save(pere);
-	   }
-
-	   Enfant enfant = new Enfant(
-			   premierCopieRequest.getNomEnfant(),
-			   premierCopieRequest.getPrenomsEnfant(),
-			   premierCopieRequest.getDatenaissEnfant(),
-			   premierCopieRequest.getLieunaissEnfant(),
-			   premierCopieRequest.getHeurenaissEnfant(),
-			   premierCopieRequest.getSexeEnfant(),
-			   premierCopieRequest.getDateEnfant());
-	   enfantRepository.save(enfant);
-
-	   PieceJustificative pieceJustificative = new PieceJustificative(
-			   premierCopieRequest.getCertificatAccouch(),
-			   premierCopieRequest.getLivretFamille(),
-			   premierCopieRequest.getCinMere(),
-			   premierCopieRequest.getCinDeclarant() );
-	   pieceJustificativeRepository.save(pieceJustificative);
-
-	   PremierCopie premierCopie = new PremierCopie(
-			   numeroRequest.idPremierCopie,
-			   premierCopieRequest.getDescription(),
-			   premierCopieRequest.getMention(),
-			   premierCopieRequest.getDatePCopie(),
-			   premierCopieRequest.getDatePremierCopie(),
-			   declarant,
-			   maire,
-			   mere,
-			   pere,
-			   enfant,
-			   pieceJustificative,
-			   premierCopieRequest.getCreatedDate(),
-			   numeroRequest.numero,
-			   numeroRequest.annee
-			   );
-
-	   premierCopieRepository.save(premierCopie);
-       User user = userService.getAuthenticatedUser();
-       premierCopie.setCreatedBy(user);
-	   return new ResponseEntity<>(premierCopie, HttpStatus.CREATED);
-
+          PremierCopie premierCopie = premierCopieService.save(premierCopieRequest);
+          return new ResponseEntity<> (premierCopie, HttpStatus.CREATED);
 	  }
 
 	@GetMapping
