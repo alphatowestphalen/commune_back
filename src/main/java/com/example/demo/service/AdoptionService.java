@@ -70,6 +70,7 @@ public class AdoptionService {
         return adoptionRepository.save(adoption);
     }
 
+    @Transactional
     public void delete(Long id) {
         Adoption adoption = getById(id);
         if(adoption == null) throw new NotFoundDataException("Not found Adoption with id = " + id);

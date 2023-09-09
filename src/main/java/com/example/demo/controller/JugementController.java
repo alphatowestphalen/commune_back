@@ -34,14 +34,10 @@ import com.example.demo.request.JugementRequest;
 public class JugementController {
 
     private final JugementService jugementService;
-	private final PremierCopieRepository premierCopieRepository;
-	private final JugementRepository jugementRepository;
 
     @Autowired
-    public JugementController(JugementService jugementService, PremierCopieRepository premierCopieRepository, JugementRepository jugementRepository) {
+    public JugementController(JugementService jugementService) {
         this.jugementService = jugementService;
-        this.premierCopieRepository = premierCopieRepository;
-        this.jugementRepository = jugementRepository;
     }
 
     @GetMapping
@@ -82,7 +78,7 @@ public class JugementController {
 	// @PreAuthorize(" hasRole('MAIRE')")
 	  public ResponseEntity<HttpStatus> deleteJugement(@PathVariable("id") long id)
 	{
-			jugementRepository.deleteById(id);
-		    return new ResponseEntity<>(HttpStatus.OK);
+        jugementService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

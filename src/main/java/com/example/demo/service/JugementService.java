@@ -71,4 +71,11 @@ public class JugementService {
 
         return jugementRepository.save(jugement);
     }
+
+    @Transactional
+    public void delete(Long id) {
+        Jugement jugement = findById(id);
+        if(jugement == null) throw new NotFoundDataException("Not found Jugement with id = " + id);
+        jugementRepository.delete(jugement);
+    }
 }
