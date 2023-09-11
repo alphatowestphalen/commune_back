@@ -1,57 +1,71 @@
 package com.example.demo.model;
 
-import java.time.Instant;
+import com.example.demo.model.auth.User;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-
-import org.springframework.data.annotation.CreatedDate;
+import java.time.Instant;
 
 @Entity
 @Table(name="bulletinNaissance")
 public class BulletinNaissance {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "idBulletinNaissance")
 	private long idBulletinNaissance;
-	
-	@Column(name = "idPremierCopie")
-	private String idPremierCopie;
-	
+
+    @OneToOne()
+    @JoinColumn(name = "idPremierCopie")
+    private PremierCopie idPremierCopie;
+
 	@Column(name = "type")
 	private String type;
-	
+
 	@Column(name = "nomPersonne")
 	private String nomPersonne;
-	
+
 	@Column(name = "prenomsPersonne")
 	private String prenomsPersonne;
-	
+
 	@Column(name = "dateNaissPersonne")
 	private String dateNaissPersonne;
-	
+
 	@Column(name = "lieuNaissPersonne")
 	private String lieuNaissPersonne;
-	
+
 	@Column(name = "nomPere")
 	private String nomPere;
-	
+
 	@Column(name = "prenomsPere")
 	private String prenomsPere;
-	
+
 	@Column(name = "nomMere")
 	private String nomMere;
-	
+
 	@Column(name = "prenomsMere")
 	private String prenomsMere;
-	
+
 	@Column(name = "dateCopie")
 	private String dateCopie;
-	
-	@CreatedDate
+
+    @ManyToOne
+    @JoinColumn(name = "created_by_id")
+    private User createdBy;
+
+	@CreationTimestamp
 	private Instant createdDate;
 
-	public long getIdBulletinNaissance() {
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public long getIdBulletinNaissance() {
 		return idBulletinNaissance;
 	}
 
@@ -59,11 +73,11 @@ public class BulletinNaissance {
 		this.idBulletinNaissance = idBulletinNaissance;
 	}
 
-	public String getIdPremierCopie() {
+	public PremierCopie getIdPremierCopie() {
 		return idPremierCopie;
 	}
 
-	public void setIdPremierCopie(String idPremierCopie) {
+	public void setIdPremierCopie(PremierCopie premierCopie) {
 		this.idPremierCopie = idPremierCopie;
 	}
 
@@ -147,7 +161,7 @@ public class BulletinNaissance {
 		this.dateCopie = dateCopie;
 	}
 
-	
+
 	public Instant getCreatedDate() {
 		return createdDate;
 	}
@@ -156,10 +170,10 @@ public class BulletinNaissance {
 		this.createdDate = createdDate;
 	}
 
-	
-	public BulletinNaissance(String idPremierCopie, String type, String nomPersonne, String prenomsPersonne,
+
+	public BulletinNaissance(PremierCopie idPremierCopie, String type, String nomPersonne, String prenomsPersonne,
 			String dateNaissPersonne, String lieuNaissPersonne, String nomPere, String prenomsPere, String nomMere,
-			String prenomsMere, String dateCopie, Instant createdDate) {
+			String prenomsMere, String dateCopie) {
 		this.idPremierCopie = idPremierCopie;
 		this.type = type;
 		this.nomPersonne = nomPersonne;
@@ -171,7 +185,6 @@ public class BulletinNaissance {
 		this.nomMere = nomMere;
 		this.prenomsMere = prenomsMere;
 		this.dateCopie = dateCopie;
-		this.createdDate = createdDate;
 	}
 
 	public BulletinNaissance() {
@@ -179,7 +192,7 @@ public class BulletinNaissance {
 		// TODO Auto-generated constructor stub
 	}
 
-	
-	
-	
+
+
+
 }

@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.example.demo.request.BulletinNaissanceRequest;
+import com.example.demo.service.BulletinNaissanceService;
+import com.example.demo.utils.ResponsePageable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -36,7 +39,14 @@ public class BulletinNaissanceController {
 	@Autowired
 	BulletinNaissanceRepository bulletinNaissanceRepository;
 
-	@PostMapping
+    private final BulletinNaissanceService bulletinNaissanceService;
+
+    @Autowired
+    public BulletinNaissanceController(BulletinNaissanceService bulletinNaissanceService) {
+        this.bulletinNaissanceService = bulletinNaissanceService;
+    }
+
+    @PostMapping
 	public ResponseEntity<BulletinNaissance> addBulletinNaissance(@RequestBody BulletinNaissance bulletinNaissance)
 	{
         BulletinNaissance bulletin = bulletinNaissanceRepository.save(bulletinNaissance);
@@ -45,93 +55,41 @@ public class BulletinNaissanceController {
 
 	@GetMapping("/{id}")
 	  public ResponseEntity<BulletinNaissance> getBulletinNaissanceById(@PathVariable(value = "id") Long id) {
-		BulletinNaissance bulletinNaissance = bulletinNaissanceRepository.findById(id)
-	        .orElseThrow(() -> new ResourceNotFoundException("Not found Bulletin de Naissance with id = " + id));
-
-	    return new ResponseEntity<>(bulletinNaissance, HttpStatus.OK);
+        BulletinNaissance bulletin = bulletinNaissanceService.findById(id);
+        return new ResponseEntity<>(bulletin, HttpStatus.OK);
 	  }
 
 
-	 @GetMapping("/numcopie/{numCopie}")
+	 @GetMapping("/premierCopies/{numCopie}")
 	 public ResponseEntity<BulletinNaissance> getBulletinNaissanceByNumCopie(@PathVariable(value = "numCopie" ) String idPremierCopie)
 	 {
-		BulletinNaissance bulletinNaissance = bulletinNaissanceRepository.findByIdPremierCopie(idPremierCopie);
-
+		BulletinNaissance bulletinNaissance = bulletinNaissanceService.findByNumeroPremierCopie(idPremierCopie);
 	    return new ResponseEntity<>(bulletinNaissance, HttpStatus.OK);
 	 }
 
 
 	@GetMapping()
-	public ResponseEntity<Map<String, Object>> getAllBulletinNaissances(
+	public ResponseEntity<ResponsePageable<BulletinNaissance>> getAllBulletinNaissances(
 	@RequestParam(defaultValue = "0") int page,
 	@RequestParam(defaultValue = "10") int size)
 	{
-	try {
-
-		List<BulletinNaissance> bulletin = new ArrayList<BulletinNaissance>();
-		Pageable paging = PageRequest.of(page, size);
-
-		Page<BulletinNaissance> bulletinNaiss;
-
-		bulletinNaiss = bulletinNaissanceRepository.findAll(paging);
-
-
-		bulletin = bulletinNaiss.getContent();
-
-		Map<String, Object> response = new HashMap<>();
-		response.put("BulletinNaiss", bulletin);
-		response.put("currentPage", bulletinNaiss.getNumber());
-		response.put("length", bulletinNaiss.getTotalElements());
-		response.put("totalPages", bulletinNaiss.getTotalPages());
-
-
-	   return new ResponseEntity<>(response, HttpStatus.OK);
-	   }
-	    catch (Exception e) {
-	   return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-	   }
-
+		Pageable pageable = PageRequest.of(page, size);
+        ResponsePageable<BulletinNaissance> response = bulletinNaissanceService.findAll(pageable);
+        return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 
 
 	@PutMapping("/{id}")
-	public ResponseEntity<BulletinNaissance> updateBulletinNaissance(@PathVariable(value = "id") Long id,@RequestBody BulletinNaissance bulletinNaissance)
+	public ResponseEntity<BulletinNaissance> updateBulletinNaissance(@PathVariable(value = "id") Long id,@RequestBody BulletinNaissanceRequest request)
 	{
-		try {
-			BulletinNaissance bulletin = bulletinNaissanceRepository.findById(id)
-			        .orElseThrow(() -> new ResourceNotFoundException("Not found Acte de décès with id = " + id));
-
-			bulletin.setIdPremierCopie(bulletinNaissance.getIdPremierCopie());
-			bulletin.setNomPersonne(bulletinNaissance.getNomPersonne());
-			bulletin.setPrenomsPersonne(bulletinNaissance.getPrenomsPersonne());
-			bulletin.setDateNaissPersonne(bulletinNaissance.getDateNaissPersonne());
-			bulletin.setLieuNaissPersonne(bulletinNaissance.getLieuNaissPersonne());
-			bulletin.setNomPere(bulletinNaissance.getNomPere());
-			bulletin.setPrenomsPere(bulletinNaissance.getPrenomsPere());
-			bulletin.setNomMere(bulletinNaissance.getNomMere());
-			bulletin.setPrenomsMere(bulletinNaissance.getPrenomsMere());
-			bulletin.setDateCopie(bulletinNaissance.getDateCopie());
-
-			bulletinNaissanceRepository.save(bulletin);
-
-			return new ResponseEntity<>(bulletin, HttpStatus.OK);
-		}
-		catch (Exception e) {
-		      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		    }
+        BulletinNaissance bulletin = bulletinNaissanceService.update(id, request);
+        return new ResponseEntity<>(bulletin, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<HttpStatus>  supprBulletinNaissance(@PathVariable("id") long idBulletinNaissance)
+	public ResponseEntity<HttpStatus>  supprBulletinNaissance(@PathVariable("id") Long idBulletinNaissance)
 	{
-		try {
-			BulletinNaissance bulletin= bulletinNaissanceRepository.findById(idBulletinNaissance).get();
-
-			bulletinNaissanceRepository.delete(bulletin);
-			return new ResponseEntity<>(HttpStatus.OK);
-		}
-		catch (Exception e) {
-		      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		    }
+        bulletinNaissanceService.delete(idBulletinNaissance);
+        return new ResponseEntity<>(HttpStatus.OK);
 	}
 }
