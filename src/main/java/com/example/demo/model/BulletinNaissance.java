@@ -17,7 +17,7 @@ public class BulletinNaissance {
 	private long idBulletinNaissance;
 
     @OneToOne()
-    @JoinColumn(name = "idPremierCopie")
+    @JoinColumn(name = "idPremierCopie" )
     private PremierCopie idPremierCopie;
 
 	@Column(name = "type")
@@ -188,8 +188,6 @@ public class BulletinNaissance {
 	}
 
 	public BulletinNaissance() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
 
 

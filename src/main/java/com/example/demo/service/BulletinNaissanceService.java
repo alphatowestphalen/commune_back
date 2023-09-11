@@ -57,23 +57,24 @@ public class BulletinNaissanceService {
     public BulletinNaissance save(BulletinNaissanceRequest request) {
         User user = userService.getAuthenticatedUser();
         if(user == null) throw new NotFoundDataException("User not found");
-
-        PremierCopie premierCopie =  premierCopieService.findById(request.getIdPremierCopie());
-        if(premierCopie == null) throw new NotFoundDataException("PremierCopie not found");
-        BulletinNaissance bulletinNaissance = new BulletinNaissance(
-            premierCopie,
-            request.getType(),
-            request.getNomPersonne(),
-            request.getPrenomsPersonne(),
-            request.getDateNaissPersonne(),
-            request.getLieuNaissPersonne(),
-            request.getNomPere(),
-            request.getPrenomsPere(),
-            request.getNomMere(),
-            request.getPrenomsMere(),
-            request.getDateCopie());
-        bulletinNaissance.setCreatedBy(user);
-        return bulletinNaissanceRepository.save(bulletinNaissance);
+        BulletinNaissance bulletin = new BulletinNaissance();
+        if(request.getIdPremierCopie()!=null) {
+            PremierCopie premierCopie = premierCopieService.findById(request.getIdPremierCopie());
+            if (premierCopie == null) throw new NotFoundDataException("PremierCopie not found");
+            bulletin.setIdPremierCopie(premierCopie);
+        }
+        bulletin.setNomPersonne(request.getNomPersonne());
+        bulletin.setType(request.getType());
+        bulletin.setPrenomsPersonne(request.getPrenomsPersonne());
+        bulletin.setDateNaissPersonne(request.getDateNaissPersonne());
+        bulletin.setLieuNaissPersonne(request.getLieuNaissPersonne());
+        bulletin.setNomPere(request.getNomPere());
+        bulletin.setPrenomsPere(request.getPrenomsPere());
+        bulletin.setNomMere(request.getNomMere());
+        bulletin.setPrenomsMere(request.getPrenomsMere());
+        bulletin.setDateCopie(request.getDateCopie());
+        bulletin.setCreatedBy(user);
+        return bulletinNaissanceRepository.save(bulletin);
     }
 
     public BulletinNaissance update(Long id , BulletinNaissanceRequest request) {
@@ -87,6 +88,7 @@ public class BulletinNaissanceService {
         bulletin.setDateNaissPersonne(request.getDateNaissPersonne());
         bulletin.setLieuNaissPersonne(request.getLieuNaissPersonne());
         bulletin.setNomPere(request.getNomPere());
+        bulletin.setType(request.getType());
         bulletin.setPrenomsPere(request.getPrenomsPere());
         bulletin.setNomMere(request.getNomMere());
         bulletin.setPrenomsMere(request.getPrenomsMere());

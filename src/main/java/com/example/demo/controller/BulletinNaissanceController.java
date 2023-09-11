@@ -36,9 +36,6 @@ import com.example.demo.repository.BulletinNaissanceRepository;
 @RequestMapping("/api/bulletinNaissances")
 public class BulletinNaissanceController {
 
-	@Autowired
-	BulletinNaissanceRepository bulletinNaissanceRepository;
-
     private final BulletinNaissanceService bulletinNaissanceService;
 
     @Autowired
@@ -47,10 +44,15 @@ public class BulletinNaissanceController {
     }
 
     @PostMapping
-	public ResponseEntity<BulletinNaissance> addBulletinNaissance(@RequestBody BulletinNaissance bulletinNaissance)
+	public ResponseEntity<BulletinNaissance> addBulletinNaissance(@RequestBody BulletinNaissanceRequest request)
 	{
-        BulletinNaissance bulletin = bulletinNaissanceRepository.save(bulletinNaissance);
-        return new ResponseEntity<>(bulletin, HttpStatus.CREATED);
+        try {
+            BulletinNaissance bulletin = bulletinNaissanceService.save(request);
+            return new ResponseEntity<>(bulletin, HttpStatus.CREATED);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
 	}
 
 	@GetMapping("/{id}")
