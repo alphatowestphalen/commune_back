@@ -78,7 +78,13 @@ public class JugementController {
 	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<Jugement> addJugement(@RequestBody JugementRequest jugementRequest)
 	{
-        Jugement jugement = jugementService.save(jugementRequest);
+        Jugement jugement = new Jugement();
+        try {
+             jugement = jugementService.save(jugementRequest);
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
         return new ResponseEntity<>(jugement, HttpStatus.OK);
 	}
 

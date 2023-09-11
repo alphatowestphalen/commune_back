@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +19,8 @@ public class AuditService {
     }
 
     @Transactional
-    public Audit saveAudit(Audit audit) {
-        return auditRepository.save(audit);
+    public void saveAudit(Audit audit) {
+        //auditRepository.save(audit);
     }
 
     @Transactional(readOnly = true)
@@ -29,5 +28,5 @@ public class AuditService {
         return auditRepository.findAll();
     }
 
-    
+
 }

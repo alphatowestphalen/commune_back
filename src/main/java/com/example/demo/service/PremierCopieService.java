@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.request.NumeroRequest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -124,6 +125,10 @@ public class PremierCopieService {
 
     public ResponsePageable<PremierCopie> findAll(Pageable pageable){
         return new ResponsePageable<PremierCopie>(premierCopieRepository.findAll(pageable));
+    }
+
+    public List<Reconnaissance> getReconnaissance(String idPremierCopie){
+        return premierCopieRepository.findAllReconnaissance(idPremierCopie);
     }
 
     public PremierCopie save(PremierCopieRequest premierCopieRequest){

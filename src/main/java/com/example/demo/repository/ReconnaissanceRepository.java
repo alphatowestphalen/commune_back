@@ -13,8 +13,10 @@ import com.example.demo.model.Reconnaissance;
 
 @Repository
 public interface ReconnaissanceRepository extends JpaRepository<Reconnaissance, Long> {
-	Page<Reconnaissance> findAll(Pageable pageable);
-	
+
+
+    @Query("select r from Reconnaissance r left join PremierCopie p on r.premierecopie.idPremierCopie = p.idPremierCopie")
+    Page<Reconnaissance> findAll(Pageable pageable);
 	@Query(value = "SELECT count(r.id_reconnaissance) FROM reconnaissance r", nativeQuery = true)
 	long countByIdReconnaissance();
 }

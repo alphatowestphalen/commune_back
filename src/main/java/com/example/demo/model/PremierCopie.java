@@ -30,7 +30,6 @@ import com.example.demo.utils.AuditTrailListener;
 @Entity
 @Table(name="premierCopie")
 @EntityListeners(AuditTrailListener.class)
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property="idPremierCopie")
 public class PremierCopie implements Serializable{
 
 	@Id
@@ -87,14 +86,12 @@ public class PremierCopie implements Serializable{
 	private List<Mention> mentions = new ArrayList<Mention>();
 
 
-	@OneToMany(mappedBy = "premierecopie", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "premierecopie", cascade = CascadeType.ALL, orphanRemoval = true , fetch = FetchType.LAZY)
 	private	List<Adoption> adoption = new ArrayList<>();
 
-	 @OneToMany(mappedBy = "premierecopie", cascade = CascadeType.ALL, orphanRemoval = true)
-	private	List<Reconnaissance> reconnaissance = new ArrayList<>();
 
-	 @OneToMany(mappedBy = "premierecopie", cascade = CascadeType.ALL, orphanRemoval = true)
-		private	List<ActeCelibataire> acteCelibataire = new ArrayList<>();
+	 @OneToMany(mappedBy = "premierecopie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+     private	List<ActeCelibataire> acteCelibataire = new ArrayList<>();
 
 
 	 @OneToOne(mappedBy = "premierCopie", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -103,10 +100,10 @@ public class PremierCopie implements Serializable{
 	 @OneToOne(mappedBy = "premierCopie", cascade = CascadeType.ALL , orphanRemoval = true)
 	 private ActeDeces acteDeces;
 
-	 @OneToMany(mappedBy = "premierecopieHomme", cascade = CascadeType.ALL, orphanRemoval = true)
+	 @OneToMany(mappedBy = "premierecopieHomme", cascade = CascadeType.ALL, orphanRemoval = true , fetch = FetchType.LAZY)
 	private	List<Mariage> homme = new ArrayList<>();
 
-	@OneToMany(mappedBy = "premierecopieFemme", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "premierecopieFemme", cascade = CascadeType.ALL, orphanRemoval = true , fetch = FetchType.LAZY)
 	private	List<Mariage> femme = new ArrayList<>();
 
 
@@ -232,15 +229,6 @@ public class PremierCopie implements Serializable{
 	public void setPieceJustificative(PieceJustificative pieceJustificative) {
 		this.pieceJustificative = pieceJustificative;
 	}
-
-	public List<Reconnaissance> getReconnaissance() {
-		return reconnaissance;
-	}
-
-	public void setReconnaissance(List<Reconnaissance> reconnaissance) {
-		this.reconnaissance = reconnaissance;
-	}
-
 	public List<Adoption> getAdoption() {
 		return adoption;
 	}

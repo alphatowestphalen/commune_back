@@ -34,6 +34,7 @@ public class ReconnaissanceService {
 
     public ResponsePageable<Reconnaissance> getAll(Pageable pageable) {
         Page<Reconnaissance> reconnaissancePage = reconnaissanceRepository.findAll(pageable);
+        reconnaissancePage.getContent().forEach(e-> System.out.println(e.getPremierecopie().getEnfant().getNomEnfant()));
         return new ResponsePageable<Reconnaissance>(reconnaissancePage);
     }
 
@@ -41,12 +42,14 @@ public class ReconnaissanceService {
         return reconnaissanceRepository.findById(id).orElseThrow(() -> new NotFoundDataException("Not found Reconnaissance with id = " + id));
     }
 
+    @Transactional
     public  Reconnaissance save(ReconnaissanceRequest reconnaissanceRequest) {
         PremierCopie premierCopie = premierCopieService.findById(reconnaissanceRequest.getIdPremierCopie());
-        if(premierCopie == null) throw new NotFoundDataException("Not found PremierCopie with id = " + reconnaissanceRequest.getIdPremierCopie());
+        if (premierCopie == null)
+            throw new NotFoundDataException("Not found PremierCopie with id = " + reconnaissanceRequest.getIdPremierCopie());
 
         User user = userService.getAuthenticatedUser();
-        if(user == null) throw new NotFoundDataException("Not found User authenticated");
+        if (user == null) throw new NotFoundDataException("Not found User authenticated");
 
         Reconnaissance reconnaissance = new Reconnaissance(
             reconnaissanceRequest.getDateDeclaration(),
@@ -54,6 +57,7 @@ public class ReconnaissanceService {
             reconnaissanceRequest.getInfoPersonDeclarant(),
             premierCopie
         );
+        System.out.println("reco : "+reconnaissance.getInfoPersonDeclarant());
         reconnaissance.setCreatedBy(user);
         return reconnaissanceRepository.save(reconnaissance);
     }

@@ -26,7 +26,7 @@ import com.example.demo.utils.*;
 public class Reconnaissance implements Serializable{
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "idReconnaissance")
 	private long idReconnaissance;
 
@@ -46,7 +46,7 @@ public class Reconnaissance implements Serializable{
 	@CreationTimestamp
 	private Instant createdDate;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="idPremierCopie")
 	private PremierCopie premierecopie;
 
@@ -122,7 +122,16 @@ public class Reconnaissance implements Serializable{
 		this.premierecopie = premierCopie;
 	}
 
-
-
-
+    @Override
+    public String toString() {
+        return "Reconnaissance{" +
+            "idReconnaissance=" + idReconnaissance +
+            ", dateDeclaration='" + dateDeclaration + '\'' +
+            ", heureDeclaration='" + heureDeclaration + '\'' +
+            ", infoPersonDeclarant='" + infoPersonDeclarant + '\'' +
+            ", createdBy=" + createdBy +
+            ", createdDate=" + createdDate +
+            ", premierecopie=" + premierecopie.getEnfant() +
+            '}';
+    }
 }
