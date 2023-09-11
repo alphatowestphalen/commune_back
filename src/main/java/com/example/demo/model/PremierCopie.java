@@ -85,11 +85,6 @@ public class PremierCopie implements Serializable{
 	@ElementCollection
 	private List<Mention> mentions = new ArrayList<Mention>();
 
-
-	@OneToMany(mappedBy = "premierecopie", cascade = CascadeType.ALL, orphanRemoval = true , fetch = FetchType.LAZY)
-	private	List<Adoption> adoption = new ArrayList<>();
-
-
 	 @OneToMany(mappedBy = "premierecopie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
      private	List<ActeCelibataire> acteCelibataire = new ArrayList<>();
 
@@ -229,14 +224,6 @@ public class PremierCopie implements Serializable{
 	public void setPieceJustificative(PieceJustificative pieceJustificative) {
 		this.pieceJustificative = pieceJustificative;
 	}
-	public List<Adoption> getAdoption() {
-		return adoption;
-	}
-
-	public void setAdoption(List<Adoption> adoption) {
-		this.adoption = adoption;
-	}
-
 	public Jugement getJugement() {
 		return jugement;
 	}

@@ -109,7 +109,7 @@ public class PremierCopieController {
 
 				List<Mention> mentions = new ArrayList<>();
 
-                List<Reconnaissance> reconnaissanceList = premierCopieService.getReconnaissance(id);
+                List<Reconnaissance> reconnaissanceList = premierCopieService.getReconnaissances(id);
 
 			    if (reconnaissanceList != null && !reconnaissanceList.isEmpty()) {
 			    	for (Reconnaissance rec : reconnaissanceList) {
@@ -134,8 +134,9 @@ public class PremierCopieController {
 			    	// mentions.add(premierCopie.getJugement());
 			    }
 
-			    if (premierCopie.getAdoption() != null && !premierCopie.getAdoption().isEmpty()) {
-			    	for (Adoption rec : premierCopie.getAdoption()) {
+                List<Adoption> adoptionList = premierCopieService.getAdoptions(id);
+			    if (adoptionList != null && !adoptionList.isEmpty()) {
+			    	for (Adoption rec : adoptionList) {
 			    		  Mention m = new Mention();
 			    		  m.setInfo(new ArrayList<>());
 			    		  m.setCreatedDate(rec.getCreatedDate());

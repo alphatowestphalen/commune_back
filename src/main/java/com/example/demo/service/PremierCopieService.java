@@ -127,8 +127,11 @@ public class PremierCopieService {
         return new ResponsePageable<PremierCopie>(premierCopieRepository.findAll(pageable));
     }
 
-    public List<Reconnaissance> getReconnaissance(String idPremierCopie){
-        return premierCopieRepository.findAllReconnaissance(idPremierCopie);
+    public List<Reconnaissance> getReconnaissances(String idPremierCopie){
+        return premierCopieRepository.findAllReconnaissances(idPremierCopie);
+    }
+    public List<Adoption> getAdoptions(String idPremierCopie){
+        return premierCopieRepository.findAllAdoptions(idPremierCopie);
     }
 
     public PremierCopie save(PremierCopieRequest premierCopieRequest){

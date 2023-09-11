@@ -3,6 +3,7 @@ package com.example.demo.repository;
 
 import java.util.List;
 
+import com.example.demo.model.Adoption;
 import com.example.demo.model.Reconnaissance;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -54,5 +55,8 @@ public interface PremierCopieRepository extends JpaRepository<PremierCopie, Stri
     void deletePremierCopie(@PathVariable("idPremierCopie") String idPremierCopie);
 
     @Query("SELECT r FROM Reconnaissance r where r.premierecopie.idPremierCopie = :idPremierCopie")
-    List<Reconnaissance> findAllReconnaissance(@Param("idPremierCopie") String idPremierCopie);
+    List<Reconnaissance> findAllReconnaissances(@Param("idPremierCopie") String idPremierCopie);
+
+    @Query("SELECT a FROM Adoption a where a.premierecopie.idPremierCopie = :idPremierCopie")
+    List<Adoption> findAllAdoptions(@Param("idPremierCopie") String idPremierCopie);
 }
