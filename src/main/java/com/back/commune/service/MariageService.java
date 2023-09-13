@@ -1,13 +1,18 @@
 package com.back.commune.service;
 
+import com.back.commune.exceptions.NotFoundDataException;
 import com.back.commune.mapper.MarriageMapper;
 import com.back.commune.model.*;
+import com.back.commune.model.auth.User;
 import com.back.commune.model.mariage.*;
 import com.back.commune.repository.*;
 import com.back.commune.request.*;
+import com.back.commune.security.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class MariageService {
@@ -22,13 +27,15 @@ public class MariageService {
     private final MereRepository mereRepository;
     private final PremierCopieService premierCopieService;
 
+    private final UserService userService;
+
     private final MaireService maireService;
 
     @Autowired
     public MariageService(
         @Autowired(required = false) TypeRepository typeRepository,
         HommeRepository hommeRepository, FemmeRepository femmeRepository, TemoinRepository temoinRepository, MariageRepository mariageRepository,
-        MarriageMapper marriageMapper, PereRepository pereRepository, MereRepository mereRepository, PremierCopieService premierCopieService, MaireService maireService) {
+        MarriageMapper marriageMapper, PereRepository pereRepository, MereRepository mereRepository, PremierCopieService premierCopieService, UserService userService, MaireService maireService) {
         this.typeRepository = typeRepository;
         this.hommeRepository = hommeRepository;
         this.femmeRepository = femmeRepository;
@@ -38,6 +45,7 @@ public class MariageService {
         this.pereRepository = pereRepository;
         this.mereRepository = mereRepository;
         this.premierCopieService = premierCopieService;
+        this.userService = userService;
         this.maireService = maireService;
     }
 
@@ -112,6 +120,9 @@ public class MariageService {
     @Transactional
     public MariageAllInterne saveMariageII(MariageIIRequest request){
         // extract temoin from request
+        User user = userService.getAuthenticatedUser();
+        if(user == null) throw new NotFoundDataException("User not found");
+
         Temoin temoinHomme =  marriageMapper.extractTemoin(request, GenreMariage.HOMME);
         Temoin temoinFemme =  marriageMapper.extractTemoin(request, GenreMariage.FEMME);
         temoinFemme = saveTemoin(temoinFemme);
@@ -124,17 +135,22 @@ public class MariageService {
         // extract mariage from request
         Mariage mariage = marriageMapper.extractMariage(request);
 
-        // set Temoin from DB to mariage
-        mariage.setTemoinFemme(temoinFemme);
-        mariage.setTemoinHomme(temoinHomme);
+        Maire maire = maireService.findById(request.getIdMaire());
 
         MariageAllInterne mariageAllInterne = new MariageAllInterne(mariage, copieHomme, copieFemme);
 
+        mariageAllInterne.setCreatedBy(user);
+        mariageAllInterne.setMaire(maire);
+        mariageAllInterne.setTemoinFemme(temoinFemme);
+        mariageAllInterne.setTemoinHomme(temoinHomme);
         return mariageRepository.save(mariageAllInterne);
     }
 
     @Transactional
     public MariageMixteHomme saveMariageIE(MariageIERequest request){
+        User user = userService.getAuthenticatedUser();
+        if(user == null) throw new NotFoundDataException("User not found");
+
         Temoin temoinHomme =  marriageMapper.extractTemoin(request, GenreMariage.HOMME);
         Temoin temoinFemme =  marriageMapper.extractTemoin(request, GenreMariage.FEMME);
         temoinFemme = saveTemoin(temoinFemme);
@@ -143,10 +159,6 @@ public class MariageService {
         PremierCopie copieHomme = premierCopieService.findById(request.getIdPremierCopieHomme());
 
         Mariage mariage = marriageMapper.extractMariage(request);
-
-        // set Temoin from DB to mariage
-        mariage.setTemoinFemme(temoinFemme);
-        mariage.setTemoinHomme(temoinHomme);
 
         Femme femme = marriageMapper.extractFemme(request);
         Pere pereFemme = marriageMapper.extractPere(request);
@@ -157,23 +169,30 @@ public class MariageService {
         femme.setPereFemme(pereFemme);
         femme.setMereFemme(mereFemme);
 
+        Maire maire = maireService.findById(request.getIdMaire());
+
+
         femme = saveFemme(femme);
 
         MariageMixteHomme mariageMixteHomme = new MariageMixteHomme(mariage, copieHomme, femme);
+        mariageMixteHomme.setCreatedBy(user);
+        mariageMixteHomme.setMaire(maire);
+        mariageMixteHomme.setTemoinFemme(temoinFemme);
+        mariageMixteHomme.setTemoinHomme(temoinHomme);
         return mariageRepository.save(mariageMixteHomme);
     }
 
-    public Mariage addMatiateEE(MariageEERequest request){
+    @Transactional
+    public Mariage saveMariageEE(MariageEERequest request){
+        User user = userService.getAuthenticatedUser();
+        if(user == null) throw new NotFoundDataException("User not found");
+
         Temoin temoinHomme =  marriageMapper.extractTemoin(request, GenreMariage.HOMME);
         Temoin temoinFemme =  marriageMapper.extractTemoin(request, GenreMariage.FEMME);
         temoinFemme = saveTemoin(temoinFemme);
         temoinHomme = saveTemoin(temoinHomme);
 
         Mariage mariage = marriageMapper.extractMariage(request);
-
-        // set Temoin from DB to mariage
-        mariage.setTemoinFemme(temoinFemme);
-        mariage.setTemoinHomme(temoinHomme);
 
         //add Homme
         Homme homme = marriageMapper.extractHomme(request);
@@ -199,12 +218,23 @@ public class MariageService {
 
         femme = saveFemme(femme);
 
+        Maire maire = maireService.findById(request.getIdMaire());
+
         MariageAllExterne mariageAllExterne = new MariageAllExterne(mariage, homme, femme);
+        mariageAllExterne.setCreatedBy(user);
+
+        mariageAllExterne.setMaire(maire);
+        mariageAllExterne.setTemoinFemme(temoinFemme);
+        mariageAllExterne.setTemoinHomme(temoinHomme);
         return mariageRepository.save(mariageAllExterne);
 
     }
 
+    @Transactional
     public Mariage saveMariageEI(MariageEIRequest request){
+        User user = userService.getAuthenticatedUser();
+        if(user == null) throw new NotFoundDataException("User not found");
+
         Temoin temoinHomme =  marriageMapper.extractTemoin(request, GenreMariage.HOMME);
         Temoin temoinFemme =  marriageMapper.extractTemoin(request, GenreMariage.FEMME);
         temoinFemme = saveTemoin(temoinFemme);
@@ -228,9 +258,18 @@ public class MariageService {
         homme.setMereHomme(mereHomme);
 
         homme = saveHomme(homme);
+        Maire maire = maireService.findById(request.getIdMaire());
 
         MariageMixteFemme mariageMixteFemme = new MariageMixteFemme(mariage, homme, copieFemme);
+        mariageMixteFemme.setCreatedBy(user);
+        mariageMixteFemme.setMaire(maire);
+        mariageMixteFemme.setTemoinFemme(temoinFemme);
+        mariageMixteFemme.setTemoinHomme(temoinHomme);
+
         return mariageRepository.save(mariageMixteFemme);
     }
 
+    public List<Mariage> getAllMariages() {
+        return mariageRepository.findAll();
+    }
 }

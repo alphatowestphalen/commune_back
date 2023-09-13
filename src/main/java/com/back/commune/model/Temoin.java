@@ -100,5 +100,11 @@ public class Temoin {
 		// TODO Auto-generated constructor stub
 	}
 
-
+    @Override
+    public String toString() {
+        return "Temoin{" +
+            "idTemoinMariage=" + idTemoinMariage +
+            ", nomTemoin='" + nomTemoin + '\'' +
+            '}';
+    }
 }
