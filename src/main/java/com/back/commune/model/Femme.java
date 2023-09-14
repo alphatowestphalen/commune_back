@@ -3,9 +3,15 @@ package com.back.commune.model;
 import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name="femme")
 @JsonInclude(Include.NON_NULL)
 public class Femme {
@@ -46,98 +52,6 @@ public class Femme {
 	@ManyToOne()
 	@JoinColumn(name = "idPere")
 	private Pere pereFemme;
-
-	public long getIdFemme() {
-		return idFemme;
-	}
-
-	public void setIdFemme(long idFemme) {
-		this.idFemme = idFemme;
-	}
-
-
-
-	public String getNationaliteFemme() {
-		return nationaliteFemme;
-	}
-
-	public void setNationaliteFemme(String nationaliteFemme) {
-		this.nationaliteFemme = nationaliteFemme;
-	}
-
-	public String getNomFemme() {
-		return nomFemme;
-	}
-
-	public void setNomFemme(String nomFemme) {
-		this.nomFemme = nomFemme;
-	}
-
-	public String getPrenomsFemme() {
-		return prenomsFemme;
-	}
-
-	public void setPrenomsFemme(String prenomsFemme) {
-		this.prenomsFemme = prenomsFemme;
-	}
-
-	public String getProfessionFemme() {
-		return professionFemme;
-	}
-
-	public void setProfessionFemme(String professionFemme) {
-		this.professionFemme = professionFemme;
-	}
-
-	public String getDateNaissFemme() {
-		return dateNaissFemme;
-	}
-
-	public void setDateNaissFemme(String dateNaissFemme) {
-		this.dateNaissFemme = dateNaissFemme;
-	}
-
-	public String getLieuNaissFemme() {
-		return lieuNaissFemme;
-	}
-
-	public void setLieuNaissFemme(String lieuNaissFemme) {
-		this.lieuNaissFemme = lieuNaissFemme;
-	}
-
-	public String getAdresseFemme() {
-		return adresseFemme;
-	}
-
-	public void setAdresseFemme(String adresseFemme) {
-		this.adresseFemme = adresseFemme;
-	}
-
-	public String getTypeFemme() {
-		return typeFemme;
-	}
-
-	public void setTypeFemme(String typeFemme) {
-		this.typeFemme = typeFemme;
-	}
-
-
-	public Mere getMereFemme() {
-		return mereFemme;
-	}
-
-	public void setMereFemme(Mere mereFemme) {
-		this.mereFemme = mereFemme;
-	}
-
-	public Pere getPereFemme() {
-		return pereFemme;
-	}
-
-	public void setPereFemme(Pere pereFemme) {
-		this.pereFemme = pereFemme;
-	}
-
 	public Femme( String nationaliteFemme, String nomFemme, String prenomsFemme, String professionFemme,
 			String dateNaissFemme, String lieuNaissFemme, String adresseFemme, String typeFemme, Mere mereFemme,
 			Pere pereFemme) {
@@ -153,11 +67,4 @@ public class Femme {
 		this.mereFemme = mereFemme;
 		this.pereFemme = pereFemme;
 	}
-
-	public Femme() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-
 }
