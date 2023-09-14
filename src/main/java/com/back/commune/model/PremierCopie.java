@@ -13,11 +13,17 @@ import javax.persistence.*;
 
 import com.back.commune.model.auth.User;
 import com.back.commune.utils.AuditTrailListener;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
 
 @Entity
 @Table(name="premierCopie")
+@Getter
+@Setter
+@NoArgsConstructor
 @EntityListeners(AuditTrailListener.class)
 public class PremierCopie implements Serializable{
 
@@ -89,169 +95,6 @@ public class PremierCopie implements Serializable{
 	 @Column(name = "isnotSingle")
 	 private boolean isnotSingle = Boolean.FALSE;
 
-    public User getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
-    }
-
-
-    public String getIdPremierCopie() {
-		return idPremierCopie;
-	}
-
-	public void setIdPremierCopie(String idPremierCopie) {
-		this.idPremierCopie = idPremierCopie;
-	}
-
-	public Long getNumero() {
-		return numero;
-	}
-
-	public void setNumero(Long numero) {
-		this.numero = numero;
-	}
-
-	public int getAnneeActuelle() {
-		return anneeActuelle;
-	}
-
-	public void setAnneeActuelle(int anneeActuelle) {
-		this.anneeActuelle = anneeActuelle;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getMention() {
-		return mention;
-	}
-
-	public void setMention(String mention) {
-		this.mention = mention;
-	}
-
-	public String getDatePCopie() {
-		return datePCopie;
-	}
-
-	public void setDatePCopie(String datePCopie) {
-		this.datePCopie = datePCopie;
-	}
-
-	public String getDatePremierCopie() {
-		return datePremierCopie;
-	}
-
-	public void setDatePremierCopie(String datePremierCopie) {
-		this.datePremierCopie = datePremierCopie;
-	}
-
-	public Declarant getDeclarant() {
-		return declarant;
-	}
-
-	public void setDeclarant(Declarant declarant) {
-		this.declarant = declarant;
-	}
-
-	public Maire getMaire() {
-		return maire;
-	}
-
-	public void setMaire(Maire maire) {
-		this.maire = maire;
-	}
-
-	public Mere getMere() {
-		return mere;
-	}
-
-	public void setMere(Mere mere) {
-		this.mere = mere;
-	}
-
-	public Pere getPere() {
-		return pere;
-	}
-
-	public void setPere(Pere pere) {
-		this.pere = pere;
-	}
-
-	public Enfant getEnfant() {
-		return enfant;
-	}
-
-	public void setEnfant(Enfant enfant) {
-		this.enfant = enfant;
-	}
-
-	public PieceJustificative getPieceJustificative() {
-		return pieceJustificative;
-	}
-
-	public void setPieceJustificative(PieceJustificative pieceJustificative) {
-		this.pieceJustificative = pieceJustificative;
-	}
-	public Jugement getJugement() {
-		return jugement;
-	}
-
-	public void setJugement(Jugement jugement) {
-		this.jugement = jugement;
-	}
-
-	public ActeDeces getActeDeces() {
-		return acteDeces;
-	}
-
-	public void setActeDeces(ActeDeces acteDeces) {
-		this.acteDeces = acteDeces;
-	}
-
-
-
-    public Instant getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(Instant createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	public List<Mention> getMentions() {
-		return mentions;
-	}
-
-	public void setMentions(List<Mention> mentions) {
-		this.mentions = mentions;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-
-
-	public boolean isIsnotSingle() {
-		return isnotSingle;
-	}
-
-	public void setIsnotSingle(boolean isnotSingle) {
-		this.isnotSingle = isnotSingle;
-	}
-
 	public PremierCopie(String idPremierCopie, String description, String mention, String datePCopie,
 			String datePremierCopie, Declarant declarant, Maire maire, Mere mere, Pere pere, Enfant enfant,
 			PieceJustificative pieceJustificative, Instant createdDate, long numero, int anneeActuelle) {
@@ -270,12 +113,4 @@ public class PremierCopie implements Serializable{
 		this.numero = numero;
 		this.anneeActuelle = anneeActuelle;
 	}
-
-	public PremierCopie() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-
-
 }

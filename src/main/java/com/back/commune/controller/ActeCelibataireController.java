@@ -1,5 +1,6 @@
 package com.back.commune.controller;
 
+import com.back.commune.DTO.ActeCelibataireDTO;
 import com.back.commune.utils.ResponsePageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -34,36 +35,35 @@ public class ActeCelibataireController {
 
     @GetMapping
 	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<ResponsePageable<ActeCelibataire>> getAllActeCelibataires
+	  public ResponseEntity<ResponsePageable<ActeCelibataireDTO>> getAllActeCelibataires
         (
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
         )
     {
         Pageable pageable = PageRequest.of(page-1, size);
-        ResponsePageable<ActeCelibataire> response = acteCelibataireService.findAll(pageable);
+        ResponsePageable<ActeCelibataireDTO> response = acteCelibataireService.findAll(pageable);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 	@PostMapping
 	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<ActeCelibataire> addActeCelibataire(@RequestBody ActeCelibataireRequest acteCelibataireRequest)
+	  public ResponseEntity<ActeCelibataireDTO> addActeCelibataire(@RequestBody ActeCelibataireRequest acteCelibataireRequest)
 	{
-        ActeCelibataire acteCelibataire = acteCelibataireService.save(acteCelibataireRequest);
-        return new ResponseEntity<>(acteCelibataire, HttpStatus.CREATED);
+        ActeCelibataireDTO acteCelibataireDTO = acteCelibataireService.save(acteCelibataireRequest);
+        return new ResponseEntity<>(acteCelibataireDTO, HttpStatus.CREATED);
 	}
-
-	@GetMapping("/{id}")
-	  public ResponseEntity<ActeCelibataire> getActeCelibataireById(@PathVariable(value = "id") String id) {
-        ActeCelibataire acteCelibataire = acteCelibataireService.find(id);
-	    return new ResponseEntity<>(acteCelibataire, HttpStatus.OK);
-	  }
+    @GetMapping("/{id}")
+    public ResponseEntity<ActeCelibataireDTO> getActeCelibataireById(@PathVariable(value = "id") String id) {
+        ActeCelibataireDTO acteCelibataireDTO = acteCelibataireService.find(id);
+        return new ResponseEntity<>(acteCelibataireDTO, HttpStatus.OK);
+    }
 
 	@PutMapping("/{id}")
-	public ResponseEntity<ActeCelibataire> updateActeCelibataire(@PathVariable(value = "id") String id, @RequestBody ActeCelibataireRequest acteCelibataireRequest)
+	public ResponseEntity<ActeCelibataireDTO> updateActeCelibataire(@PathVariable(value = "id") String id, @RequestBody ActeCelibataireRequest acteCelibataireRequest)
 	{
-        ActeCelibataire acteCelibataire = acteCelibataireService.update(acteCelibataireRequest, id);
-        return new ResponseEntity<>(acteCelibataire, HttpStatus.OK);
+        ActeCelibataireDTO acteCelibataireDTO = acteCelibataireService.update(acteCelibataireRequest, id);
+        return new ResponseEntity<>(acteCelibataireDTO, HttpStatus.OK);
 	}
 	@DeleteMapping("/{id}")
 //	 @PreAuthorize(" hasRole('MAIRE')")

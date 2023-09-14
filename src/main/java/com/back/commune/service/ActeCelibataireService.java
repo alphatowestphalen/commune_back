@@ -1,5 +1,6 @@
 package com.back.commune.service;
 
+import com.back.commune.DTO.ActeCelibataireDTO;
 import com.back.commune.exceptions.NotFoundDataException;
 import com.back.commune.model.PremierCopie;
 import com.back.commune.repository.ActeCelibataireRepository;
@@ -10,10 +11,13 @@ import com.back.commune.request.NumeroActeCelibataire;
 import com.back.commune.utils.ResponsePageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.back.commune.model.ActeCelibataire;
+
+import java.util.List;
 
 @Service
 public class ActeCelibataireService {
@@ -75,13 +79,14 @@ public class ActeCelibataireService {
 
 	}
 
-    public ActeCelibataire save(ActeCelibataireRequest acteCelibataireRequest) {
+    public ActeCelibataireDTO save(ActeCelibataireRequest acteCelibataireRequest) {
         NumeroActeCelibataire numeroActeCelibataire = numeroActeCelibataire();
         PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(acteCelibataireRequest.getIdPremierCopie());
         if(premierCopie == null) throw new NotFoundDataException("Not found PremierCopie with id = " + acteCelibataireRequest.getIdPremierCopie());
         ActeCelibataire acteCelibataire = new ActeCelibataire(
             numeroActeCelibataire.idActeCelibataire,
             acteCelibataireRequest.getNomFkt(),
+            acteCelibataireRequest.getChefFkt(),
             acteCelibataireRequest.getNumCin(),
             acteCelibataireRequest.getDateCin(),
             acteCelibataireRequest.getLieuCin(),
@@ -90,7 +95,7 @@ public class ActeCelibataireService {
             numeroActeCelibataire.numero,
             numeroActeCelibataire.annee
         );
-        return acteCelibataireRepository.save(acteCelibataire);
+        return new ActeCelibataireDTO(acteCelibataireRepository.save(acteCelibataire));
     }
 
 
@@ -98,7 +103,7 @@ public class ActeCelibataireService {
         acteCelibataireRepository.deleteById(id);
     }
 
-    public ActeCelibataire update(ActeCelibataireRequest acteCelibataireRequest, String id) {
+    public ActeCelibataireDTO update(ActeCelibataireRequest acteCelibataireRequest, String id) {
         ActeCelibataire acteCelibataire = acteCelibataireRepository
             .findById(id)
             .orElseThrow(() -> new NotFoundDataException("Not found Jugement with id = " + id));;
@@ -106,23 +111,27 @@ public class ActeCelibataireService {
         PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(acteCelibataire.getPremierecopie().getIdPremierCopie());
 
         acteCelibataire.setNomFkt(acteCelibataireRequest.getNomFkt());
+        acteCelibataire.setChefFkt(acteCelibataireRequest.getChefFkt());
         acteCelibataire.setNumCin(acteCelibataireRequest.getNumCin());
         acteCelibataire.setDateCin(acteCelibataireRequest.getDateCin());
         acteCelibataire.setLieuCin(acteCelibataireRequest.getLieuCin());
         acteCelibataire.setDateActe(acteCelibataireRequest.getDateActe());
         acteCelibataire.setPremierecopie(premierCopie);
 
-        return acteCelibataireRepository.save(acteCelibataire);
+        return new ActeCelibataireDTO(acteCelibataireRepository.save(acteCelibataire));
     }
 
-    public ActeCelibataire find(String id) {
-       return acteCelibataireRepository
+    public ActeCelibataireDTO find(String id) {
+       ActeCelibataire acteCelibataire =  acteCelibataireRepository
             .findById(id)
-            .orElseThrow(() -> new NotFoundDataException("Not found Jugement with id = " + id));
+            .orElseThrow(() -> new NotFoundDataException("Not found ActeCellibataire with id = " + id));
+        return new ActeCelibataireDTO(acteCelibataire);
     }
-
-    public ResponsePageable<ActeCelibataire> findAll(Pageable pageable) {
-        Page<ActeCelibataire> pageactecelibataire = acteCelibataireRepository.findAll(pageable);
-        return new ResponsePageable<>(pageactecelibataire);
+    public ResponsePageable<ActeCelibataireDTO> findAll(Pageable pageable) {
+        Page<ActeCelibataire> resultDB = acteCelibataireRepository.findAll(pageable);
+        List<ActeCelibataireDTO> listDTO =  resultDB.getContent().
+            stream().map(ActeCelibataireDTO::new).collect(java.util.stream.Collectors.toList());
+        Page<ActeCelibataireDTO> page = new PageImpl<>(listDTO,pageable,resultDB.getTotalElements());
+        return new ResponsePageable<>(page);
     }
 }

@@ -11,7 +11,6 @@ public class Enfant {
 	@Column(name = "idEnfant")
 	private long idEnfant;
 
-
 	@Column(name = "nomEnfant")
 	private String nomEnfant;
 
