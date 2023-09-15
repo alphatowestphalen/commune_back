@@ -1,5 +1,6 @@
 package com.back.commune.service;
 
+import com.back.commune.DTO.resulSet.CountByUser;
 import com.back.commune.exceptions.NotFoundDataException;
 import com.back.commune.model.*;
 import com.back.commune.repository.TypeRepository;
@@ -15,6 +16,7 @@ import com.back.commune.repository.ActeDecesRepository;
 import com.back.commune.request.NumeroActeDecesRequest;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class ActeDecesService {
@@ -189,5 +191,13 @@ public class ActeDecesService {
         acteDeces.setPremierCopie(premierCopie);
 
         return acteDecesRepository.save(acteDeces);
+    }
+
+    public Long count() {
+        return acteDecesRepository.count();
+    }
+
+    public List<CountByUser> countByUser() {
+        return acteDecesRepository.countByUser();
     }
 }

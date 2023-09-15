@@ -1,5 +1,6 @@
 package com.back.commune.service;
 
+import com.back.commune.DTO.resulSet.CountByUser;
 import com.back.commune.exceptions.NotFoundDataException;
 import com.back.commune.mapper.MarriageMapper;
 import com.back.commune.model.*;
@@ -271,5 +272,13 @@ public class MariageService {
 
     public List<Mariage> getAllMariages() {
         return mariageRepository.findAll();
+    }
+
+    public Long count() {
+        return mariageRepository.count();
+    }
+
+    public List<CountByUser> countByUser() {
+        return mariageRepository.countByUser();
     }
 }

@@ -1,4 +1,5 @@
 package com.back.commune.service;
+import com.back.commune.DTO.resulSet.CountByUser;
 import com.back.commune.exceptions.NotFoundDataException;
 import com.back.commune.model.Adoption;
 import com.back.commune.model.PremierCopie;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
+
+import java.util.List;
 
 @Controller
 public class AdoptionService {
@@ -71,5 +74,13 @@ public class AdoptionService {
         Adoption adoption = getById(id);
         if(adoption == null) throw new NotFoundDataException("Not found Adoption with id = " + id);
         adoptionRepository.delete(adoption);
+    }
+
+    public Long count() {
+        return adoptionRepository.count();
+    }
+
+    public List<CountByUser> countByUser() {
+        return adoptionRepository.countByUser();
     }
 }

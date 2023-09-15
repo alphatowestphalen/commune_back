@@ -1,9 +1,10 @@
 package com.back.commune.DTO;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
-public class StatistiquePremierCopie {
+@NoArgsConstructor
+public class StatistiqueBulletinNaiss {
     private StatisiqueAbstract nombre;
 }

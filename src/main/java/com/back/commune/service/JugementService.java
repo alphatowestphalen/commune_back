@@ -1,5 +1,6 @@
 package com.back.commune.service;
 
+import com.back.commune.DTO.resulSet.CountByUser;
 import com.back.commune.exceptions.NotFoundDataException;
 import com.back.commune.model.PremierCopie;
 import com.back.commune.model.auth.User;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
+
+import java.util.List;
 
 @Controller
 public class JugementService {
@@ -89,5 +92,13 @@ public class JugementService {
     public ResponsePageable<PremierCopie> getAllPremierCopieHaveJugement(Pageable pageable) {
         Page<PremierCopie> premierCopiePage = jugementRepository.getAllPremierCopieHaveJugement(pageable);
         return new ResponsePageable<>(premierCopiePage);
+    }
+
+    public Long count() {
+        return jugementRepository.count();
+    }
+
+    public List<CountByUser> countByUser() {
+        return jugementRepository.countByUser();
     }
 }

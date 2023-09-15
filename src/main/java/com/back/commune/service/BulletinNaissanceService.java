@@ -1,5 +1,6 @@
 package com.back.commune.service;
 
+import com.back.commune.DTO.resulSet.CountByUser;
 import com.back.commune.exceptions.NotFoundDataException;
 import com.back.commune.model.BulletinNaissance;
 import com.back.commune.model.auth.User;
@@ -13,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Controller
 public class BulletinNaissanceService {
@@ -96,5 +99,13 @@ public class BulletinNaissanceService {
         bulletin.setCreatedBy(user);
 
         return bulletinNaissanceRepository.save(bulletin);
+    }
+
+    public Long count() {
+        return bulletinNaissanceRepository.count();
+    }
+
+    public List<CountByUser> countByUser() {
+        return bulletinNaissanceRepository.countByUser();
     }
 }

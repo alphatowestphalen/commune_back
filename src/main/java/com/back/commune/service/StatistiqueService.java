@@ -1,8 +1,10 @@
 package com.back.commune.service;
 
+import com.back.commune.DTO.*;
 import com.back.commune.output.Acte;
 import com.back.commune.output.Naissance;
 import com.back.commune.repository.PremierCopieRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,62 +13,115 @@ import com.back.commune.repository.AdoptionRepository;
 import com.back.commune.repository.JugementRepository;
 import com.back.commune.repository.MariageRepository;
 import com.back.commune.repository.ReconnaissanceRepository;
-
 @Service
+@AllArgsConstructor
 public class StatistiqueService {
-	@Autowired
-    PremierCopieRepository premierCopieRepository;
-	@Autowired
-	ActeDecesRepository acteDecesRepository;
-	@Autowired
-	MariageRepository mariageRepository;
-	@Autowired
-	AdoptionRepository adoptionRepository;
-	@Autowired
-	JugementRepository jugementRepository;
-	@Autowired
-	ReconnaissanceRepository reconnaissanceRepository;
+    private final PremierCopieStatService premierCopieStatService;
+    private final ActeDecesService acteDecesService;
+    private final AdoptionService adoptionService;
+    private final JugementService jugementService;
+    private final MariageService mariageService;
+    private final BulletinNaissanceService bulletinNaissanceService;
+    private final ReconnaissanceService reconnaissanceService;
 
-	static final long price = 2000 ;
+    public Statistique getStatistique() {
+        Statistique statistique = new Statistique();
 
-	public Acte statistiqueacte()
-	{
-		Acte acte = new Acte();
+        statistique.setPremierCopie(getStatistiquePremierCopie());
+        statistique.setActeDeces(getStatistiaqueDeces());
+        statistique.setAdoption(getStatistiqueAdoption());
+        statistique.setJugement(getStatistiqueJugement());
+        statistique.setMariage(getStatistiqueMariage());
+        statistique.setBulletinNaissance(getStatistiqueBulletinNaiss());
+        statistique.setReconnaissance(getStatistiqueReconnaissance());
 
-		long nbrActeNaissance = premierCopieRepository.countByIdPC();
-		long nbrActeDeces = acteDecesRepository.countByIdDeces();
-		long nbrActeMariage = mariageRepository.countByIdMariage();
+        return statistique;
+    }
 
-		long priceActenaissance = nbrActeNaissance * price ;
-		long priceActedeces = nbrActeDeces * price ;
-		long priceActemariage = nbrActeMariage * price ;
+    private StatistiquePremierCopie getStatistiquePremierCopie() {
+        StatistiquePremierCopie statistiquePremierCopie = new StatistiquePremierCopie();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
 
-		acte.setNbrActeNaissance(nbrActeNaissance);
-		acte.setNbrActeDeces(nbrActeDeces);
-		acte.setNbrActeMariage(nbrActeMariage);
-		acte.setPriceActeNaissance(priceActenaissance);
-		acte.setPriceActeDeces(priceActedeces);
-		acte.setNbrActeMariage(priceActemariage);
+        statisiqueAbstract.setNombre(premierCopieStatService.count());
+        statisiqueAbstract.setNombreParUtilisateur(premierCopieStatService.countByUser());
 
-		return acte;
-	}
+        statistiquePremierCopie.setNombre(statisiqueAbstract);
 
-	public Naissance statistiqueNaissance()
-	{
-		Naissance naissance = new Naissance();
+        return statistiquePremierCopie;
+    }
 
-		long nbrPremierCopie = premierCopieRepository.countByIdPC();
-		long nbrAdoption = adoptionRepository.countByIdAdoption();
-		long nbrJugement = jugementRepository.countByIdJugement();
-		long nbrReconnaissance = reconnaissanceRepository.countByIdReconnaissance();
+    private StatistiqueAdoption getStatistiqueAdoption() {
+        StatistiqueAdoption statistiqueAdoption = new StatistiqueAdoption();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
 
-		naissance.setNbrPremierCopie(nbrPremierCopie);
-		naissance.setNbrAdoption(nbrAdoption);
-		naissance.setNbrJugement(nbrJugement);
-		naissance.setNbrReconnaissance(nbrReconnaissance);
+        statisiqueAbstract.setNombre(adoptionService.count());
+        statisiqueAbstract.setNombreParUtilisateur(adoptionService.countByUser());
 
-		return naissance;
-	}
+        statistiqueAdoption.setNombre(statisiqueAbstract);
+
+        return statistiqueAdoption;
+    }
+
+    private StatistiqueJugement getStatistiqueJugement() {
+        StatistiqueJugement statiqueJugement = new StatistiqueJugement();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(jugementService.count());
+        statisiqueAbstract.setNombreParUtilisateur(jugementService.countByUser());
+
+        statiqueJugement.setNombre(statisiqueAbstract);
+
+        return statiqueJugement;
+    }
+
+    private StatistiqueReconnaissance getStatistiqueReconnaissance() {
+        StatistiqueReconnaissance statistiqueReconnaissance = new StatistiqueReconnaissance();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(reconnaissanceService.count());
+        statisiqueAbstract.setNombreParUtilisateur(reconnaissanceService.countByUser());
+
+        statistiqueReconnaissance.setNombre(statisiqueAbstract);
+
+        return statistiqueReconnaissance;
+    }
+
+    private StatistiqueMariage getStatistiqueMariage() {
+        StatistiqueMariage statistiqueMariage = new StatistiqueMariage();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(mariageService.count());
+        statisiqueAbstract.setNombreParUtilisateur(mariageService.countByUser());
+
+        statistiqueMariage.setNombre(statisiqueAbstract);
+
+        return statistiqueMariage;
+    }
+
+    private StatistiaqueDeces getStatistiaqueDeces() {
+        StatistiaqueDeces statistiaqueDeces = new StatistiaqueDeces();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(acteDecesService.count());
+        statisiqueAbstract.setNombreParUtilisateur(acteDecesService.countByUser());
+
+        statistiaqueDeces.setNombre(statisiqueAbstract);
+
+        return statistiaqueDeces;
+    }
+
+    private StatistiqueBulletinNaiss getStatistiqueBulletinNaiss() {
+        StatistiqueBulletinNaiss statistiqueBulletinNaiss = new StatistiqueBulletinNaiss();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(bulletinNaissanceService.count());
+        statisiqueAbstract.setNombreParUtilisateur(bulletinNaissanceService.countByUser());
+
+        statistiqueBulletinNaiss.setNombre(statisiqueAbstract);
+
+        return statistiqueBulletinNaiss;
+    }
+
 
 
 }

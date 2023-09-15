@@ -1,5 +1,6 @@
 package com.back.commune.service;
 
+import com.back.commune.DTO.resulSet.CountByUser;
 import com.back.commune.exceptions.NotFoundDataException;
 import com.back.commune.model.auth.User;
 import com.back.commune.model.PremierCopie;
@@ -13,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class ReconnaissanceService {
@@ -85,5 +88,11 @@ public class ReconnaissanceService {
     }
 
 
+    public Long count() {
+        return reconnaissanceRepository.count();
+    }
 
+    public List<CountByUser> countByUser() {
+        return reconnaissanceRepository.countByUser();
+    }
 }

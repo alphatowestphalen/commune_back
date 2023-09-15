@@ -4,6 +4,7 @@ import java.time.Instant;
 
 import javax.persistence.*;
 
+import com.back.commune.model.auth.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -65,6 +66,10 @@ public class ActeDeces {
 
 	@CreationTimestamp
 	private Instant createdDate;
+
+    @ManyToOne
+    @JoinColumn(name = "created_by_id")
+    private User createdBy;
 
 	@OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idPremierCopie")
