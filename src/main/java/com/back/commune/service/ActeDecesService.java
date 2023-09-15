@@ -3,11 +3,9 @@ package com.back.commune.service;
 import com.back.commune.exceptions.NotFoundDataException;
 import com.back.commune.model.*;
 import com.back.commune.repository.TypeRepository;
-import com.back.commune.repository.MaireRepository;
 import com.back.commune.repository.PieceDecesRepository;
 import com.back.commune.request.DecesRequest;
 import com.back.commune.utils.ResponsePageable;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,11 +17,9 @@ import com.back.commune.request.NumeroActeDecesRequest;
 import javax.transaction.Transactional;
 
 @Service
-@AllArgsConstructor
 public class ActeDecesService {
 
-	@Autowired(required = false)
-    TypeRepository typeRepository;
+    private final TypeRepository typeRepository;
 
 	private final ActeDecesRepository acteDecesRepository;
 
@@ -34,6 +30,22 @@ public class ActeDecesService {
     private final DefuntService defuntService;
 
     private final MaireService maireService;
+
+    @Autowired
+    public ActeDecesService(@Autowired(required = false) TypeRepository typeRepository,
+                            ActeDecesRepository acteDecesRepository,
+                            PremierCopieService premierCopieService,
+                            PieceDecesRepository pieceDecesRepository,
+                            DefuntService defuntService,
+                            MaireService maireService)
+    {
+        this.typeRepository = typeRepository;
+        this.acteDecesRepository = acteDecesRepository;
+        this.premierCopieService = premierCopieService;
+        this.pieceDecesRepository = pieceDecesRepository;
+        this.defuntService = defuntService;
+        this.maireService = maireService;
+    }
 
     public NumeroActeDecesRequest numeroActeDeces()
 	{

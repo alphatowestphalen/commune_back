@@ -4,6 +4,7 @@ import java.time.Instant;
 
 import javax.persistence.*;
 
+import com.back.commune.model.auth.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -42,10 +43,14 @@ public class ActeCelibataire {
 	private PremierCopie premierecopie;
 
 	@Column(name = "numero")
-	 private Long numero;
+    private Long numero;
 
-	 @Column(name = "annee")
-	 private int annee;
+    @Column(name = "annee")
+    private int annee;
+
+    @ManyToOne
+    @JoinColumn(name = "created_by_id")
+    private User createdBy;
 
 	@CreationTimestamp
 	private Instant createdDate;

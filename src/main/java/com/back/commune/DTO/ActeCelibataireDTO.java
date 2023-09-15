@@ -3,6 +3,7 @@ package com.back.commune.DTO;
 import com.back.commune.model.ActeCelibataire;
 import com.back.commune.model.Mere;
 import com.back.commune.model.Pere;
+import com.back.commune.model.auth.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +24,7 @@ public class ActeCelibataireDTO {
     private String prenom;
     private String nomPere;
     private String nomMere;
+    private User createdBy;
 
     public ActeCelibataireDTO(ActeCelibataire acteCelibataire){
         this.chefFkt = acteCelibataire.getChefFkt();
@@ -37,6 +39,7 @@ public class ActeCelibataireDTO {
         this.prenom = acteCelibataire.getPremierecopie().getEnfant().getPrenomsEnfant();
         this.nomPere = getFullNamePere(acteCelibataire.getPremierecopie().getPere());
         this.nomMere = getFullNameMere(acteCelibataire.getPremierecopie().getMere());
+        this.createdBy = acteCelibataire.getCreatedBy();
     }
     private String getFullNamePere(Pere pere){
         return pere.getNomPere() + " " + pere.getPrenomsPere();
