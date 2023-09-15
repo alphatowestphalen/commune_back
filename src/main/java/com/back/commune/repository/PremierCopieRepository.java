@@ -3,6 +3,7 @@ package com.back.commune.repository;
 
 import java.util.List;
 
+import com.back.commune.DTO.resulSet.CountByUser;
 import com.back.commune.model.Adoption;
 import com.back.commune.model.Reconnaissance;
 import org.springframework.data.domain.Page;
@@ -48,4 +49,9 @@ public interface PremierCopieRepository extends JpaRepository<PremierCopie, Stri
     @Modifying
     @Query("UPDATE PremierCopie p SET p.deleted = false WHERE p.idPremierCopie = :idPremierCopie")
     void undoDeletePremierCopie(String idPremierCopie);
+
+    @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idPremierCopie)) FROM PremierCopie p WHERE p.deleted = false group by p.createdBy")
+    List<CountByUser> countByUser();
+    @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idPremierCopie)) FROM PremierCopie p WHERE p.deleted = true group by p.createdBy")
+    List<CountByUser> countDeletedByUser();
 }

@@ -4,14 +4,11 @@ import com.back.commune.model.Femme;
 import com.back.commune.model.Homme;
 import com.back.commune.model.Maire;
 import com.back.commune.model.auth.User;
-import org.hibernate.annotations.CreationTimestamp;
+import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.time.Instant;
 
+@Data
 public class MariageDTO {
 
     private Homme homme;

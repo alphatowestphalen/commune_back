@@ -1,11 +1,14 @@
 package com.back.commune.repository;
 
 
+import com.back.commune.DTO.resulSet.CountByUser;
 import com.back.commune.model.mariage.Mariage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 public interface MariageRepository extends JpaRepository<Mariage, Long> {
 
@@ -18,5 +21,8 @@ public interface MariageRepository extends JpaRepository<Mariage, Long> {
 
 	@Query(value = "SELECT count(m.id_mariage) FROM mariage m", nativeQuery = true)
 	long countByIdMariage();
+
+    @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( m.createdBy, count(m.idMariage)) FROM Mariage m group by m.createdBy")
+    List<CountByUser> countByUser();
 
 }
