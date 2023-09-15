@@ -1,134 +1,58 @@
 package com.back.commune.controller;
-
-
-
-import java.util.List;
-
-import com.back.commune.repository.PremierCopieRepository;
-import com.back.commune.repository.TypeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.back.commune.utils.ResponsePageable;
+import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import com.back.commune.model.ActeDeces;
-import com.back.commune.model.Defunt;
-import com.back.commune.model.Maire;
-import com.back.commune.model.PieceDeces;
-import com.back.commune.model.PremierCopie;
-import com.back.commune.repository.ActeDecesRepository;
-import com.back.commune.repository.DefuntRepository;
-import com.back.commune.repository.MaireRepository;
-import com.back.commune.repository.PieceDecesRepository;
 import com.back.commune.request.DecesRequest;
 import com.back.commune.service.ActeDecesService;
-import com.back.commune.service.PremierCopieService;
-
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/deces")
+@AllArgsConstructor
 public class ActeDecesController {
 
-	@Autowired
-    PremierCopieRepository premierCopieRepository;
-	@Autowired
-	ActeDecesRepository acteDecesRepository;
-	@Autowired
-	MaireRepository maireRepository;
-	@Autowired
-	DefuntRepository defuntRepository;
-	@Autowired
-	PieceDecesRepository pieceDecesRepository;
-	@Autowired(required = false)
-    TypeRepository typeRepository;
-	@Autowired
-	ActeDecesService acteDecesService;
-	@Autowired
-	PremierCopieService premierCopieService;
+    private final ActeDecesService acteDecesService;
 
-
-	@PostMapping("/{IdPremierCopie}")
-	  public ResponseEntity<ActeDeces> addDeces(@PathVariable(value = "IdPremierCopie") String IdPremierCopie, @RequestBody DecesRequest decesRequest)
+	@PostMapping
+	  public ResponseEntity<ActeDeces> addDeces(@RequestBody DecesRequest decesRequest)
 	{
-        ActeDeces actedeces = acteDecesService.save(decesRequest, IdPremierCopie);
+        ActeDeces actedeces = acteDecesService.save(decesRequest);
         return new ResponseEntity<>(actedeces, HttpStatus.OK);
 	}
 
 	@GetMapping
-	  public ResponseEntity<List<ActeDeces>> getAllActeDeces() {
-        List<ActeDeces> acte = acteDecesRepository.findAll();
-	    if (acte.isEmpty()) {
-	      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	    }
-	    return new ResponseEntity<>(acte, HttpStatus.OK);
+	  public ResponseEntity<ResponsePageable<ActeDeces>> getAllActeDeces(
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page-1, size);
+        ResponsePageable<ActeDeces> acteDeces = acteDecesService.findAll(pageable);
+	    return new ResponseEntity<>(acteDeces, HttpStatus.OK);
 	  }
-
 
 	@GetMapping("/{id}")
 	  public ResponseEntity<ActeDeces> getActeDecesById(@PathVariable(value = "id") String id) {
-		ActeDeces acte = acteDecesRepository.findByIdActeDeces(id);
+		ActeDeces acte = acteDecesService.findById(id);
 	    return new ResponseEntity<>(acte, HttpStatus.OK);
 	  }
 
 	@PutMapping("/{id}")
-	public ResponseEntity<ActeDeces> updateActeDeces(@PathVariable(value = "id") String id, @RequestBody DecesRequest decesRequest)
+	public ResponseEntity<ActeDeces> updateActeDeces(
+        @PathVariable(value = "id") String id,
+        @RequestBody DecesRequest decesRequest)
 	{
-        ActeDeces acteDeces = acteDecesRepository.findByIdActeDeces(id);
-
-        PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(acteDeces.getPremierCopie().getIdPremierCopie());
-        Maire maire = maireRepository.findById(decesRequest.getIdMaire()).get();
-
-        Defunt defunt = acteDeces.getDefunt();
-        PieceDeces pieceDeces = acteDeces.getPieceDeces();
-
-        defunt.setProfessionDefunt(decesRequest.getProfessionDefunt());
-        defunt.setAdresseDefunt(decesRequest.getAdresseDefunt());
-        defunt.setDateDeces(decesRequest.getDateDeces());
-        defunt.setLieuDeces(decesRequest.getLieuDeces());
-        defunt.setHeureDeces(decesRequest.getHeureDeces());
-        defuntRepository.save(defunt);
-
-        pieceDeces.setNomPiece(decesRequest.isNomPiece());
-        pieceDecesRepository.save(pieceDeces);
-
-        //acteDeces.setIdActeDeces(decesRequest.getIdActeDeces());
-        acteDeces.setDateDeclaration(decesRequest.getDateDeclaration());
-        acteDeces.setHeureDeclaration(decesRequest.getHeureDeclaration());
-        acteDeces.setNomDeclarant(decesRequest.getNomDeclarant());
-        acteDeces.setPrenomsDeclarant(decesRequest.getPrenomsDeclarant());
-        acteDeces.setProfessionDeclarant(decesRequest.getProfessionDeclarant());
-        acteDeces.setLieuNaissanceDeclarant(decesRequest.getLieuNaissanceDeclarant());
-        acteDeces.setAdresseDeclarant(decesRequest.getAdresseDeclarant());
-        acteDeces.setDateNaissanceDeclarant(decesRequest.getDateNaissanceDeclarant());
-        acteDeces.setDate(decesRequest.getDate());
-        acteDeces.setMaire(maire);
-        acteDeces.setDefunt(defunt);
-        acteDeces.setPieceDeces(pieceDeces);
-        acteDeces.setPremierCopie(premierCopie);
-
-        acteDecesRepository.save(acteDeces);
+        ActeDeces acteDeces = acteDecesService.update(id, decesRequest);
         return new ResponseEntity<>(acteDeces, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<HttpStatus>  supprActeDeces(@PathVariable("id") String idActeDeces)
 	{
-        ActeDeces acteDeces = acteDecesRepository.findByIdActeDeces(idActeDeces);
-        Defunt defunt = acteDeces.getDefunt();
-        PieceDeces pieceDeces = acteDeces.getPieceDeces();
-
-        acteDecesRepository.delete(acteDeces);
-        defuntRepository.delete(defunt);
-        pieceDecesRepository.delete(pieceDeces);
-
+        acteDecesService.delete(idActeDeces);
         return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

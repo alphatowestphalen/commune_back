@@ -54,13 +54,12 @@ public class ActeCelibataireService {
 
 				return numeroActeCelibataire;
 			}
-
-				num = 1;
-				annee = currentYear;
-				String idActeCelibataire = Long.toString(num).concat(Integer.toString(annee));
-				numeroActeCelibataire.idActeCelibataire = idActeCelibataire;
-				numeroActeCelibataire.annee = annee;
-				numeroActeCelibataire.numero = num;
+                    num = 1;
+                    annee = currentYear;
+                    String idActeCelibataire = Long.toString(num).concat(Integer.toString(annee));
+                    numeroActeCelibataire.idActeCelibataire = idActeCelibataire;
+                    numeroActeCelibataire.annee = annee;
+                    numeroActeCelibataire.numero = num;
 
 				return numeroActeCelibataire;
 		}

@@ -355,7 +355,7 @@ public class PremierCopieController {
 	@Transactional
 	@PutMapping("/restore/{idPremierCopie}")
 	public ResponseEntity<HttpStatus> restorePremierCopie(@PathVariable("idPremierCopie") String idPremierCopie) {
-        premierCopieRepository.restorePremierCopie(idPremierCopie);
+        premierCopieRepository.undoDeletePremierCopie(idPremierCopie);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

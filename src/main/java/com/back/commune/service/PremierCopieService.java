@@ -107,16 +107,6 @@ public class PremierCopieService {
 		premierCopieRepository.personneDecede(idPremierCopie);
 	}
 	*/
-
-	public void supprimerPCopie( String IdPremierCopie)
-	{
-        System.out.println("id copie "+IdPremierCopie);
-		PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
-        System.out.println("premier "+premierCopie.getIdPremierCopie());
-		if(premierCopie == null) throw new RuntimeException("Premier Copie not found");
-        premierCopieRepository.deletePremierCopie(premierCopie.getIdPremierCopie());
-	}
-
     public PremierCopie findById(String IdPremierCopie){
         return premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
     }
@@ -131,7 +121,6 @@ public class PremierCopieService {
     public List<Adoption> getAdoptions(String idPremierCopie){
         return premierCopieRepository.findAllAdoptions(idPremierCopie);
     }
-
     public PremierCopie save(PremierCopieRequest premierCopieRequest){
         NumeroRequest numeroRequest = numeroCopie();
         Optional<Maire> optionalMaire = maireRepository.findById(premierCopieRequest.getIdMaire());
@@ -199,12 +188,17 @@ public class PremierCopieService {
             numeroRequest.annee
         );
         premierCopie.setCreatedBy(user);
-
-        System.out.println("user "+user.getUsername());
         return premierCopieRepository.save(premierCopie);
     }
 
     public void setDefuntPremierCopie(String IdPremierCopie){
-        supprimerPCopie(IdPremierCopie);
+        PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
+        if(premierCopie == null) throw new RuntimeException("Premier Copie not found");
+        premierCopieRepository.deletePremierCopie(premierCopie.getIdPremierCopie());
+    }
+    public void setUndoDefuntPremierCopie(String IdPremierCopie){
+        PremierCopie premierCopie = premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
+        if(premierCopie == null) throw new RuntimeException("Premier Copie not found");
+        premierCopieRepository.undoDeletePremierCopie(premierCopie.getIdPremierCopie());
     }
 }

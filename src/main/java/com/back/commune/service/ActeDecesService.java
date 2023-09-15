@@ -1,11 +1,16 @@
 package com.back.commune.service;
 
+import com.back.commune.exceptions.NotFoundDataException;
 import com.back.commune.model.*;
 import com.back.commune.repository.TypeRepository;
 import com.back.commune.repository.MaireRepository;
 import com.back.commune.repository.PieceDecesRepository;
 import com.back.commune.request.DecesRequest;
+import com.back.commune.utils.ResponsePageable;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.back.commune.repository.ActeDecesRepository;
@@ -14,24 +19,23 @@ import com.back.commune.request.NumeroActeDecesRequest;
 import javax.transaction.Transactional;
 
 @Service
+@AllArgsConstructor
 public class ActeDecesService {
 
 	@Autowired(required = false)
     TypeRepository typeRepository;
-	@Autowired
-	ActeDecesRepository acteDecesRepository;
-    @Autowired
-    MaireRepository maireRepository;
-    @Autowired
-    PremierCopieService premierCopieService;
 
-    @Autowired
-    PieceDecesRepository pieceDecesRepository;
+	private final ActeDecesRepository acteDecesRepository;
 
-    @Autowired
-    DefuntService defuntService;
+    private final PremierCopieService premierCopieService;
 
-	public NumeroActeDecesRequest numeroActeDeces()
+    private final PieceDecesRepository pieceDecesRepository;
+
+    private final DefuntService defuntService;
+
+    private final MaireService maireService;
+
+    public NumeroActeDecesRequest numeroActeDeces()
 	{
 		NumeroActeDecesRequest numActeDeces = new NumeroActeDecesRequest();
 
@@ -42,8 +46,6 @@ public class ActeDecesService {
 		{
 			long num = deces.getNumero();
 			int annee = deces.getAnnee();
-
-
 			if(annee == currentYear)
 			{
 				long numero = num + 1;
@@ -75,13 +77,12 @@ public class ActeDecesService {
 			return numActeDeces;
 		}
 	}
-
-
     @Transactional
-    public ActeDeces save(DecesRequest decesRequest, String idPremierCopie) {
-        Maire maire = maireRepository.findById( decesRequest.getIdMaire()).get();
-        PremierCopie premierCopie = premierCopieService.findById(idPremierCopie);
-
+    public ActeDeces save(DecesRequest decesRequest) {
+        Maire maire = maireService.findById( decesRequest.getIdMaire());
+        if (maire == null) throw new NotFoundDataException("Not found Maire with id = " + decesRequest.getIdMaire());
+        PremierCopie premierCopie = premierCopieService.findById(decesRequest.getIdPremierCopie());
+        if(premierCopie == null) throw new NotFoundDataException("Not found PremierCopie with id = " + decesRequest.getIdPremierCopie());
         PieceDeces pieceDeces = new PieceDeces(
             decesRequest.isNomPiece());
         pieceDecesRepository.save(pieceDeces);
@@ -111,12 +112,70 @@ public class ActeDecesService {
             maire,
             defunt,
             pieceDeces,
-            decesRequest.getCreatedDate(),
             premierCopie,
             numActeDeces.numero,
             numActeDeces.annee
         );
-        premierCopieService.setDefuntPremierCopie(idPremierCopie);
+        premierCopieService.setDefuntPremierCopie(decesRequest.getIdPremierCopie());
         return acteDecesRepository.save(actedeces);
+    }
+
+    public ResponsePageable<ActeDeces> findAll(Pageable pageable){
+        Page<ActeDeces> acteDeces = acteDecesRepository.findAll(pageable);
+        return new ResponsePageable<>(acteDeces);
+    }
+
+    public ActeDeces findById(String id) {
+        ActeDeces acteDeces = acteDecesRepository.findByIdActeDeces(id);
+        if(acteDeces == null) throw new NotFoundDataException("Not found ActeDeces with id = " + id);
+        return acteDeces;
+    }
+
+    public void delete(String idActeDeces) {
+        ActeDeces acteDeces =  findById(idActeDeces);
+        if (acteDeces == null) throw new NotFoundDataException("Not found ActeDeces with id = " + idActeDeces);
+        premierCopieService.setDefuntPremierCopie(acteDeces.getPremierCopie().getIdPremierCopie());
+        acteDecesRepository.deleteById(idActeDeces);
+    }
+
+    public ActeDeces update(String idActe, DecesRequest decesRequest){
+        ActeDeces acteDeces = findById(idActe);
+        if(acteDeces == null) throw new NotFoundDataException("Not found ActeDeces with id = " + idActe);
+
+        PremierCopie premierCopie = premierCopieService.findById(decesRequest.getIdPremierCopie());
+        if(premierCopie == null) throw new NotFoundDataException("Not found PremierCopie with id = " + decesRequest.getIdPremierCopie());
+
+        Maire maire =  maireService.findById( decesRequest.getIdMaire());
+        if(maire == null) throw new NotFoundDataException("Not found Maire with id = " + decesRequest.getIdMaire());
+
+        Defunt defunt = acteDeces.getDefunt();
+        PieceDeces pieceDeces = acteDeces.getPieceDeces();
+
+        defunt.setProfessionDefunt(decesRequest.getProfessionDefunt());
+        defunt.setAdresseDefunt(decesRequest.getAdresseDefunt());
+        defunt.setDateDeces(decesRequest.getDateDeces());
+        defunt.setLieuDeces(decesRequest.getLieuDeces());
+        defunt.setHeureDeces(decesRequest.getHeureDeces());
+
+        defunt =  defuntService.save(defunt);
+
+        pieceDeces.setNomPiece(decesRequest.isNomPiece());
+        pieceDecesRepository.save(pieceDeces);
+
+        acteDeces.setDateDeclaration(decesRequest.getDateDeclaration());
+        acteDeces.setHeureDeclaration(decesRequest.getHeureDeclaration());
+        acteDeces.setNomDeclarant(decesRequest.getNomDeclarant());
+        acteDeces.setPrenomsDeclarant(decesRequest.getPrenomsDeclarant());
+        acteDeces.setProfessionDeclarant(decesRequest.getProfessionDeclarant());
+        acteDeces.setLieuNaissanceDeclarant(decesRequest.getLieuNaissanceDeclarant());
+        acteDeces.setAdresseDeclarant(decesRequest.getAdresseDeclarant());
+        acteDeces.setDateNaissanceDeclarant(decesRequest.getDateNaissanceDeclarant());
+        acteDeces.setDate(decesRequest.getDate());
+        acteDeces.setMaire(maire);
+        acteDeces.setDefunt(defunt);
+        acteDeces.setPieceDeces(pieceDeces);
+        acteDeces.setPremierCopie(premierCopie);
+
+        return acteDecesRepository.save(acteDeces);
     }
 }
