@@ -41,7 +41,7 @@ public class MariageEIRequest extends  MariageRequest{
 
     private String professionPereHomme;
 
-    private String adressPereHomme;
+    private String adressePereHomme;
 
 
     //MERE HOMME

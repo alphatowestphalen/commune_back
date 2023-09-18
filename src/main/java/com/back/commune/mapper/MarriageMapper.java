@@ -104,7 +104,7 @@ public class MarriageMapper {
         pere.setNomPere(request.getNomPereHomme());
         pere.setDateNaissPere(request.getDateNaissPereHomme());
         pere.setPrenomsPere(request.getPrenomsPereHomme());
-        pere.setAdressePere(request.getAdressPereHomme());
+        pere.setAdressePere(request.getAdressePereHomme());
         pere.setProfessionPere(request.getProfessionPereHomme());
         pere.setLieuNaissPere(request.getLieuNaissHomme());
         return pere;
