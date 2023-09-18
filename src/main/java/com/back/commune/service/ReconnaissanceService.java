@@ -1,5 +1,7 @@
 package com.back.commune.service;
 
+import com.back.commune.DTO.StatisiqueAbstract;
+import com.back.commune.DTO.StatistiqueReconnaissance;
 import com.back.commune.DTO.resulSet.CountByUser;
 import com.back.commune.exceptions.NotFoundDataException;
 import com.back.commune.model.auth.User;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -87,12 +90,62 @@ public class ReconnaissanceService {
         reconnaissanceRepository.delete(reconnaissance);
     }
 
+    public StatistiqueReconnaissance getStatistiqueReconnaissance() {
+        StatistiqueReconnaissance statistiqueReconnaissance = new StatistiqueReconnaissance();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
 
-    public Long count() {
-        return reconnaissanceRepository.count();
+        statisiqueAbstract.setNombre(reconnaissanceRepository.count());
+        statisiqueAbstract.setNombreParUtilisateur(reconnaissanceRepository.countByUser());
+
+        statistiqueReconnaissance.setNombre(statisiqueAbstract);
+
+        return statistiqueReconnaissance;
+    }
+    public StatistiqueReconnaissance getStatistiqueReconnaissanceDays(Date date) {
+        StatistiqueReconnaissance statistiqueReconnaissance = new StatistiqueReconnaissance();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(reconnaissanceRepository.countByDays(date));
+        statisiqueAbstract.setNombreParUtilisateur(reconnaissanceRepository.countByUserDay(date));
+
+        statistiqueReconnaissance.setNombre(statisiqueAbstract);
+
+        return statistiqueReconnaissance;
     }
 
-    public List<CountByUser> countByUser() {
-        return reconnaissanceRepository.countByUser();
+    public StatistiqueReconnaissance getStatistiqueReconnaissanceDays(Date date1, Date date2) {
+        StatistiqueReconnaissance statistiqueReconnaissance = new StatistiqueReconnaissance();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(reconnaissanceRepository.countByDays(date1,date2));
+        statisiqueAbstract.setNombreParUtilisateur(reconnaissanceRepository.countByUserDay(date1, date2));
+
+        statistiqueReconnaissance.setNombre(statisiqueAbstract);
+
+        return statistiqueReconnaissance;
+    }
+
+    public StatistiqueReconnaissance getStatistiqueReconnaissanceMonth(String month, String year) {
+        StatistiqueReconnaissance statistiqueReconnaissance = new StatistiqueReconnaissance();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(reconnaissanceRepository.countByMonth(month, year));
+        statisiqueAbstract.setNombreParUtilisateur(reconnaissanceRepository.countByUserMonth(month, year));
+
+        statistiqueReconnaissance.setNombre(statisiqueAbstract);
+
+        return statistiqueReconnaissance;
+    }
+
+    public StatistiqueReconnaissance getStatistiqueReconnaissanceYear(String year) {
+        StatistiqueReconnaissance statistiqueReconnaissance = new StatistiqueReconnaissance();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(reconnaissanceRepository.countByYear(year));
+        statisiqueAbstract.setNombreParUtilisateur(reconnaissanceRepository.countByUserYear(year));
+
+        statistiqueReconnaissance.setNombre(statisiqueAbstract);
+
+        return statistiqueReconnaissance;
     }
 }

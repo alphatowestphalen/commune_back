@@ -1,4 +1,6 @@
 package com.back.commune.service;
+import com.back.commune.DTO.StatisiqueAbstract;
+import com.back.commune.DTO.StatistiqueAdoption;
 import com.back.commune.DTO.resulSet.CountByUser;
 import com.back.commune.exceptions.NotFoundDataException;
 import com.back.commune.model.Adoption;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -82,5 +85,65 @@ public class AdoptionService {
 
     public List<CountByUser> countByUser() {
         return adoptionRepository.countByUser();
+    }
+
+    public StatistiqueAdoption getStatistiqueAdoption() {
+        StatistiqueAdoption statistiqueAdoption = new StatistiqueAdoption();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(adoptionRepository.count());
+        statisiqueAbstract.setNombreParUtilisateur(adoptionRepository.countByUser());
+
+        statistiqueAdoption.setNombre(statisiqueAbstract);
+
+        return statistiqueAdoption;
+    }
+
+    public StatistiqueAdoption getStatistiqueAdoptionDays(Date day) {
+        StatistiqueAdoption statistiqueAdoption = new StatistiqueAdoption();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(adoptionRepository.countByDays(day));
+        statisiqueAbstract.setNombreParUtilisateur(adoptionRepository.countByUserDay(day));
+
+        statistiqueAdoption.setNombre(statisiqueAbstract);
+
+        return statistiqueAdoption;
+    }
+
+    public StatistiqueAdoption getStatistiqueAdoptionDays(Date day1, Date day2) {
+        StatistiqueAdoption statistiqueAdoption = new StatistiqueAdoption();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(adoptionRepository.countByDays(day1, day2));
+        statisiqueAbstract.setNombreParUtilisateur(adoptionRepository.countByUserDay(day1, day2));
+
+        statistiqueAdoption.setNombre(statisiqueAbstract);
+
+        return statistiqueAdoption;
+    }
+
+    public StatistiqueAdoption getStatistiqueAdoptionMonth(String month, String Year) {
+        StatistiqueAdoption statistiqueAdoption = new StatistiqueAdoption();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(adoptionRepository.countByMonth(month, Year));
+        statisiqueAbstract.setNombreParUtilisateur(adoptionRepository.countByUserMonth(month, Year));
+
+        statistiqueAdoption.setNombre(statisiqueAbstract);
+
+        return statistiqueAdoption;
+    }
+
+    public StatistiqueAdoption getStatistiqueAdoptionYear(String Year) {
+        StatistiqueAdoption statistiqueAdoption = new StatistiqueAdoption();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(adoptionRepository.countByYear(Year));
+        statisiqueAbstract.setNombreParUtilisateur(adoptionRepository.countByUserYear(Year));
+
+        statistiqueAdoption.setNombre(statisiqueAbstract);
+
+        return statistiqueAdoption;
     }
 }

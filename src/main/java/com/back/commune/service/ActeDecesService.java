@@ -1,5 +1,7 @@
 package com.back.commune.service;
 
+import com.back.commune.DTO.StatisiqueAbstract;
+import com.back.commune.DTO.StatistiaqueDeces;
 import com.back.commune.DTO.resulSet.CountByUser;
 import com.back.commune.exceptions.NotFoundDataException;
 import com.back.commune.model.*;
@@ -16,6 +18,7 @@ import com.back.commune.repository.ActeDecesRepository;
 import com.back.commune.request.NumeroActeDecesRequest;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -192,12 +195,64 @@ public class ActeDecesService {
 
         return acteDecesRepository.save(acteDeces);
     }
+    public StatistiaqueDeces getStatistiaqueDeces() {
+        StatistiaqueDeces statistiaqueDeces = new StatistiaqueDeces();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
 
-    public Long count() {
-        return acteDecesRepository.count();
+        statisiqueAbstract.setNombre(acteDecesRepository.count());
+        statisiqueAbstract.setNombreParUtilisateur(acteDecesRepository.countByUser());
+
+        statistiaqueDeces.setNombre(statisiqueAbstract);
+
+        return statistiaqueDeces;
     }
 
-    public List<CountByUser> countByUser() {
-        return acteDecesRepository.countByUser();
+    public StatistiaqueDeces getStatistiaqueDecesDays(Date day) {
+        StatistiaqueDeces statistiaqueDeces = new StatistiaqueDeces();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(acteDecesRepository.countByDays(day));
+        statisiqueAbstract.setNombreParUtilisateur(acteDecesRepository.countByUserDay(day));
+
+        statistiaqueDeces.setNombre(statisiqueAbstract);
+
+        return statistiaqueDeces;
     }
+
+    public StatistiaqueDeces getStatistiaqueDecesDays(Date day1, Date day2) {
+        StatistiaqueDeces statistiaqueDeces = new StatistiaqueDeces();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(acteDecesRepository.countByDays(day1, day2));
+        statisiqueAbstract.setNombreParUtilisateur(acteDecesRepository.countByUserDay(day1, day2));
+
+        statistiaqueDeces.setNombre(statisiqueAbstract);
+
+        return statistiaqueDeces;
+    }
+
+    public StatistiaqueDeces getStatistiaqueDecesMonth(String month, String year) {
+        StatistiaqueDeces statistiaqueDeces = new StatistiaqueDeces();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(acteDecesRepository.countByMonth(month, year));
+        statisiqueAbstract.setNombreParUtilisateur(acteDecesRepository.countByUserMonth(month, year));
+
+        statistiaqueDeces.setNombre(statisiqueAbstract);
+
+        return statistiaqueDeces;
+    }
+
+    public StatistiaqueDeces getStatistiaqueDecesYear(String year) {
+        StatistiaqueDeces statistiaqueDeces = new StatistiaqueDeces();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(acteDecesRepository.countByYear(year));
+        statisiqueAbstract.setNombreParUtilisateur(acteDecesRepository.countByUserYear(year));
+
+        statistiaqueDeces.setNombre(statisiqueAbstract);
+
+        return statistiaqueDeces;
+    }
+
 }

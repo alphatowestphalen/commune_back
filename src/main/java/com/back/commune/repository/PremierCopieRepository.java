@@ -1,6 +1,7 @@
 package com.back.commune.repository;
 
 
+import java.util.Date;
 import java.util.List;
 
 import com.back.commune.DTO.resulSet.CountByUser;
@@ -52,6 +53,35 @@ public interface PremierCopieRepository extends JpaRepository<PremierCopie, Stri
 
     @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idPremierCopie)) FROM PremierCopie p WHERE p.deleted = false group by p.createdBy")
     List<CountByUser> countByUser();
+    @Query("select count(p.idPremierCopie) from PremierCopie  p WHERE p.deleted = false and day(p.createdDate) = day(:jour) ")
+    Long countByDays(@Param("jour") Date date);
+
+    @Query("select count(p.idPremierCopie) from PremierCopie  p WHERE p.deleted = false and day(p.createdDate) between day(:jour1) and day(:jour2) ")
+    Long countByDays(@Param("jour1") Date date1, @Param("jour2") Date date2);
+
+    @Query("select count(p.idPremierCopie) from PremierCopie  p " +
+        "WHERE p.deleted = false and month (p.createdDate) = :mois and year (p.createdDate) = :anne")
+    Long countByMonth(@Param("mois") String month, @Param("anne") String year);
+
+    @Query("select count(p.idPremierCopie) from PremierCopie  p " +
+        "WHERE p.deleted = false and year (p.createdDate) = :anne ")
+    Long countByYear(@Param("anne") String year);
+
+    @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idPremierCopie)) " +
+        "FROM PremierCopie p WHERE p.deleted = false and DAY(p.createdDate) = day(:jour) group by p.createdBy")
+    List<CountByUser> countByUserDay(@Param("jour") Date date);
+
+    @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idPremierCopie)) " +
+        "FROM PremierCopie p WHERE p.deleted = false and DAY(p.createdDate) between day(:jour1) and day(:jour2)  group by p.createdBy")
+    List<CountByUser> countByUserDay(@Param("jour1") Date date1, @Param("jour2") Date date2);
+
+    @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idPremierCopie)) " +
+        "FROM PremierCopie p WHERE p.deleted = false and month (p.createdDate) = :mois and year(p.createdDate) = :anne group by p.createdBy")
+    List<CountByUser> countByUserMonth(@Param("mois") String month, @Param("anne") String year);
+
+    @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idPremierCopie)) " +
+        "FROM PremierCopie p WHERE p.deleted = false and year(p.createdDate) = :anne group by p.createdBy")
+    List<CountByUser> countByUserYear(@Param("anne") String date);
     @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idPremierCopie)) FROM PremierCopie p WHERE p.deleted = true group by p.createdBy")
     List<CountByUser> countDeletedByUser();
 }

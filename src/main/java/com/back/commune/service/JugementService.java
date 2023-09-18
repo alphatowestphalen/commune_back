@@ -1,5 +1,7 @@
 package com.back.commune.service;
 
+import com.back.commune.DTO.StatisiqueAbstract;
+import com.back.commune.DTO.StatistiqueJugement;
 import com.back.commune.DTO.resulSet.CountByUser;
 import com.back.commune.exceptions.NotFoundDataException;
 import com.back.commune.model.PremierCopie;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -101,4 +104,66 @@ public class JugementService {
     public List<CountByUser> countByUser() {
         return jugementRepository.countByUser();
     }
+
+    public StatistiqueJugement getStatistiqueJugement() {
+        StatistiqueJugement statiqueJugement = new StatistiqueJugement();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(jugementRepository.count());
+        statisiqueAbstract.setNombreParUtilisateur(jugementRepository.countByUser());
+
+        statiqueJugement.setNombre(statisiqueAbstract);
+
+        return statiqueJugement;
+    }
+
+    public StatistiqueJugement getStatistiqueJugementDays(Date day) {
+        StatistiqueJugement statiqueJugement = new StatistiqueJugement();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(jugementRepository.countByDays(day));
+        statisiqueAbstract.setNombreParUtilisateur(jugementRepository.countByUserDay(day));
+
+        statiqueJugement.setNombre(statisiqueAbstract);
+
+        return statiqueJugement;
+    }
+
+    public StatistiqueJugement getStatistiqueJugementDays(Date day1, Date day2) {
+        StatistiqueJugement statiqueJugement = new StatistiqueJugement();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(jugementRepository.countByDays(day1, day2));
+        statisiqueAbstract.setNombreParUtilisateur(jugementRepository.countByUserDay(day1, day2));
+
+        statiqueJugement.setNombre(statisiqueAbstract);
+
+        return statiqueJugement;
+    }
+
+    public StatistiqueJugement getStatistiqueJugementMonth(String month, String year) {
+        StatistiqueJugement statiqueJugement = new StatistiqueJugement();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(jugementRepository.countByMonth(month, year));
+        statisiqueAbstract.setNombreParUtilisateur(jugementRepository.countByUserMonth(month, year));
+
+        statiqueJugement.setNombre(statisiqueAbstract);
+
+        return statiqueJugement;
+    }
+    public StatistiqueJugement getStatistiqueJugementYear( String year) {
+        StatistiqueJugement statiqueJugement = new StatistiqueJugement();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(jugementRepository.countByYear(year));
+        statisiqueAbstract.setNombreParUtilisateur(jugementRepository.countByUserYear(year));
+
+        statiqueJugement.setNombre(statisiqueAbstract);
+
+        return statiqueJugement;
+    }
+
+
+
 }

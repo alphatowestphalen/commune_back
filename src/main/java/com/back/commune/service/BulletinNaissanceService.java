@@ -1,5 +1,7 @@
 package com.back.commune.service;
 
+import com.back.commune.DTO.StatisiqueAbstract;
+import com.back.commune.DTO.StatistiqueBulletinNaiss;
 import com.back.commune.DTO.resulSet.CountByUser;
 import com.back.commune.exceptions.NotFoundDataException;
 import com.back.commune.model.BulletinNaissance;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -105,7 +108,64 @@ public class BulletinNaissanceService {
         return bulletinNaissanceRepository.count();
     }
 
-    public List<CountByUser> countByUser() {
-        return bulletinNaissanceRepository.countByUser();
+    public StatistiqueBulletinNaiss getStatistiqueBulletinNaiss() {
+        StatistiqueBulletinNaiss statistiqueBulletinNaiss = new StatistiqueBulletinNaiss();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(bulletinNaissanceRepository.count());
+        statisiqueAbstract.setNombreParUtilisateur(bulletinNaissanceRepository.countByUser());
+
+        statistiqueBulletinNaiss.setNombre(statisiqueAbstract);
+
+        return statistiqueBulletinNaiss;
     }
+
+    public StatistiqueBulletinNaiss getStatistiqueBulletinNaissDays(Date day) {
+        StatistiqueBulletinNaiss statistiqueBulletinNaiss = new StatistiqueBulletinNaiss();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(bulletinNaissanceRepository.countByDays(day));
+        statisiqueAbstract.setNombreParUtilisateur(bulletinNaissanceRepository.countByUserDay(day));
+
+        statistiqueBulletinNaiss.setNombre(statisiqueAbstract);
+
+        return statistiqueBulletinNaiss;
+    }
+
+    public StatistiqueBulletinNaiss getStatistiqueBulletinNaissDays(Date day1, Date day2) {
+        StatistiqueBulletinNaiss statistiqueBulletinNaiss = new StatistiqueBulletinNaiss();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(bulletinNaissanceRepository.countByDays(day1, day2));
+        statisiqueAbstract.setNombreParUtilisateur(bulletinNaissanceRepository.countByUserDay(day1, day2));
+
+        statistiqueBulletinNaiss.setNombre(statisiqueAbstract);
+
+        return statistiqueBulletinNaiss;
+    }
+
+    public StatistiqueBulletinNaiss getStatistiqueBulletinNaissMonth(String month, String year) {
+        StatistiqueBulletinNaiss statistiqueBulletinNaiss = new StatistiqueBulletinNaiss();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(bulletinNaissanceRepository.countByMonth(month, year));
+        statisiqueAbstract.setNombreParUtilisateur(bulletinNaissanceRepository.countByUserMonth(month, year));
+
+        statistiqueBulletinNaiss.setNombre(statisiqueAbstract);
+
+        return statistiqueBulletinNaiss;
+    }
+
+    public StatistiqueBulletinNaiss getStatistiqueBulletinNaissMonth(String year) {
+        StatistiqueBulletinNaiss statistiqueBulletinNaiss = new StatistiqueBulletinNaiss();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(bulletinNaissanceRepository.countByYear(year));
+        statisiqueAbstract.setNombreParUtilisateur(bulletinNaissanceRepository.countByUserYear(year));
+
+        statistiqueBulletinNaiss.setNombre(statisiqueAbstract);
+
+        return statistiqueBulletinNaiss;
+    }
+
 }

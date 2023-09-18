@@ -1,5 +1,7 @@
 package com.back.commune.service;
 
+import com.back.commune.DTO.StatisiqueAbstract;
+import com.back.commune.DTO.StatistiqueMariage;
 import com.back.commune.DTO.resulSet.CountByUser;
 import com.back.commune.exceptions.NotFoundDataException;
 import com.back.commune.mapper.MarriageMapper;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -50,53 +53,6 @@ public class MariageService {
         this.maireService = maireService;
     }
 
-    /*
-    public NumeroMariageRequest numeroMariage()
-	{
-		NumeroMariageRequest numeroMariage = new NumeroMariageRequest();
-
-		Mariage mariage = mariageRepository.chercherMariage();
-		int currentYear = typeRepository.year;
-
-		if(mariage != null)
-		{
-			long num = mariage.getNumero();
-			int annee = mariage.getAnnee();
-
-
-			if(annee == currentYear)
-			{
-				long numero = num + 1;
-				String idMariage = Long.toString(numero).concat(Integer.toString(annee));
-				numeroMariage.idMariage = idMariage;
-				numeroMariage.annee = annee;
-				numeroMariage.numero = numero;
-
-				return numeroMariage;
-			}
-			num = 1;
-			annee = currentYear;
-			String idMariage = Long.toString(num).concat(Integer.toString(annee));
-			numeroMariage.idMariage = idMariage;
-			numeroMariage.annee = annee;
-			numeroMariage.numero = num;
-
-			return numeroMariage;
-
-			}
-		else
-		{
-			long numero = 1;
-			int annee = currentYear;
-			String idMariage = Long.toString(numero).concat(Integer.toString(annee));
-			numeroMariage.idMariage = idMariage;
-			numeroMariage.annee = annee;
-			numeroMariage.numero = numero;
-
-			return numeroMariage;
-		}
-	}*/
-
     public Homme saveHomme(Homme homme){
         return hommeRepository.save(homme);
     }
@@ -111,11 +67,9 @@ public class MariageService {
         return mereRepository.save(mere);
     }
 
-
     public Temoin saveTemoin(Temoin temoin){
         return temoinRepository.save(temoin);
     }
-
 
     // add mariage interne interne
     @Transactional
@@ -274,11 +228,61 @@ public class MariageService {
         return mariageRepository.findAll();
     }
 
-    public Long count() {
-        return mariageRepository.count();
+    public StatistiqueMariage getStatistiqueMariage() {
+        StatistiqueMariage statistiqueMariage = new StatistiqueMariage();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(mariageRepository.count());
+        statisiqueAbstract.setNombreParUtilisateur(mariageRepository.countByUser());
+
+        statistiqueMariage.setNombre(statisiqueAbstract);
+
+        return statistiqueMariage;
+    }
+    private StatistiqueMariage getStatistiqueMariageDays(Date day) {
+        StatistiqueMariage statistiqueMariage = new StatistiqueMariage();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(mariageRepository.countByDays(day));
+        statisiqueAbstract.setNombreParUtilisateur(mariageRepository.countByUserDay(day));
+
+        statistiqueMariage.setNombre(statisiqueAbstract);
+
+        return statistiqueMariage;
     }
 
-    public List<CountByUser> countByUser() {
-        return mariageRepository.countByUser();
+    private StatistiqueMariage getStatistiqueMariageDays(Date day1, Date day2) {
+        StatistiqueMariage statistiqueMariage = new StatistiqueMariage();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(mariageRepository.countByDays(day1, day2));
+        statisiqueAbstract.setNombreParUtilisateur(mariageRepository.countByUserDay(day1, day2));
+
+        statistiqueMariage.setNombre(statisiqueAbstract);
+
+        return statistiqueMariage;
+    }
+
+    private StatistiqueMariage getStatistiqueMariageMonth(String month, String year) {
+        StatistiqueMariage statistiqueMariage = new StatistiqueMariage();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(mariageRepository.countByMonth(month, year));
+        statisiqueAbstract.setNombreParUtilisateur(mariageRepository.countByUserMonth(month, year));
+
+        statistiqueMariage.setNombre(statisiqueAbstract);
+
+        return statistiqueMariage;
+    }
+    private StatistiqueMariage getStatistiqueMariageYear(String month, String year) {
+        StatistiqueMariage statistiqueMariage = new StatistiqueMariage();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(mariageRepository.countByMonth(month, year));
+        statisiqueAbstract.setNombreParUtilisateur(mariageRepository.countByUserMonth(month, year));
+
+        statistiqueMariage.setNombre(statisiqueAbstract);
+
+        return statistiqueMariage;
     }
 }
