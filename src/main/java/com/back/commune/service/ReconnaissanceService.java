@@ -125,7 +125,7 @@ public class ReconnaissanceService {
         return statistiqueReconnaissance;
     }
 
-    public StatistiqueReconnaissance getStatistiqueReconnaissanceMonth(String month, String year) {
+    public StatistiqueReconnaissance getStatistiqueReconnaissanceMonth(Integer month, Integer year) {
         StatistiqueReconnaissance statistiqueReconnaissance = new StatistiqueReconnaissance();
         StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
 
@@ -137,7 +137,7 @@ public class ReconnaissanceService {
         return statistiqueReconnaissance;
     }
 
-    public StatistiqueReconnaissance getStatistiqueReconnaissanceYear(String year) {
+    public StatistiqueReconnaissance getStatistiqueReconnaissanceYear(Integer year) {
         StatistiqueReconnaissance statistiqueReconnaissance = new StatistiqueReconnaissance();
         StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
 

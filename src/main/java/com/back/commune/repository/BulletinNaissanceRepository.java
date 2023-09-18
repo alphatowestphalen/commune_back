@@ -27,11 +27,11 @@ public interface BulletinNaissanceRepository extends JpaRepository<BulletinNaiss
 
     @Query("select count(p.idBulletinNaissance) from BulletinNaissance  p " +
         "WHERE  month (p.createdDate) = :mois and year (p.createdDate) = :anne")
-    long countByMonth(@Param("mois") String month, @Param("anne") String year);
+    long countByMonth(@Param("mois") Integer month, @Param("anne") Integer year);
 
     @Query("select count(p.idBulletinNaissance) from BulletinNaissance  p " +
         "WHERE  year (p.createdDate) = :anne ")
-    long countByYear(@Param("anne") String year);
+    long countByYear(@Param("anne") Integer year);
 
     @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idBulletinNaissance)) " +
         "FROM BulletinNaissance p WHERE  DAY(p.createdDate) = day(:jour) group by p.createdBy")
@@ -43,9 +43,9 @@ public interface BulletinNaissanceRepository extends JpaRepository<BulletinNaiss
 
     @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idBulletinNaissance)) " +
         "FROM BulletinNaissance p WHERE  month (p.createdDate) = :mois and year(p.createdDate) = :anne group by p.createdBy")
-    List<CountByUser> countByUserMonth(@Param("mois") String month, @Param("anne") String year);
+    List<CountByUser> countByUserMonth(@Param("mois") Integer month, @Param("anne") Integer year);
 
     @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idBulletinNaissance)) " +
         "FROM BulletinNaissance p WHERE  year(p.createdDate) = :anne group by p.createdBy")
-    List<CountByUser> countByUserYear(@Param("anne") String date);
+    List<CountByUser> countByUserYear(@Param("anne") Integer date);
 }

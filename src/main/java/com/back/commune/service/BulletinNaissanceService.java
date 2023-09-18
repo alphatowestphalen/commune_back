@@ -144,7 +144,7 @@ public class BulletinNaissanceService {
         return statistiqueBulletinNaiss;
     }
 
-    public StatistiqueBulletinNaiss getStatistiqueBulletinNaissMonth(String month, String year) {
+    public StatistiqueBulletinNaiss getStatistiqueBulletinNaissMonth(Integer month, Integer year) {
         StatistiqueBulletinNaiss statistiqueBulletinNaiss = new StatistiqueBulletinNaiss();
         StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
 
@@ -156,7 +156,7 @@ public class BulletinNaissanceService {
         return statistiqueBulletinNaiss;
     }
 
-    public StatistiqueBulletinNaiss getStatistiqueBulletinNaissYear(String year) {
+    public StatistiqueBulletinNaiss getStatistiqueBulletinNaissYear(Integer year) {
         StatistiqueBulletinNaiss statistiqueBulletinNaiss = new StatistiqueBulletinNaiss();
         StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
 

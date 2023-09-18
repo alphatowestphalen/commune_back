@@ -55,7 +55,7 @@ public class PremierCopieStatService {
         return statistiquePremierCopie;
     }
 
-    public StatistiquePremierCopie getStatistiquePremierCopieMonth(String mois, String anne){
+    public StatistiquePremierCopie getStatistiquePremierCopieMonth(Integer mois, Integer anne){
         StatistiquePremierCopie statistiquePremierCopie = new StatistiquePremierCopie();
         StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
 
@@ -67,7 +67,7 @@ public class PremierCopieStatService {
         return statistiquePremierCopie;
     }
 
-    public StatistiquePremierCopie getStatistiquePremierCopieYear(String anne){
+    public StatistiquePremierCopie getStatistiquePremierCopieYear(Integer anne){
         StatistiquePremierCopie statistiquePremierCopie = new StatistiquePremierCopie();
         StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
 

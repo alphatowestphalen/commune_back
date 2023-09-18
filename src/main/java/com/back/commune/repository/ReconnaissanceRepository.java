@@ -32,11 +32,11 @@ public interface ReconnaissanceRepository extends JpaRepository<Reconnaissance, 
 
     @Query("select count(p.idReconnaissance) from Reconnaissance  p " +
         "WHERE  month (p.createdDate) = :mois and year (p.createdDate) = :anne")
-    Long countByMonth(@Param("mois") String month, @Param("anne") String year);
+    Long countByMonth(@Param("mois") Integer month, @Param("anne") Integer year);
 
     @Query("select count(p.idReconnaissance) from Reconnaissance  p " +
         "WHERE  year (p.createdDate) = :anne ")
-    Long countByYear(@Param("anne") String year);
+    Long countByYear(@Param("anne") Integer year);
 
     @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idReconnaissance)) " +
         "FROM Reconnaissance p WHERE  DAY(p.createdDate) = day(:jour) group by p.createdBy")
@@ -48,9 +48,9 @@ public interface ReconnaissanceRepository extends JpaRepository<Reconnaissance, 
 
     @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idReconnaissance)) " +
         "FROM Reconnaissance p WHERE  month (p.createdDate) = :mois and year(p.createdDate) = :anne group by p.createdBy")
-    List<CountByUser> countByUserMonth(@Param("mois") String month, @Param("anne") String year);
+    List<CountByUser> countByUserMonth(@Param("mois") Integer month, @Param("anne") Integer year);
 
     @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idReconnaissance)) " +
         "FROM Reconnaissance p WHERE  year(p.createdDate) = :anne group by p.createdBy")
-    List<CountByUser> countByUserYear(@Param("anne") String date);
+    List<CountByUser> countByUserYear(@Param("anne") Integer date);
 }

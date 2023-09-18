@@ -263,7 +263,7 @@ public class MariageService {
         return statistiqueMariage;
     }
 
-    public StatistiqueMariage getStatistiqueMariageMonth(String month, String year) {
+    public StatistiqueMariage getStatistiqueMariageMonth(Integer month, Integer year) {
         StatistiqueMariage statistiqueMariage = new StatistiqueMariage();
         StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
 
@@ -274,7 +274,7 @@ public class MariageService {
 
         return statistiqueMariage;
     }
-    public StatistiqueMariage getStatistiqueMariageYear(String year) {
+    public StatistiqueMariage getStatistiqueMariageYear(Integer year) {
         StatistiqueMariage statistiqueMariage = new StatistiqueMariage();
         StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
 

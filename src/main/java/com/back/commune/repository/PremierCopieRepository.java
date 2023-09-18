@@ -61,11 +61,11 @@ public interface PremierCopieRepository extends JpaRepository<PremierCopie, Stri
 
     @Query("select count(p.idPremierCopie) from PremierCopie  p " +
         "WHERE p.deleted = false and month (p.createdDate) = :mois and year (p.createdDate) = :anne")
-    Long countByMonth(@Param("mois") String month, @Param("anne") String year);
+    Long countByMonth(@Param("mois") Integer month, @Param("anne") Integer year);
 
     @Query("select count(p.idPremierCopie) from PremierCopie  p " +
-        "WHERE p.deleted = false and year (p.createdDate) = :anne ")
-    Long countByYear(@Param("anne") String year);
+        "WHERE p.deleted = false and year(p.createdDate) = :anne ")
+    Long countByYear(@Param("anne") Integer year);
 
     @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idPremierCopie)) " +
         "FROM PremierCopie p WHERE p.deleted = false and DAY(p.createdDate) = day(:jour) group by p.createdBy")
@@ -77,11 +77,11 @@ public interface PremierCopieRepository extends JpaRepository<PremierCopie, Stri
 
     @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idPremierCopie)) " +
         "FROM PremierCopie p WHERE p.deleted = false and month (p.createdDate) = :mois and year(p.createdDate) = :anne group by p.createdBy")
-    List<CountByUser> countByUserMonth(@Param("mois") String month, @Param("anne") String year);
+    List<CountByUser> countByUserMonth(@Param("mois") Integer month, @Param("anne") Integer year);
 
     @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idPremierCopie)) " +
         "FROM PremierCopie p WHERE p.deleted = false and year(p.createdDate) = :anne group by p.createdBy")
-    List<CountByUser> countByUserYear(@Param("anne") String date);
+    List<CountByUser> countByUserYear(@Param("anne") Integer year);
     @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idPremierCopie)) FROM PremierCopie p WHERE p.deleted = true group by p.createdBy")
     List<CountByUser> countDeletedByUser();
 }

@@ -123,7 +123,7 @@ public class AdoptionService {
         return statistiqueAdoption;
     }
 
-    public StatistiqueAdoption getStatistiqueAdoptionMonth(String month, String Year) {
+    public StatistiqueAdoption getStatistiqueAdoptionMonth(Integer month, Integer Year) {
         StatistiqueAdoption statistiqueAdoption = new StatistiqueAdoption();
         StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
 
@@ -135,7 +135,7 @@ public class AdoptionService {
         return statistiqueAdoption;
     }
 
-    public StatistiqueAdoption getStatistiqueAdoptionYear(String Year) {
+    public StatistiqueAdoption getStatistiqueAdoptionYear(Integer Year) {
         StatistiqueAdoption statistiqueAdoption = new StatistiqueAdoption();
         StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
 

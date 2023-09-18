@@ -231,7 +231,7 @@ public class ActeDecesService {
         return statistiaqueDeces;
     }
 
-    public StatistiaqueDeces getStatistiaqueDecesMonth(String month, String year) {
+    public StatistiaqueDeces getStatistiaqueDecesMonth(Integer month, Integer year) {
         StatistiaqueDeces statistiaqueDeces = new StatistiaqueDeces();
         StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
 
@@ -243,7 +243,7 @@ public class ActeDecesService {
         return statistiaqueDeces;
     }
 
-    public StatistiaqueDeces getStatistiaqueDecesYear(String year) {
+    public StatistiaqueDeces getStatistiaqueDecesYear(Integer year) {
         StatistiaqueDeces statistiaqueDeces = new StatistiaqueDeces();
         StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
 

@@ -68,7 +68,7 @@ public class StatistiqueService {
         return statistique;
     }
 
-    public Statistique getStatistiqueMonth(String month, String year) {
+    public Statistique getStatistiqueMonth(Integer month, Integer year) {
         Statistique statistique = new Statistique();
 
         statistique.setPremierCopie(premierCopieStatService.getStatistiquePremierCopieMonth(month, year));
@@ -82,7 +82,7 @@ public class StatistiqueService {
         return statistique;
     }
 
-    public Statistique getStatistiqueYear(String year) {
+    public Statistique getStatistiqueYear(Integer year) {
         Statistique statistique = new Statistique();
 
         statistique.setPremierCopie(premierCopieStatService.getStatistiquePremierCopieYear(year));

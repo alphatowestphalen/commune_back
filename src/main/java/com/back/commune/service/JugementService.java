@@ -141,7 +141,7 @@ public class JugementService {
         return statiqueJugement;
     }
 
-    public StatistiqueJugement getStatistiqueJugementMonth(String month, String year) {
+    public StatistiqueJugement getStatistiqueJugementMonth(Integer month, Integer year) {
         StatistiqueJugement statiqueJugement = new StatistiqueJugement();
         StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
 
@@ -152,7 +152,7 @@ public class JugementService {
 
         return statiqueJugement;
     }
-    public StatistiqueJugement getStatistiqueJugementYear( String year) {
+    public StatistiqueJugement getStatistiqueJugementYear( Integer year) {
         StatistiqueJugement statiqueJugement = new StatistiqueJugement();
         StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
 
