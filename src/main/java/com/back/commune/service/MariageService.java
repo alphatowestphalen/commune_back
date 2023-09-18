@@ -239,7 +239,7 @@ public class MariageService {
 
         return statistiqueMariage;
     }
-    private StatistiqueMariage getStatistiqueMariageDays(Date day) {
+    public StatistiqueMariage getStatistiqueMariageDays(Date day) {
         StatistiqueMariage statistiqueMariage = new StatistiqueMariage();
         StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
 
@@ -251,7 +251,7 @@ public class MariageService {
         return statistiqueMariage;
     }
 
-    private StatistiqueMariage getStatistiqueMariageDays(Date day1, Date day2) {
+    public StatistiqueMariage getStatistiqueMariageDays(Date day1, Date day2) {
         StatistiqueMariage statistiqueMariage = new StatistiqueMariage();
         StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
 
@@ -263,7 +263,7 @@ public class MariageService {
         return statistiqueMariage;
     }
 
-    private StatistiqueMariage getStatistiqueMariageMonth(String month, String year) {
+    public StatistiqueMariage getStatistiqueMariageMonth(String month, String year) {
         StatistiqueMariage statistiqueMariage = new StatistiqueMariage();
         StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
 
@@ -274,12 +274,12 @@ public class MariageService {
 
         return statistiqueMariage;
     }
-    private StatistiqueMariage getStatistiqueMariageYear(String month, String year) {
+    public StatistiqueMariage getStatistiqueMariageYear(String year) {
         StatistiqueMariage statistiqueMariage = new StatistiqueMariage();
         StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
 
-        statisiqueAbstract.setNombre(mariageRepository.countByMonth(month, year));
-        statisiqueAbstract.setNombreParUtilisateur(mariageRepository.countByUserMonth(month, year));
+        statisiqueAbstract.setNombre(mariageRepository.countByYear(year));
+        statisiqueAbstract.setNombreParUtilisateur(mariageRepository.countByUserYear(year));
 
         statistiqueMariage.setNombre(statisiqueAbstract);
 

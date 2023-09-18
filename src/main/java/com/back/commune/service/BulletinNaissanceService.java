@@ -156,7 +156,7 @@ public class BulletinNaissanceService {
         return statistiqueBulletinNaiss;
     }
 
-    public StatistiqueBulletinNaiss getStatistiqueBulletinNaissMonth(String year) {
+    public StatistiqueBulletinNaiss getStatistiqueBulletinNaissYear(String year) {
         StatistiqueBulletinNaiss statistiqueBulletinNaiss = new StatistiqueBulletinNaiss();
         StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
 
