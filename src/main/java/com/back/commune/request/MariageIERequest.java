@@ -29,12 +29,7 @@ public class MariageIERequest extends  MariageRequest {
 
     private String adresseFemme;
 
-    private String typeFemme;
-
-
     // PERE FEMME
-    private Long idPereFemme;
-
     private String nomPereFemme;
 
     private String prenomsPereFemme;
@@ -49,9 +44,6 @@ public class MariageIERequest extends  MariageRequest {
 
 
     //MERE FEMME
-
-    private long idMereFemme;
-
     private String nomMereFemme;
 
     private String prenomsMereFemme;

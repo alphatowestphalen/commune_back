@@ -51,8 +51,8 @@ public class StatistiqueController {
 
     @GetMapping("/month/{month}/{year}")
     public ResponseEntity<Statistique> getStatistiqueMonth(
-        @RequestParam("month")String month,
-        @RequestParam("year") String year
+        @PathVariable("month")String month,
+        @PathVariable("year") String year
     ){
         return ResponseEntity.ok().body(
             statistiqueService.getStatistiqueMonth(
@@ -64,7 +64,7 @@ public class StatistiqueController {
 
     @GetMapping("/year/{year}")
     public ResponseEntity<Statistique> getStatistiqueYear(
-        @RequestParam("year") String year
+        @PathVariable("year") String year
     ){
         return ResponseEntity.ok().body(statistiqueService.getStatistiqueYear(Integer.parseInt(year)));
     }

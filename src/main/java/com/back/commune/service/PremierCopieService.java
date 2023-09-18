@@ -108,7 +108,7 @@ public class PremierCopieService {
 	}
 	*/
     public PremierCopie findById(String IdPremierCopie){
-        return premierCopieRepository.findByIdPremierCopie(IdPremierCopie);
+        return premierCopieRepository.findById(IdPremierCopie).orElseThrow(()->new NotFoundDataException("Not Found Premier Copie!"));
     }
 
     public ResponsePageable<PremierCopie> findAll(Pageable pageable){

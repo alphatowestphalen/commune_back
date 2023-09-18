@@ -130,6 +130,7 @@ public class MariageService {
         femme = saveFemme(femme);
 
         MariageMixteHomme mariageMixteHomme = new MariageMixteHomme(mariage, copieHomme, femme);
+        System.out.println("copie : " + mariageMixteHomme.getHomme().getIdPremierCopie());
         mariageMixteHomme.setCreatedBy(user);
         mariageMixteHomme.setMaire(maire);
         mariageMixteHomme.setTemoinFemme(temoinFemme);
@@ -284,5 +285,14 @@ public class MariageService {
         statistiqueMariage.setNombre(statisiqueAbstract);
 
         return statistiqueMariage;
+    }
+
+    public Mariage findById(Long id){
+       return mariageRepository.findById(id).orElseThrow(()-> new NotFoundDataException("Not found Mariage with id " + id));
+    }
+
+    public void delete(Long id) {
+        Mariage mariage = findById(id) ;
+        mariageRepository.delete(mariage);
     }
 }

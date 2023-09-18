@@ -9,7 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class MariageEIRequest extends  MariageRequest{
+
     private String idPremierCopieFemme;
+
     // Info Homme
     private String nationaliteHomme;
 
@@ -26,11 +28,7 @@ public class MariageEIRequest extends  MariageRequest{
 
     private String adresseHomme;
 
-    private String typeHomme;
-
     // PERE HOMME
-    private long idPereHomme;
-
     private String nomPereHomme;
 
     private String prenomsPereHomme;
@@ -45,9 +43,6 @@ public class MariageEIRequest extends  MariageRequest{
 
 
     //MERE HOMME
-
-    private long idMereHomme;
-
     private String nomMereHomme;
 
     private String prenomsMereHomme;

@@ -14,8 +14,6 @@ public class MariageEERequest extends  MariageRequest{
 
     private String nationaliteHomme;
 
-    private String idPremierCopieHomme;
-
     private String nomHomme;
 
     private String prenomsHomme;
@@ -29,11 +27,7 @@ public class MariageEERequest extends  MariageRequest{
 
     private String adresseHomme;
 
-    private String typeHomme;
-
     // PERE HOMME
-    private long idPereHomme;
-
     private String nomPereHomme;
 
     private String prenomsPereHomme;
@@ -48,9 +42,6 @@ public class MariageEERequest extends  MariageRequest{
 
 
     //MERE HOMME
-
-    private long idMereHomme;
-
     private String nomMereHomme;
 
     private String prenomsMereHomme;
@@ -65,9 +56,6 @@ public class MariageEERequest extends  MariageRequest{
 
 
     // Info Femme
-
-    private String idPremierCopieFemme;
-
     private String nationaliteFemme;
 
     private String nomFemme;
@@ -85,8 +73,6 @@ public class MariageEERequest extends  MariageRequest{
 
 
     // PERE FEMME
-    private long idPereFemme;
-
     private String nomPereFemme;
 
     private String prenomsPereFemme;
@@ -101,9 +87,6 @@ public class MariageEERequest extends  MariageRequest{
 
 
     //MERE FEMME
-
-    private long idMereFemme;
-
     private String nomMereFemme;
 
     private String prenomsMereFemme;
