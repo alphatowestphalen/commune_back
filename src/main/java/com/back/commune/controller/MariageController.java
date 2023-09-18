@@ -1,5 +1,6 @@
 package com.back.commune.controller;
 
+import com.back.commune.DTO.MariageDTO;
 import com.back.commune.model.mariage.Mariage;
 import com.back.commune.request.MariageEERequest;
 import com.back.commune.request.MariageEIRequest;
@@ -54,9 +55,9 @@ public class MariageController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Mariage> getMariage(@PathVariable String id){
+    public ResponseEntity<MariageDTO> getMariage(@PathVariable String id){
         System.out.println(id);
         Mariage mariage =  mariageService.findById(Long.parseLong(id));
-        return new ResponseEntity<>(mariage,HttpStatus.OK);
+        return new ResponseEntity<>(new MariageDTO(mariage),HttpStatus.OK);
     }
 }

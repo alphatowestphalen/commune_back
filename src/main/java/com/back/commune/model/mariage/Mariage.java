@@ -8,10 +8,16 @@ import javax.validation.constraints.NotNull;
 import com.back.commune.model.Maire;
 import com.back.commune.model.Temoin;
 import com.back.commune.model.auth.User;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name="mariage")
+@Getter
+@Setter
+@NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "typeMariage")
 public class Mariage {
@@ -53,75 +59,6 @@ public class Mariage {
 
 	@CreationTimestamp
 	private Instant createdDate;
-
-    public User getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Long getIdMariage() {
-		return idMariage;
-	}
-
-	public void setIdMariage(Long idMariage) {
-		this.idMariage = idMariage;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getDateMariage() {
-		return dateMariage;
-	}
-
-	public void setDateMariage(String dateMariage) {
-		this.dateMariage = dateMariage;
-	}
-
-	public String getHeureMariage() {
-		return heureMariage;
-	}
-
-	public void setHeureMariage(String heureMariage) {
-		this.heureMariage = heureMariage;
-	}
-
-
-	public Maire getMaire() {
-		return maire;
-	}
-
-	public void setMaire(Maire maire) {
-		this.maire = maire;
-	}
-
-	public Instant getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(Instant createdDate) {
-		this.createdDate = createdDate;
-	}
-
-    public String getNumeroCopieMariage() {
-        return numeroCopieMariage;
-    }
-
-    public void setNumeroCopieMariage(String numeroCopieMariage) {
-        this.numeroCopieMariage = numeroCopieMariage;
-    }
-
-    public Mariage() {
-	}
-
     public Mariage(Mariage mariage) {
         this.idMariage = mariage.getIdMariage();
         this.description = mariage.getDescription();
@@ -130,7 +67,6 @@ public class Mariage {
         this.numeroCopieMariage = mariage.getNumeroCopieMariage();
         this.maire = mariage.getMaire();
     }
-
     public Mariage(Long idMariage, String description, String dateMariage, String heureMariage, String numeroCopieMariage, Maire maire) {
         this.idMariage = idMariage;
         this.description = description;
@@ -138,21 +74,5 @@ public class Mariage {
         this.heureMariage = heureMariage;
         this.numeroCopieMariage = numeroCopieMariage;
         this.maire = maire;
-    }
-
-    public Temoin getTemoinFemme() {
-        return temoinFemme;
-    }
-
-    public void setTemoinFemme(Temoin temoinFemme) {
-        this.temoinFemme = temoinFemme;
-    }
-
-    public Temoin getTemoinHomme() {
-        return temoinHomme;
-    }
-
-    public void setTemoinHomme(Temoin temoinHomme) {
-        this.temoinHomme = temoinHomme;
     }
 }
