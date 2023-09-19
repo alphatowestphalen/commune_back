@@ -26,6 +26,9 @@ public interface PremierCopieRepository extends JpaRepository<PremierCopie, Stri
 	@Query(value = "SELECT * FROM premier_copie p ORDER BY p.created_date DESC LIMIT 1 ", nativeQuery = true)
 	PremierCopie chercherPremierCopie();
 
+    @Query("select p from PremierCopie p where p.deleted = false and p.enfant.sexeEnfant like %:sexeEnfant% ")
+    Page<PremierCopie> findBySexeEnfant(@Param("sexeEnfant") String sexeEnfant, Pageable pageable);
+
     @Query(value = "SELECT p FROM PremierCopie p WHERE p.deleted = false ORDER BY p.createdDate DESC")
     List<PremierCopie> findAllPremierCopie();
 	Page<PremierCopie> findAll(Pageable pageable);

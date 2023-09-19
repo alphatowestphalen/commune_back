@@ -9,6 +9,7 @@ import com.back.commune.request.PremierCopieRequest;
 import com.back.commune.utils.ResponsePageable;
 import com.back.commune.security.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -34,8 +35,8 @@ public class PremierCopieService {
     public PremierCopieService(
         PieceJustificativeRepository pieceJustificativeRepository, EnfantRepository enfantRepository, MereRepository mereRepository,
         PereRepository pereRepository,
-        PremierCopieRepository premierCopieRepository,
         @Autowired(required = false) TypeRepository typeRepository,
+        PremierCopieRepository premierCopieRepository,
         MaireRepository maireRepository,
         DeclarantRepository declarantRepository,
         UserService userService) {
@@ -49,9 +50,6 @@ public class PremierCopieService {
         this.declarantRepository = declarantRepository;
         this.userService = userService;
     }
-
-
-
     public NumeroRequest numeroCopie()
 	{
 		NumeroRequest numeroRequest = new NumeroRequest();
@@ -99,20 +97,18 @@ public class PremierCopieService {
 			return numeroRequest;
 
 		}
-
 	}
-
-/*	public void PersonDecede(@Param("idPremierCopie") String idPremierCopie)
-	{
-		premierCopieRepository.personneDecede(idPremierCopie);
-	}
-	*/
     public PremierCopie findById(String IdPremierCopie){
         return premierCopieRepository.findById(IdPremierCopie).orElseThrow(()->new NotFoundDataException("Not Found Premier Copie!"));
     }
 
     public ResponsePageable<PremierCopie> findAll(Pageable pageable){
-        return new ResponsePageable<PremierCopie>(premierCopieRepository.findAll(pageable));
+        return new ResponsePageable<>(premierCopieRepository.findAll(pageable));
+    }
+
+    public ResponsePageable<PremierCopie> findBySexeEnfant(String sexeEnfant, Pageable pageable){
+        Page<PremierCopie> page = premierCopieRepository.findBySexeEnfant(sexeEnfant, pageable);
+        return new ResponsePageable<>(page);
     }
 
     public List<Reconnaissance> getReconnaissances(String idPremierCopie){

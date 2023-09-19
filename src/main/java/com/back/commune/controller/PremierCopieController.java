@@ -87,13 +87,23 @@ public class PremierCopieController {
 
 	@GetMapping
 //	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<ResponsePageable<PremierCopie>> getAllPremierCopie(
-			        @RequestParam(defaultValue = "1") int page,
-			        @RequestParam(defaultValue = "10") int size)
+    public ResponseEntity<ResponsePageable<PremierCopie>> getAllPremierCopie(
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "10") int size)
     {
 	        Pageable pageable = PageRequest.of(page-1, size);
             ResponsePageable<PremierCopie> response =  premierCopieService.findAll(pageable);
             return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @GetMapping("/sexeEnfant/{sexeEnfant}")
+    public ResponseEntity<ResponsePageable<PremierCopie>> getAllPremierCopieBySexe(
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "10") int size,
+        @PathVariable("sexeEnfant") String sexeEnfant
+    ){
+        Pageable pageable = PageRequest.of(page-1, size);
+        ResponsePageable<PremierCopie> response =  premierCopieService.findBySexeEnfant(sexeEnfant, pageable);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 	@GetMapping("/{id}")
