@@ -1,5 +1,6 @@
 package com.back.commune.service;
 
+import com.back.commune.DTO.MariageDTO;
 import com.back.commune.DTO.StatisiqueAbstract;
 import com.back.commune.DTO.StatistiqueMariage;
 import com.back.commune.DTO.resulSet.CountByUser;
@@ -11,12 +12,17 @@ import com.back.commune.model.mariage.*;
 import com.back.commune.repository.*;
 import com.back.commune.request.*;
 import com.back.commune.security.services.UserService;
+import com.back.commune.utils.ResponsePageable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MariageService {
@@ -225,8 +231,13 @@ public class MariageService {
         return mariageRepository.save(mariageMixteFemme);
     }
 
-    public List<Mariage> getAllMariages() {
-        return mariageRepository.findAll();
+    public ResponsePageable<MariageDTO> getAllMariages(Pageable pageable){
+
+        Page<Mariage> page = mariageRepository.findAll(pageable);
+        List<Mariage> mariageList = page.getContent();
+        List<MariageDTO> mariageDTOS = mariageList.stream().map(MariageDTO::new).collect(Collectors.toList());
+        Page<MariageDTO> mariageDTOPage = new PageImpl<>(mariageDTOS,pageable,page.getTotalElements());
+        return new ResponsePageable<>(mariageDTOPage);
     }
 
     public StatistiqueMariage getStatistiqueMariage() {

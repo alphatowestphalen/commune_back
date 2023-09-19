@@ -26,21 +26,23 @@ public class MariageDTO {
     public <T extends Mariage > MariageDTO(T mariage) {
         temoinFemme = mariage.getTemoinFemme();
         temoinHomme = mariage.getTemoinHomme();
+        maire = mariage.getMaire();
         createdBy = mariage.getCreatedBy();
         createdDate = mariage.getCreatedDate();
         description = mariage.getDescription();
         idMariage = mariage.getIdMariage();
         dateMariage = mariage.getDateMariage();
         heureMariage= mariage.getHeureMariage();
+        getCouples(mariage);
     }
 
-    private <T extends Mariage > void getHomme(T mariage){
+    private <T extends Mariage > void getCouples(T mariage){
         if (mariage instanceof MariageAllExterne) {
             MariageAllExterne allExterne = (MariageAllExterne) mariage;
             getHommeFemmeEE(allExterne);
         }
         else if (mariage instanceof MariageAllInterne) {
-            MariageAllInterne allExterne = (MariageAllInterne) mariage;
+            getHommeFemmeII((MariageAllInterne) mariage);
         }
         else if (mariage instanceof MariageMixteHomme) {
             getHommeFemmeMH((MariageMixteHomme) mariage);
@@ -51,6 +53,7 @@ public class MariageDTO {
         else throw new IllegalArgumentException("mariage non reconnu");
     }
     private void getHommeFemmeEE(MariageAllExterne mariage){
+        typeMariage = "Externe-Externe";
         homme = mariage.getHomme();
         femme = mariage.getFemme();
     }
@@ -59,6 +62,7 @@ public class MariageDTO {
         typeMariage = "Interne-Interne";
         PremierCopie homeTmp = mariage.getHomme();
         homme = new Homme();
+        homme.setIdHomme(Long.parseLong(homeTmp.getIdPremierCopie()));
         homme.setMereHomme(homeTmp.getMere());
         homme.setPereHomme(homeTmp.getPere());
         homme.setDateNaissHomme(homeTmp.getEnfant().getDatenaissEnfant());
@@ -70,6 +74,7 @@ public class MariageDTO {
 
         PremierCopie femmeTmp = mariage.getFemme();
         femme = new Femme();
+        femme.setIdFemme(Long.parseLong(femmeTmp.getIdPremierCopie()));
         femme.setMereFemme(femmeTmp.getMere());
         femme.setPereFemme(femmeTmp.getPere());
         femme.setDateNaissFemme(femmeTmp.getEnfant().getDatenaissEnfant());
@@ -80,8 +85,10 @@ public class MariageDTO {
         homme.setLieuNaissHomme(femmeTmp.getEnfant().getLieunaissEnfant());
     }
     private void getHommeFemmeMF(MariageMixteFemme mariage){
+        typeMariage = "Externe-Interne";
         PremierCopie femmeTmp = mariage.getFemme();
         femme = new Femme();
+        femme.setIdFemme(Long.parseLong(femmeTmp.getIdPremierCopie()));
         femme.setMereFemme(femmeTmp.getMere());
         femme.setPereFemme(femmeTmp.getPere());
         femme.setDateNaissFemme(femmeTmp.getEnfant().getDatenaissEnfant());
@@ -94,9 +101,11 @@ public class MariageDTO {
         homme = mariage.getHomme();
     }
     private void getHommeFemmeMH(MariageMixteHomme mariage){
+        typeMariage = "Interne-Externe";
         femme = mariage.getFemme();
         PremierCopie hommeTmp = mariage.getHomme();
         homme = new Homme();
+        homme.setIdHomme(Long.parseLong(hommeTmp.getIdPremierCopie()));
         homme.setMereHomme(hommeTmp.getMere());
         homme.setPereHomme(hommeTmp.getPere());
         homme.setDateNaissHomme(hommeTmp.getEnfant().getDatenaissEnfant());

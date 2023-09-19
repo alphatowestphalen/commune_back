@@ -6,6 +6,9 @@ import com.back.commune.request.MariageEERequest;
 import com.back.commune.request.MariageEIRequest;
 import com.back.commune.request.MariageIERequest;
 import com.back.commune.request.MariageIIRequest;
+import com.back.commune.utils.ResponsePageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,8 +47,12 @@ public class MariageController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Mariage>> getAllMariages(){
-        return ResponseEntity.ok(mariageService.getAllMariages());
+    public ResponseEntity<ResponsePageable<MariageDTO>> getAllMariages(
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "10") int size)
+    {
+        Pageable pageable = PageRequest.of(page-1, size);
+        return ResponseEntity.ok(mariageService.getAllMariages(pageable));
     }
 
     @DeleteMapping("/{id}")
