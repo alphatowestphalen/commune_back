@@ -14,6 +14,7 @@ import com.back.commune.request.PremierCopieRequest;
 import com.back.commune.security.services.UserService;
 import com.back.commune.service.PremierCopieService;
 import com.back.commune.utils.ResponsePageable;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,35 +56,24 @@ import com.back.commune.repository.PremierCopieRepository;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/premierCopies")
-
+@AllArgsConstructor
 public class PremierCopieController {
-
-    @Autowired
     PieceJustificativeRepository pieceJustificativeRepository;
-    @Autowired
     EnfantRepository enfantRepository;
-    @Autowired
     MereRepository mereRepository;
-    @Autowired
     PereRepository pereRepository;
-    @Autowired
     DeclarantRepository declarantRepository;
-	@Autowired
 	MaireRepository maireRepository;
-    @Autowired
-    UserService userService;
-	@Autowired
     PremierCopieService premierCopieService;
-	@Autowired
 	PremierCopieRepository premierCopieRepository;
 
 	@PostMapping
 //	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-	  public ResponseEntity<PremierCopie> createPremierCopie(@RequestBody @Valid PremierCopieRequest premierCopieRequest)
-	  {
+    public ResponseEntity<PremierCopie> createPremierCopie(@RequestBody @Valid PremierCopieRequest premierCopieRequest)
+    {
           PremierCopie premierCopie = premierCopieService.save(premierCopieRequest);
           return new ResponseEntity<> (premierCopie, HttpStatus.CREATED);
-	  }
+    }
 
 	@GetMapping
 //	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
@@ -91,9 +81,9 @@ public class PremierCopieController {
         @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "10") int size)
     {
-	        Pageable pageable = PageRequest.of(page-1, size);
-            ResponsePageable<PremierCopie> response =  premierCopieService.findAll(pageable);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+        Pageable pageable = PageRequest.of(page-1, size);
+        ResponsePageable<PremierCopie> response =  premierCopieService.findAll(pageable);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @GetMapping("/sexeEnfant/{sexeEnfant}")
     public ResponseEntity<ResponsePageable<PremierCopie>> getAllPremierCopieBySexe(
@@ -156,108 +146,58 @@ public class PremierCopieController {
 			    premierCopie.setMentions(mentions);
 				return new ResponseEntity<>(premierCopie, HttpStatus.OK);
 
-	 }
+    }
 
 
-	 @GetMapping("/")
-	 //	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-		   public ResponseEntity<Map<String, Object>> findByIdPremiereCopie(
-		   @RequestParam(required = true) String idPremierCopie,
-		   @RequestParam(defaultValue = "0") int page,
-		   @RequestParam(defaultValue = "3") int size)
-		 {
-				try {
-					List<PremierCopie> premierCopies = new ArrayList<PremierCopie>();
-					Pageable paging = PageRequest.of(page, size);
+    @GetMapping("/")
+    //@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
+    public ResponseEntity<Map<String, Object>> findByIdPremiereCopie(
+       @RequestParam(required = true) String idPremierCopie,
+       @RequestParam(defaultValue = "0") int page,
+       @RequestParam(defaultValue = "3") int size)
+    {
+        List<PremierCopie> premierCopies = new ArrayList<PremierCopie>();
+        Pageable paging = PageRequest.of(page, size);
+        Page<PremierCopie> pagecopie;
+        System.out.println(idPremierCopie);
+        pagecopie = premierCopieRepository.findByIdPremierCopieStartsWith(idPremierCopie,paging);
+        premierCopies = pagecopie.getContent();
 
-					Page<PremierCopie> pagecopie;
-					// pagecopie = premierCopieRepository.findAll(paging);
+            Map<String, Object> response = new HashMap<>();
+            response.put("premierCopies", premierCopies);
+            response.put("currentPage", pagecopie.getNumber());
+            response.put("totalItems", pagecopie.getTotalElements());
+            response.put("totalPages", pagecopie.getTotalPages());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @GetMapping("/nomEnfant")
+    //@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
+    public ResponseEntity<Map<String, Object>> findByNomEnfant(
+       @RequestParam(required = true) String NomEnfant,
+       @RequestParam(required = true) String PrenomsEnfant,
+       @RequestParam(defaultValue = "1") int page,
+       @RequestParam(defaultValue = "10") int size)
+    {
+        List<PremierCopie> premierCopies = new ArrayList<PremierCopie>();
+        Pageable paging = PageRequest.of(page-1, size);
+        Page<PremierCopie> pagecopie;
+        pagecopie = premierCopieRepository.findByEnfantNomEnfantStartsWithOrEnfantPrenomsEnfantStartsWith(NomEnfant,PrenomsEnfant,paging);
+        premierCopies = pagecopie.getContent();
 
-
-					// if(idPremierCopie == 0)
-
-					// 	 pagecopie = premierCopieRepository.findAll(paging);
-
-					// else
-						System.out.println(idPremierCopie);
-						pagecopie = premierCopieRepository.findByIdPremierCopieStartsWith(idPremierCopie,paging);
-
-
-
-
-
-					premierCopies = pagecopie.getContent();
-
-
-						Map<String, Object> response = new HashMap<>();
-						response.put("premierCopies", premierCopies);
-						response.put("currentPage", pagecopie.getNumber());
-						response.put("totalItems", pagecopie.getTotalElements());
-						response.put("totalPages", pagecopie.getTotalPages());
-				 return new ResponseEntity<>(response, HttpStatus.OK);
-
-
-
-
-				} catch (Exception e) {
-					return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-				}
-
-
-		  }
-
-
-	 @GetMapping("/nomEnfant")
-	 //	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
-		   public ResponseEntity<Map<String, Object>> findByNomEnfant(
-		   @RequestParam(required = true) String NomEnfant,
-		   @RequestParam(required = true) String PrenomsEnfant,
-		   @RequestParam(defaultValue = "0") int page,
-		   @RequestParam(defaultValue = "3") int size)
-		 {
-				try {
-					List<PremierCopie> premierCopies = new ArrayList<PremierCopie>();
-					Pageable paging = PageRequest.of(page, size);
-
-					Page<PremierCopie> pagecopie;
-					// pagecopie = premierCopieRepository.findAll(paging);
-
-
-					// if(idPremierCopie == 0)
-
-					// 	 pagecopie = premierCopieRepository.findAll(paging);
-
-					// else
-
-						pagecopie = premierCopieRepository.findByEnfantNomEnfantStartsWithOrEnfantPrenomsEnfantStartsWith(NomEnfant,PrenomsEnfant,paging);
-
-					premierCopies = pagecopie.getContent();
-
-
-						Map<String, Object> response = new HashMap<>();
-						response.put("premierCopies", premierCopies);
-						response.put("currentPage", pagecopie.getNumber());
-						response.put("totalItems", pagecopie.getTotalElements());
-						response.put("totalPages", pagecopie.getTotalPages());
-				 return new ResponseEntity<>(response, HttpStatus.OK);
-
-
-
-
-				} catch (Exception e) {
-					return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-				}
-
-
-		  }
-
+            Map<String, Object> response = new HashMap<>();
+            response.put("premierCopies", premierCopies);
+            response.put("currentPage", pagecopie.getNumber());
+            response.put("totalItems", pagecopie.getTotalElements());
+            response.put("totalPages", pagecopie.getTotalPages());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 	@PutMapping("/{IdPremierCopie}")
 	// @PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<PremierCopie> updatePremierCopie(@PathVariable("IdPremierCopie") String IdPremierCopie,
-			@RequestBody PremierCopieRequest premierCopieRequest)
+	public ResponseEntity<PremierCopie> updatePremierCopie(
+        @PathVariable("IdPremierCopie") String IdPremierCopie,
+        @RequestBody PremierCopieRequest premierCopieRequest)
 	{
-		try {
 			PremierCopie premierCopie = premierCopieRepository.findById(IdPremierCopie)
 					.orElseThrow(() -> new ResourceNotFoundException("Not found Premier Copie with id = " + IdPremierCopie));;
 
@@ -322,13 +262,8 @@ public class PremierCopieController {
 			premierCopie.setPieceJustificative(pieceJustificative);
 			premierCopieRepository.save(premierCopie);
 
-	   return new ResponseEntity<>(premierCopie, HttpStatus.CREATED);
-		}
-		catch (Exception e) {
-		      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		    }
+	    return new ResponseEntity<>(premierCopie, HttpStatus.CREATED);
 	}
-
 	@DeleteMapping("/{IdPremierCopie}")
 	// @PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<HttpStatus>  supprPremierCopie(@PathVariable("IdPremierCopie") String IdPremierCopie)
@@ -349,7 +284,6 @@ public class PremierCopieController {
 
         return new ResponseEntity<>(HttpStatus.OK);
 	}
-
 	@GetMapping("LastPremiereCopie")
 	public String getLastIdPremierCopie() {
 		PremierCopie premierecopie = premierCopieRepository.findTopByOrderByIdPremierCopieDesc();
@@ -361,7 +295,6 @@ public class PremierCopieController {
 		return numerorequest.idPremierCopie;
 
 	}
-
 	@Transactional
 	@PutMapping("/restore/{idPremierCopie}")
 	public ResponseEntity<HttpStatus> restorePremierCopie(@PathVariable("idPremierCopie") String idPremierCopie) {
