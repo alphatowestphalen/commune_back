@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class DecesRequest {
 
 	private String dateDeclaration;
+
     private String idPremierCopie;
 
 	private String heureDeclaration;
@@ -32,15 +33,45 @@ public class DecesRequest {
 
 	private long idMaire;
 
+    private String nomDefunt;
+
+    private String prenomDefunt;
+
+    private String dateDeNaissDefunt;
+
+    private String lieuDeNaissDefunt;
+
+    private String cinDefunt;
+
+    private String dateCinDefunt;
+
+    private String lieuCinDefunt;
+
 	private String professionDefunt;
 
 	private String adresseDefunt;
+
+    private String nomMereDefunt;
+
+    private String nomPereDefunt;
 
 	private String dateDeces;
 
 	private String lieuDeces;
 
 	private String heureDeces;
+
+    private String dateEnterement;
+
+    private String heureEnterement;
+
+    private String lieuEnterement;
+
+    private String communeEnterement;
+
+    private String regionEnterement;
+
+    private boolean isFasanDehibe;
 
 	private boolean nomPiece;
 }

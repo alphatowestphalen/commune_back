@@ -2,12 +2,17 @@ package com.back.commune.service;
 
 import com.back.commune.DTO.StatisiqueAbstract;
 import com.back.commune.DTO.StatistiaqueDeces;
-import com.back.commune.DTO.resulSet.CountByUser;
 import com.back.commune.exceptions.NotFoundDataException;
+import com.back.commune.mapper.ActeDeDecesMapper;
 import com.back.commune.model.*;
+import com.back.commune.model.auth.User;
+import com.back.commune.model.deces.ActeDeces;
+import com.back.commune.model.deces.Defunt;
+import com.back.commune.repository.DefuntRepository;
 import com.back.commune.repository.TypeRepository;
 import com.back.commune.repository.PieceDecesRepository;
 import com.back.commune.request.DecesRequest;
+import com.back.commune.security.services.UserService;
 import com.back.commune.utils.ResponsePageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,37 +24,35 @@ import com.back.commune.request.NumeroActeDecesRequest;
 
 import javax.transaction.Transactional;
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class ActeDecesService {
-
     private final TypeRepository typeRepository;
-
 	private final ActeDecesRepository acteDecesRepository;
-
     private final PremierCopieService premierCopieService;
-
     private final PieceDecesRepository pieceDecesRepository;
-
-    private final DefuntService defuntService;
-
+    private final DefuntRepository defuntRepository;
     private final MaireService maireService;
+    private final UserService userService;
+    private final ActeDeDecesMapper acteDeDecesMapper;
 
     @Autowired
-    public ActeDecesService(@Autowired(required = false) TypeRepository typeRepository,
-                            ActeDecesRepository acteDecesRepository,
-                            PremierCopieService premierCopieService,
-                            PieceDecesRepository pieceDecesRepository,
-                            DefuntService defuntService,
-                            MaireService maireService)
+    public ActeDecesService(
+        @Autowired(required = false) TypeRepository typeRepository,
+        ActeDecesRepository acteDecesRepository,
+        PremierCopieService premierCopieService,
+        PieceDecesRepository pieceDecesRepository,
+        DefuntRepository defuntRepository, MaireService maireService,
+        UserService userService, ActeDeDecesMapper acteDeDecesMapper)
     {
         this.typeRepository = typeRepository;
         this.acteDecesRepository = acteDecesRepository;
         this.premierCopieService = premierCopieService;
         this.pieceDecesRepository = pieceDecesRepository;
-        this.defuntService = defuntService;
+        this.defuntRepository = defuntRepository;
         this.maireService = maireService;
+        this.userService = userService;
+        this.acteDeDecesMapper = acteDeDecesMapper;
     }
 
     public NumeroActeDecesRequest numeroActeDeces()
@@ -96,45 +99,29 @@ public class ActeDecesService {
 	}
     @Transactional
     public ActeDeces save(DecesRequest decesRequest) {
+        User user = userService.getAuthenticatedUser();
+        if (user == null) throw new NotFoundDataException("Not found User authenticated");
         Maire maire = maireService.findById( decesRequest.getIdMaire());
         if (maire == null) throw new NotFoundDataException("Not found Maire with id = " + decesRequest.getIdMaire());
-        PremierCopie premierCopie = premierCopieService.findById(decesRequest.getIdPremierCopie());
-        if(premierCopie == null) throw new NotFoundDataException("Not found PremierCopie with id = " + decesRequest.getIdPremierCopie());
+        PremierCopie premierCopie = null;
+        if(decesRequest.getIdPremierCopie() != null){
+            premierCopie = premierCopieService.findById(decesRequest.getIdPremierCopie());
+            if (premierCopie == null)
+                throw new NotFoundDataException("Not found PremierCopie with id = " + decesRequest.getIdPremierCopie());
+        }
         PieceDeces pieceDeces = new PieceDeces(
             decesRequest.isNomPiece());
         pieceDecesRepository.save(pieceDeces);
+        Defunt defunt = acteDeDecesMapper.convertToDefunt(decesRequest);
+        defuntRepository.save(defunt);
+        System.out.println(defunt);
 
-        Defunt defunt = new Defunt(
-            decesRequest.getProfessionDefunt(),
-            decesRequest.getAdresseDefunt(),
-            decesRequest.getDateDeces(),
-            decesRequest.getLieuDeces(),
-            decesRequest.getHeureDeces());
-
-        defunt =  defuntService.save(defunt);
-
-        NumeroActeDecesRequest numActeDeces = numeroActeDeces();
-
-        ActeDeces actedeces = new ActeDeces(
-            numActeDeces.idActeDeces,
-            decesRequest.getDateDeclaration(),
-            decesRequest.getHeureDeclaration(),
-            decesRequest.getNomDeclarant(),
-            decesRequest.getPrenomsDeclarant(),
-            decesRequest.getProfessionDeclarant(),
-            decesRequest.getLieuNaissanceDeclarant(),
-            decesRequest.getAdresseDeclarant(),
-            decesRequest.getDateNaissanceDeclarant(),
-            decesRequest.getDate(),
-            maire,
-            defunt,
-            pieceDeces,
-            premierCopie,
-            numActeDeces.numero,
-            numActeDeces.annee
-        );
+        ActeDeces acteDeces = acteDeDecesMapper.convertToActeDeDeces(decesRequest);
+        acteDeces.setCreatedBy(user);
+        acteDeces.setMaire(maire);
+        if(decesRequest.getIdPremierCopie() != null) acteDeces.setPremierCopie(premierCopie);
         premierCopieService.setDefuntPremierCopie(decesRequest.getIdPremierCopie());
-        return acteDecesRepository.save(actedeces);
+        return acteDecesRepository.save(acteDeces);
     }
 
     public ResponsePageable<ActeDeces> findAll(Pageable pageable){
@@ -156,6 +143,9 @@ public class ActeDecesService {
     }
 
     public ActeDeces update(String idActe, DecesRequest decesRequest){
+        User user = userService.getAuthenticatedUser();
+        if (user == null) throw new NotFoundDataException("Not found User authenticated");
+
         ActeDeces acteDeces = findById(idActe);
         if(acteDeces == null) throw new NotFoundDataException("Not found ActeDeces with id = " + idActe);
 
@@ -173,8 +163,22 @@ public class ActeDecesService {
         defunt.setDateDeces(decesRequest.getDateDeces());
         defunt.setLieuDeces(decesRequest.getLieuDeces());
         defunt.setHeureDeces(decesRequest.getHeureDeces());
+        defunt.setDateEnterement(decesRequest.getDateEnterement());
+        defunt.setHeureEnterement(decesRequest.getHeureEnterement());
+        defunt.setLieuEnterement(decesRequest.getLieuEnterement());
+        defunt.setCommuneEnterement(decesRequest.getCommuneEnterement());
+        defunt.setRegionEnterement(decesRequest.getRegionEnterement());
+        defunt.setNomDefunt(decesRequest.getNomDefunt());
+        defunt.setPrenomDefunt(decesRequest.getPrenomDefunt());
+        defunt.setDateDeNaissDefunt(decesRequest.getDateDeNaissDefunt());
+        defunt.setLieuDeNaissDefunt(decesRequest.getLieuDeNaissDefunt());
+        defunt.setDateCinDefunt(decesRequest.getDateCinDefunt());
+        defunt.setLieuCinDefunt(decesRequest.getLieuCinDefunt());
+        defunt.setNomPereDefunt(defunt.getNomPereDefunt());
+        defunt.setNomMereDefunt(defunt.getNomMereDefunt());
+        defunt.setFasanDehibe(decesRequest.isFasanDehibe());
 
-        defunt =  defuntService.save(defunt);
+        defunt =  defuntRepository.save(defunt);
 
         pieceDeces.setNomPiece(decesRequest.isNomPiece());
         pieceDecesRepository.save(pieceDeces);
@@ -192,6 +196,7 @@ public class ActeDecesService {
         acteDeces.setDefunt(defunt);
         acteDeces.setPieceDeces(pieceDeces);
         acteDeces.setPremierCopie(premierCopie);
+        acteDeces.setCreatedBy(user);
 
         return acteDecesRepository.save(acteDeces);
     }

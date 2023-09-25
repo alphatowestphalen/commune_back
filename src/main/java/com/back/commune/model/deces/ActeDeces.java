@@ -1,15 +1,17 @@
-package com.back.commune.model;
+package com.back.commune.model.deces;
 
 import java.time.Instant;
 
 import javax.persistence.*;
 
+import com.back.commune.model.Maire;
+import com.back.commune.model.PieceDeces;
+import com.back.commune.model.PremierCopie;
 import com.back.commune.model.auth.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -80,26 +82,4 @@ public class ActeDeces {
 
     @Column(name = "annee")
     private int annee;
-
-	public ActeDeces(String idActeDeces, String dateDeclaration, String heureDeclaration, String nomDeclarant,
-			String prenomsDeclarant, String professionDeclarant, String lieuNaissanceDeclarant, String adresseDeclarant,
-			String dateNaissanceDeclarant, String date, Maire maire, Defunt defunt, PieceDeces pieceDeces,
-			PremierCopie premierCopie, long numero, int annee) {
-		this.idActeDeces = idActeDeces;
-		this.dateDeclaration = dateDeclaration;
-		this.heureDeclaration = heureDeclaration;
-		this.nomDeclarant = nomDeclarant;
-		this.prenomsDeclarant = prenomsDeclarant;
-		this.professionDeclarant = professionDeclarant;
-		this.lieuNaissanceDeclarant = lieuNaissanceDeclarant;
-		this.adresseDeclarant = adresseDeclarant;
-		this.dateNaissanceDeclarant = dateNaissanceDeclarant;
-		this.date = date;
-		this.maire = maire;
-		this.defunt = defunt;
-		this.pieceDeces = pieceDeces;
-		this.premierCopie = premierCopie;
-		this.numero = numero;
-		this.annee = annee;
-	}
 }

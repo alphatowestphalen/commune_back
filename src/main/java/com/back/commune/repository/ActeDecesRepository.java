@@ -1,7 +1,7 @@
 package com.back.commune.repository;
 
 import com.back.commune.DTO.resulSet.CountByUser;
-import com.back.commune.model.ActeDeces;
+import com.back.commune.model.deces.ActeDeces;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -12,6 +12,7 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.back.commune.model.auth.User;
+import com.back.commune.model.deces.ActeDeces;
 import com.back.commune.utils.AuditTrailListener;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
