@@ -24,6 +24,7 @@ import com.back.commune.request.NumeroActeDecesRequest;
 
 import javax.transaction.Transactional;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class ActeDecesService {
@@ -104,6 +105,7 @@ public class ActeDecesService {
         Maire maire = maireService.findById( decesRequest.getIdMaire());
         if (maire == null) throw new NotFoundDataException("Not found Maire with id = " + decesRequest.getIdMaire());
         PremierCopie premierCopie = null;
+        System.out.println(decesRequest.getIdPremierCopie());
         if(decesRequest.getIdPremierCopie() != null){
             premierCopie = premierCopieService.findById(decesRequest.getIdPremierCopie());
             if (premierCopie == null)
@@ -114,13 +116,15 @@ public class ActeDecesService {
         pieceDecesRepository.save(pieceDeces);
         Defunt defunt = acteDeDecesMapper.convertToDefunt(decesRequest);
         defuntRepository.save(defunt);
-        System.out.println(defunt);
 
         ActeDeces acteDeces = acteDeDecesMapper.convertToActeDeDeces(decesRequest);
         acteDeces.setCreatedBy(user);
+        acteDeces.setDefunt(defunt);
         acteDeces.setMaire(maire);
-        if(decesRequest.getIdPremierCopie() != null) acteDeces.setPremierCopie(premierCopie);
-        premierCopieService.setDefuntPremierCopie(decesRequest.getIdPremierCopie());
+        if(decesRequest.getIdPremierCopie() != null) {
+            acteDeces.setPremierCopie(premierCopie);
+            premierCopieService.setDefuntPremierCopie(decesRequest.getIdPremierCopie());
+        }
         return acteDecesRepository.save(acteDeces);
     }
 
@@ -129,20 +133,20 @@ public class ActeDecesService {
         return new ResponsePageable<>(acteDeces);
     }
 
-    public ActeDeces findById(String id) {
-        ActeDeces acteDeces = acteDecesRepository.findByIdActeDeces(id);
-        if(acteDeces == null) throw new NotFoundDataException("Not found ActeDeces with id = " + id);
-        return acteDeces;
+    public ActeDeces findById(Long id) {
+        Optional<ActeDeces> opt = acteDecesRepository.findById(id);
+        if(!opt.isPresent()) throw new NotFoundDataException("Not found ActeDeces with id = " + id);
+        return opt.get();
     }
 
-    public void delete(String idActeDeces) {
+    public void delete(Long idActeDeces) {
         ActeDeces acteDeces =  findById(idActeDeces);
         if (acteDeces == null) throw new NotFoundDataException("Not found ActeDeces with id = " + idActeDeces);
         premierCopieService.setDefuntPremierCopie(acteDeces.getPremierCopie().getIdPremierCopie());
         acteDecesRepository.deleteById(idActeDeces);
     }
 
-    public ActeDeces update(String idActe, DecesRequest decesRequest){
+    public ActeDeces update(Long idActe, DecesRequest decesRequest){
         User user = userService.getAuthenticatedUser();
         if (user == null) throw new NotFoundDataException("Not found User authenticated");
 

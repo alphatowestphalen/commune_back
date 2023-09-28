@@ -9,9 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Date;
 import java.util.List;
 
-public interface ActeDecesRepository extends JpaRepository<ActeDeces, String>{
-
-	ActeDeces findByIdActeDeces(String idActeDeces);
+public interface ActeDecesRepository extends JpaRepository<ActeDeces, Long>{
 
 	@Query(value = "SELECT * FROM acte_deces a ORDER BY a.created_date DESC LIMIT 1 ", nativeQuery = true)
 	ActeDeces chercherActeDeces();

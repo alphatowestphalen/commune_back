@@ -25,7 +25,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 public class ActeDeces {
 	@Id
 	@Column(name = "idActeDeces")
-	private String idActeDeces;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private Long idActeDeces;
 
 	@Column(name = "dateDeclaration")
 	private String dateDeclaration;

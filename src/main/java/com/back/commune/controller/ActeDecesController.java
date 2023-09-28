@@ -35,14 +35,14 @@ public class ActeDecesController {
 	  }
 
 	@GetMapping("/{id}")
-	  public ResponseEntity<ActeDeces> getActeDecesById(@PathVariable(value = "id") String id) {
+	  public ResponseEntity<ActeDeces> getActeDecesById(@PathVariable(value = "id") Long id) {
 		ActeDeces acte = acteDecesService.findById(id);
 	    return new ResponseEntity<>(acte, HttpStatus.OK);
 	  }
 
 	@PutMapping("/{id}")
 	public ResponseEntity<ActeDeces> updateActeDeces(
-        @PathVariable(value = "id") String id,
+        @PathVariable(value = "id") Long id,
         @RequestBody DecesRequest decesRequest)
 	{
         ActeDeces acteDeces = acteDecesService.update(id, decesRequest);
@@ -50,7 +50,7 @@ public class ActeDecesController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<HttpStatus>  supprActeDeces(@PathVariable("id") String idActeDeces)
+	public ResponseEntity<HttpStatus>  supprActeDeces(@PathVariable("id") Long idActeDeces)
 	{
         acteDecesService.delete(idActeDeces);
         return new ResponseEntity<>(HttpStatus.OK);

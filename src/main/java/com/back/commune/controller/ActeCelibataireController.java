@@ -27,12 +27,10 @@ import com.back.commune.service.ActeCelibataireService;
 @RequestMapping("/api/acteCelibataires")
 public class ActeCelibataireController {
     private  final ActeCelibataireService acteCelibataireService;
-
     @Autowired
     public ActeCelibataireController( ActeCelibataireService acteCelibataireService) {
         this.acteCelibataireService = acteCelibataireService;
     }
-
     @GetMapping
 	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<ResponsePageable<ActeCelibataireDTO>> getAllActeCelibataires
@@ -47,34 +45,45 @@ public class ActeCelibataireController {
     }
 
 	@PostMapping("/externe")
-	  public ResponseEntity<ActeCelibataireDTO> addActeCelibataire(@RequestBody ActeCelibataireRequestE acteCelibataireRequestE)
+	  public ResponseEntity<ActeCelibataireDTO> addActeCelibataire(
+          @RequestBody ActeCelibataireRequestE acteCelibataireRequestE
+    )
 	{
         ActeCelibataireDTO acteCelibataireDTO = acteCelibataireService.save(acteCelibataireRequestE);
         return new ResponseEntity<>(acteCelibataireDTO, HttpStatus.CREATED);
 	}
 
     @PostMapping("/interne")
-    public ResponseEntity<ActeCelibataireDTO> addActeCelibataire(@RequestBody ActeCelibataireRequestI acteCelibataireRequestI)
+    public ResponseEntity<ActeCelibataireDTO> addActeCelibataire(
+        @RequestBody ActeCelibataireRequestI acteCelibataireRequestI
+    )
     {
         ActeCelibataireDTO acteCelibataireDTO = acteCelibataireService.save(acteCelibataireRequestI);
         return new ResponseEntity<>(acteCelibataireDTO, HttpStatus.CREATED);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ActeCelibataireDTO> getActeCelibataireById(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<ActeCelibataireDTO> getActeCelibataireById(
+        @PathVariable(value = "id") Long id) {
         ActeCelibataireDTO acteCelibataireDTO = acteCelibataireService.find(id);
         return new ResponseEntity<>(acteCelibataireDTO, HttpStatus.OK);
     }
 
 
 	@PutMapping("interne/{id}")
-	public ResponseEntity<ActeCelibataireDTO> updateActeCelibataire(@PathVariable(value = "id") Long id, @RequestBody ActeCelibataireRequestI requestE)
+	public ResponseEntity<ActeCelibataireDTO> updateActeCelibataire(
+        @PathVariable(value = "id") Long id,
+        @RequestBody ActeCelibataireRequestI requestE
+    )
 	{
         ActeCelibataireDTO acteCelibataireDTO = acteCelibataireService.update(requestE, id);
         return new ResponseEntity<>(acteCelibataireDTO, HttpStatus.OK);
 	}
 
     @PutMapping("externe/{id}")
-    public ResponseEntity<ActeCelibataireDTO> updateActeCelibataire(@PathVariable(value = "id") Long id, @RequestBody ActeCelibataireRequestE requestE)
+    public ResponseEntity<ActeCelibataireDTO> updateActeCelibataire(
+        @PathVariable(value = "id") Long id,
+        @RequestBody ActeCelibataireRequestE requestE
+    )
     {
         ActeCelibataireDTO acteCelibataireDTO = acteCelibataireService.update(requestE, id);
         return new ResponseEntity<>(acteCelibataireDTO, HttpStatus.OK);

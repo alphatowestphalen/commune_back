@@ -96,6 +96,16 @@ public class PremierCopieController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/living")
+    public ResponseEntity<ResponsePageable<PremierCopie>> getAllPremierCopieAlive(
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "10") int size
+    ){
+        Pageable pageable = PageRequest.of(page-1, size);
+        ResponsePageable<PremierCopie> response =  premierCopieService.findAllAlive(pageable);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 	@GetMapping("/{id}")
 //	@PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
 	  public ResponseEntity<PremierCopie> getByIdPremierCopie(@PathVariable("id") String id)

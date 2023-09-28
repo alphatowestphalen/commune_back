@@ -111,6 +111,11 @@ public class PremierCopieService {
         return new ResponsePageable<>(page);
     }
 
+    public ResponsePageable<PremierCopie> findAllAlive(Pageable pageable){
+        Page<PremierCopie> page = premierCopieRepository.findAllAlive(pageable);
+        return new ResponsePageable<>(page);
+    }
+
     public List<Reconnaissance> getReconnaissances(String idPremierCopie){
         return premierCopieRepository.findAllReconnaissances(idPremierCopie);
     }
