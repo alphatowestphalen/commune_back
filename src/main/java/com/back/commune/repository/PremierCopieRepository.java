@@ -57,6 +57,9 @@ public interface PremierCopieRepository extends JpaRepository<PremierCopie, Stri
     @Query("UPDATE PremierCopie p SET p.deleted = false WHERE p.idPremierCopie = :idPremierCopie")
     void undoDeletePremierCopie(String idPremierCopie);
 
+    @Query("select count(p.idPremierCopie) from PremierCopie p where p.deleted = false")
+    long count();
+
     @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idPremierCopie)) FROM PremierCopie p WHERE p.deleted = false group by p.createdBy")
     List<CountByUser> countByUser();
     @Query("select count(p.idPremierCopie) from PremierCopie  p WHERE p.deleted = false and day(p.createdDate) = day(:jour) ")

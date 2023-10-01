@@ -26,11 +26,13 @@ public class StatistiqueService {
     private final MariageService mariageService;
     private final BulletinNaissanceService bulletinNaissanceService;
     private final ReconnaissanceService reconnaissanceService;
+    private final ActeCelibataireService acteCelibataireService;
 
     public Statistique getStatistique() {
         Statistique statistique = new Statistique();
 
         statistique.setPremierCopie(premierCopieStatService.getStatistiquePremierCopie());
+        statistique.setActeCalibataire(acteCelibataireService.getStatistiqueCelibataire());
         statistique.setActeDeces(acteDecesService.getStatistiaqueDeces());
         statistique.setAdoption(adoptionService.getStatistiqueAdoption());
         statistique.setJugement(jugementService.getStatistiqueJugement());
@@ -45,6 +47,7 @@ public class StatistiqueService {
         Statistique statistique = new Statistique();
 
         statistique.setPremierCopie(premierCopieStatService.getStatistiquePremierCopieDays(day));
+        statistique.setActeCalibataire(acteCelibataireService.getStatistiqueCelibataireDays(day));
         statistique.setActeDeces(acteDecesService.getStatistiaqueDecesDays(day));
         statistique.setAdoption(adoptionService.getStatistiqueAdoptionDays(day));
         statistique.setJugement(jugementService.getStatistiqueJugementDays(day));
@@ -58,6 +61,7 @@ public class StatistiqueService {
         Statistique statistique = new Statistique();
 
         statistique.setPremierCopie(premierCopieStatService.getStatistiquePremierCopieDays(day1, day2));
+        statistique.setActeCalibataire(acteCelibataireService.getStatistiqueCelibataireDays(day1, day2));
         statistique.setActeDeces(acteDecesService.getStatistiaqueDecesDays(day1, day2));
         statistique.setAdoption(adoptionService.getStatistiqueAdoptionDays(day1, day2));
         statistique.setJugement(jugementService.getStatistiqueJugementDays(day1, day2));
@@ -72,6 +76,7 @@ public class StatistiqueService {
         Statistique statistique = new Statistique();
 
         statistique.setPremierCopie(premierCopieStatService.getStatistiquePremierCopieMonth(month, year));
+        statistique.setActeCalibataire(acteCelibataireService.getStatistiqueCelibataireMonth(month, year));
         statistique.setActeDeces(acteDecesService.getStatistiaqueDecesMonth(month, year));
         statistique.setAdoption(adoptionService.getStatistiqueAdoptionMonth(month, year));
         statistique.setJugement(jugementService.getStatistiqueJugementMonth(month, year));
@@ -86,6 +91,7 @@ public class StatistiqueService {
         Statistique statistique = new Statistique();
 
         statistique.setPremierCopie(premierCopieStatService.getStatistiquePremierCopieYear(year));
+        statistique.setActeCalibataire(acteCelibataireService.getStatistiqueCelibataireYear(year));
         statistique.setActeDeces(acteDecesService.getStatistiaqueDecesYear(year));
         statistique.setAdoption(adoptionService.getStatistiqueAdoptionYear(year));
         statistique.setJugement(jugementService.getStatistiqueJugementYear(year));

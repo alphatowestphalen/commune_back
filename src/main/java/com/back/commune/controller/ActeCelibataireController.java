@@ -1,7 +1,6 @@
 package com.back.commune.controller;
 
 import com.back.commune.DTO.ActeCelibataireDTO;
-import com.back.commune.request.ActeCelibataireRequestE;
 import com.back.commune.utils.ResponsePageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -44,16 +43,7 @@ public class ActeCelibataireController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-	@PostMapping("/externe")
-	  public ResponseEntity<ActeCelibataireDTO> addActeCelibataire(
-          @RequestBody ActeCelibataireRequestE acteCelibataireRequestE
-    )
-	{
-        ActeCelibataireDTO acteCelibataireDTO = acteCelibataireService.save(acteCelibataireRequestE);
-        return new ResponseEntity<>(acteCelibataireDTO, HttpStatus.CREATED);
-	}
-
-    @PostMapping("/interne")
+    @PostMapping()
     public ResponseEntity<ActeCelibataireDTO> addActeCelibataire(
         @RequestBody ActeCelibataireRequestI acteCelibataireRequestI
     )
@@ -61,6 +51,7 @@ public class ActeCelibataireController {
         ActeCelibataireDTO acteCelibataireDTO = acteCelibataireService.save(acteCelibataireRequestI);
         return new ResponseEntity<>(acteCelibataireDTO, HttpStatus.CREATED);
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<ActeCelibataireDTO> getActeCelibataireById(
         @PathVariable(value = "id") Long id) {
@@ -69,7 +60,7 @@ public class ActeCelibataireController {
     }
 
 
-	@PutMapping("interne/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<ActeCelibataireDTO> updateActeCelibataire(
         @PathVariable(value = "id") Long id,
         @RequestBody ActeCelibataireRequestI requestE
@@ -78,16 +69,6 @@ public class ActeCelibataireController {
         ActeCelibataireDTO acteCelibataireDTO = acteCelibataireService.update(requestE, id);
         return new ResponseEntity<>(acteCelibataireDTO, HttpStatus.OK);
 	}
-
-    @PutMapping("externe/{id}")
-    public ResponseEntity<ActeCelibataireDTO> updateActeCelibataire(
-        @PathVariable(value = "id") Long id,
-        @RequestBody ActeCelibataireRequestE requestE
-    )
-    {
-        ActeCelibataireDTO acteCelibataireDTO = acteCelibataireService.update(requestE, id);
-        return new ResponseEntity<>(acteCelibataireDTO, HttpStatus.OK);
-    }
 	@DeleteMapping("/{id}")
 //	 @PreAuthorize(" hasRole('MAIRE')")
 	  public ResponseEntity<HttpStatus> deleteActeCelibataire(@PathVariable("id") Long id) {

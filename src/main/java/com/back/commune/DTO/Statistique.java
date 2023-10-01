@@ -13,4 +13,5 @@ public class Statistique {
     private StatistiqueBulletinNaiss bulletinNaissance;
     private StatistiaqueDeces acteDeces;
     private StatistiqueReconnaissance reconnaissance;
+    private StatistiqueCalibataire acteCalibataire;
 }

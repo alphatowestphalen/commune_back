@@ -1,20 +1,18 @@
 package com.back.commune.service;
 
 import com.back.commune.DTO.ActeCelibataireDTO;
+import com.back.commune.DTO.StatisiqueAbstract;
+import com.back.commune.DTO.StatistiqueCalibataire;
 import com.back.commune.exceptions.NotFoundDataException;
 import com.back.commune.model.PremierCopie;
 import com.back.commune.model.auth.User;
 import com.back.commune.model.mariage.GenreMariage;
 import com.back.commune.repository.ActeCelibataireRepository;
 import com.back.commune.repository.PremierCopieRepository;
-import com.back.commune.repository.TypeRepository;
-import com.back.commune.request.ActeCelibataireRequestE;
 import com.back.commune.request.ActeCelibataireRequestI;
-import com.back.commune.request.NumeroActeCelibataire;
 import com.back.commune.security.services.UserService;
 import com.back.commune.utils.ResponsePageable;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import com.back.commune.model.celibataire.ActeCelibataire;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -61,25 +60,6 @@ public class ActeCelibataireService {
         return new ActeCelibataireDTO(acteCelibataireRepository.save(acteCelibataire));
     }
 
-    public ActeCelibataireDTO save(ActeCelibataireRequestE acteCelibataireRequestE) {
-        User user = userService.getAuthenticatedUser();
-        if (user == null) throw new NotFoundDataException("Not found User authenticated");
-        ActeCelibataire acteCelibataire = new  ActeCelibataire();
-
-        acteCelibataire.setLieuCin(acteCelibataireRequestE.getLieuCin());
-        acteCelibataire.setNom(acteCelibataireRequestE.getNom());
-        acteCelibataire.setNomFkt(acteCelibataireRequestE.getNomFkt());
-        acteCelibataire.setNumCin(acteCelibataireRequestE.getNumCin());
-        acteCelibataire.setDateCin(acteCelibataireRequestE.getDateCin());
-        acteCelibataire.setNomPere(acteCelibataireRequestE.getNomPere());
-        acteCelibataire.setNomMere(acteCelibataireRequestE.getNomMere());
-        acteCelibataire.setDateDeNaiss(acteCelibataireRequestE.getDateDeNaiss());
-        acteCelibataire.setLieuDeNaiss(acteCelibataireRequestE.getLieuDeNaiss());
-        acteCelibataire.setCreatedBy(user);
-
-        return new ActeCelibataireDTO(acteCelibataireRepository.save(acteCelibataire));
-    }
-
 
     public void delete(Long id) {
         acteCelibataireRepository.deleteById(id);
@@ -100,32 +80,6 @@ public class ActeCelibataireService {
         return new ActeCelibataireDTO(acteCelibataireRepository.save(acteCelibataire));
     }
 
-    public ActeCelibataireDTO update(ActeCelibataireRequestE acteCelibataireRequestE, Long id) {
-        User user = userService.getAuthenticatedUser();
-        if (user == null) throw new NotFoundDataException("Not found User authenticated");
-        ActeCelibataire acteCelibataire = acteCelibataireRepository
-            .findById(id)
-            .orElseThrow(() -> new NotFoundDataException("Not found acte de celibataire with id = " + id));;
-
-        acteCelibataire.setLieuCin(acteCelibataireRequestE.getLieuCin());
-        acteCelibataire.setNomFkt(acteCelibataireRequestE.getNomFkt());
-        acteCelibataire.setNumCin(acteCelibataireRequestE.getNumCin());
-        acteCelibataire.setGenre(acteCelibataireRequestE.getGenre());
-        acteCelibataire.setNom(acteCelibataireRequestE.getNom());
-        acteCelibataire.setDateCin(acteCelibataireRequestE.getDateCin());
-        acteCelibataire.setNomPere(acteCelibataireRequestE.getNomPere());
-        acteCelibataire.setNomMere(acteCelibataireRequestE.getNomMere());
-        acteCelibataire.setDateDeNaiss(acteCelibataireRequestE.getDateDeNaiss());
-        acteCelibataire.setLieuDeNaiss(acteCelibataireRequestE.getLieuDeNaiss());
-        acteCelibataire.setCreatedBy(user);
-
-        return new ActeCelibataireDTO(acteCelibataireRepository.save(acteCelibataire));
-    }
-
-
-
-
-
     public ActeCelibataireDTO find(Long id) {
        ActeCelibataire acteCelibataire =  acteCelibataireRepository
             .findById(id)
@@ -139,4 +93,65 @@ public class ActeCelibataireService {
         Page<ActeCelibataireDTO> page = new PageImpl<>(listDTO,pageable,resultDB.getTotalElements());
         return new ResponsePageable<>(page);
     }
+
+    public StatistiqueCalibataire getStatistiqueCelibataire() {
+        StatistiqueCalibataire statistiqueCelibataire = new StatistiqueCalibataire();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(acteCelibataireRepository.count());
+        statisiqueAbstract.setNombreParUtilisateur(acteCelibataireRepository.countByUser());
+
+        statistiqueCelibataire.setNombre(statisiqueAbstract);
+
+        return statistiqueCelibataire;
+    }
+
+    public StatistiqueCalibataire getStatistiqueCelibataireDays(Date day) {
+        StatistiqueCalibataire statistiqueCelibataire = new StatistiqueCalibataire();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(acteCelibataireRepository.countByDays(day));
+        statisiqueAbstract.setNombreParUtilisateur(acteCelibataireRepository.countByUserDay(day));
+
+        statistiqueCelibataire.setNombre(statisiqueAbstract);
+
+        return statistiqueCelibataire;
+    }
+
+    public StatistiqueCalibataire getStatistiqueCelibataireDays(Date day1, Date day2) {
+        StatistiqueCalibataire statistiqueCelibataire = new StatistiqueCalibataire();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(acteCelibataireRepository.countByDays(day1, day2));
+        statisiqueAbstract.setNombreParUtilisateur(acteCelibataireRepository.countByUserDay(day1, day2));
+
+        statistiqueCelibataire.setNombre(statisiqueAbstract);
+
+        return statistiqueCelibataire;
+    }
+
+    public StatistiqueCalibataire getStatistiqueCelibataireMonth(Integer month, Integer year) {
+        StatistiqueCalibataire statistiqueCelibataire = new StatistiqueCalibataire();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(acteCelibataireRepository.countByMonth(month, year));
+        statisiqueAbstract.setNombreParUtilisateur(acteCelibataireRepository.countByUserMonth(month, year));
+
+        statistiqueCelibataire.setNombre(statisiqueAbstract);
+
+        return statistiqueCelibataire;
+    }
+
+    public StatistiqueCalibataire getStatistiqueCelibataireYear(Integer year) {
+        StatistiqueCalibataire statistiqueCelibataire = new StatistiqueCalibataire();
+        StatisiqueAbstract statisiqueAbstract = new StatisiqueAbstract();
+
+        statisiqueAbstract.setNombre(acteCelibataireRepository.countByYear(year));
+        statisiqueAbstract.setNombreParUtilisateur(acteCelibataireRepository.countByUserYear(year));
+
+        statistiqueCelibataire.setNombre(statisiqueAbstract);
+
+        return statistiqueCelibataire;
+    }
+
 }
