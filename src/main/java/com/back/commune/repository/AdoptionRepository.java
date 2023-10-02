@@ -51,4 +51,10 @@ public interface AdoptionRepository extends JpaRepository<Adoption, Long> {
     @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idAdoption)) " +
         "FROM Adoption p WHERE  year(p.createdDate) = :anne group by p.createdBy")
     List<CountByUser> countByUserYear(@Param("anne") Integer date);
+
+    @Query("SELECT a FROM Adoption a WHERE cast(a.idAdoption as string ) like :query% or " +
+        "lower(a.premierecopie.enfant.nomEnfant) like lower(concat(:query,'%')) or " +
+        "lower(a.premierecopie.enfant.prenomsEnfant) like lower(concat(:query,'%')) " +
+        "order by a.createdDate desc ")
+    Page<Adoption> findSearchAll(@Param("query") String query, Pageable pageable);
 }

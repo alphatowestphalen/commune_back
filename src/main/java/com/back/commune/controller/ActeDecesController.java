@@ -1,4 +1,5 @@
 package com.back.commune.controller;
+import com.back.commune.DTO.ActeDeDecesDTO;
 import com.back.commune.utils.ResponsePageable;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -9,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import com.back.commune.model.deces.ActeDeces;
 import com.back.commune.request.DecesRequest;
 import com.back.commune.service.ActeDecesService;
+
+import java.util.Optional;
+
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/deces")
@@ -18,25 +22,32 @@ public class ActeDecesController {
     private final ActeDecesService acteDecesService;
 
 	@PostMapping
-	  public ResponseEntity<ActeDeces> addDeces(@RequestBody DecesRequest decesRequest)
+	  public ResponseEntity<ActeDeDecesDTO> addDeces(@RequestBody DecesRequest decesRequest)
 	{
-        ActeDeces actedeces = acteDecesService.save(decesRequest);
-        return new ResponseEntity<>(actedeces, HttpStatus.OK);
+        ActeDeDecesDTO acteDeDecesDTO = acteDecesService.save(decesRequest);
+        return new ResponseEntity<>(acteDeDecesDTO, HttpStatus.OK);
 	}
 
 	@GetMapping
-	  public ResponseEntity<ResponsePageable<ActeDeces>> getAllActeDeces(
+	  public ResponseEntity<ResponsePageable<ActeDeDecesDTO>> getAllActeDeces(
         @RequestParam(defaultValue = "1") int page,
+        @RequestParam() Optional<String> q,
         @RequestParam(defaultValue = "10") int size
     ) {
         Pageable pageable = PageRequest.of(page-1, size);
-        ResponsePageable<ActeDeces> acteDeces = acteDecesService.findAll(pageable);
+        ResponsePageable<ActeDeDecesDTO> acteDeces;
+        if(q.isPresent() && !q.get().trim().isEmpty()){
+            acteDeces = acteDecesService.findAllSearch(q.get().trim() ,pageable);
+        }else{
+            acteDeces = acteDecesService.findAll(pageable);
+        }
+
 	    return new ResponseEntity<>(acteDeces, HttpStatus.OK);
 	  }
 
 	@GetMapping("/{id}")
-	  public ResponseEntity<ActeDeces> getActeDecesById(@PathVariable(value = "id") Long id) {
-		ActeDeces acte = acteDecesService.findById(id);
+	  public ResponseEntity<ActeDeDecesDTO> getActeDecesById(@PathVariable(value = "id") Long id) {
+        ActeDeDecesDTO acte = acteDecesService.findById(id);
 	    return new ResponseEntity<>(acte, HttpStatus.OK);
 	  }
 

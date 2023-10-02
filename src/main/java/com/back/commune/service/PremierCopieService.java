@@ -105,6 +105,9 @@ public class PremierCopieService {
     public ResponsePageable<PremierCopie> findAll(Pageable pageable){
         return new ResponsePageable<>(premierCopieRepository.findAll(pageable));
     }
+    public ResponsePageable<PremierCopie> findAllSearch(String query,Pageable pageable){
+        return new ResponsePageable<>(premierCopieRepository.findAllSearch(query,pageable));
+    }
 
     public ResponsePageable<PremierCopie> findBySexeEnfant(String sexeEnfant, Pageable pageable){
         Page<PremierCopie> page = premierCopieRepository.findBySexeEnfant(sexeEnfant, pageable);

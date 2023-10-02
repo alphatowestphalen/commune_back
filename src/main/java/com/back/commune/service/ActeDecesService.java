@@ -1,5 +1,6 @@
 package com.back.commune.service;
 
+import com.back.commune.DTO.ActeDeDecesDTO;
 import com.back.commune.DTO.StatisiqueAbstract;
 import com.back.commune.DTO.StatistiaqueDeces;
 import com.back.commune.exceptions.NotFoundDataException;
@@ -16,6 +17,7 @@ import com.back.commune.security.services.UserService;
 import com.back.commune.utils.ResponsePageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +26,9 @@ import com.back.commune.request.NumeroActeDecesRequest;
 
 import javax.transaction.Transactional;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ActeDecesService {
@@ -99,7 +103,7 @@ public class ActeDecesService {
 		}
 	}
     @Transactional
-    public ActeDeces save(DecesRequest decesRequest) {
+    public ActeDeDecesDTO save(DecesRequest decesRequest) {
         User user = userService.getAuthenticatedUser();
         if (user == null) throw new NotFoundDataException("Not found User authenticated");
         Maire maire = maireService.findById( decesRequest.getIdMaire());
@@ -125,24 +129,27 @@ public class ActeDecesService {
             acteDeces.setPremierCopie(premierCopie);
             premierCopieService.setDefuntPremierCopie(decesRequest.getIdPremierCopie());
         }
-        return acteDecesRepository.save(acteDeces);
+        return new ActeDeDecesDTO(acteDecesRepository.save(acteDeces));
     }
 
-    public ResponsePageable<ActeDeces> findAll(Pageable pageable){
-        Page<ActeDeces> acteDeces = acteDecesRepository.findAll(pageable);
-        return new ResponsePageable<>(acteDeces);
+    public ResponsePageable<ActeDeDecesDTO> findAll(Pageable pageable){
+        Page<ActeDeces> acteDecesPage = acteDecesRepository.findAll(pageable);
+        List<ActeDeDecesDTO> acteDecesList = acteDecesPage.getContent().stream().
+            map(ActeDeDecesDTO::new).collect(Collectors.toList());
+        Page<ActeDeDecesDTO> page = new PageImpl<>(acteDecesList,pageable,acteDecesPage.getTotalPages());
+        return new ResponsePageable<>(page);
     }
 
-    public ActeDeces findById(Long id) {
+    public ActeDeDecesDTO findById(Long id) {
         Optional<ActeDeces> opt = acteDecesRepository.findById(id);
         if(!opt.isPresent()) throw new NotFoundDataException("Not found ActeDeces with id = " + id);
-        return opt.get();
+        return new ActeDeDecesDTO(opt.get());
     }
 
     public void delete(Long idActeDeces) {
-        ActeDeces acteDeces =  findById(idActeDeces);
-        if (acteDeces == null) throw new NotFoundDataException("Not found ActeDeces with id = " + idActeDeces);
-        premierCopieService.setDefuntPremierCopie(acteDeces.getPremierCopie().getIdPremierCopie());
+        Optional<ActeDeces> opt = acteDecesRepository.findById(idActeDeces);
+        if(!opt.isPresent()) throw new NotFoundDataException("Not found ActeDeces with id = " + idActeDeces);;
+        premierCopieService.setDefuntPremierCopie(opt.get().getPremierCopie().getIdPremierCopie());
         acteDecesRepository.deleteById(idActeDeces);
     }
 
@@ -150,8 +157,9 @@ public class ActeDecesService {
         User user = userService.getAuthenticatedUser();
         if (user == null) throw new NotFoundDataException("Not found User authenticated");
 
-        ActeDeces acteDeces = findById(idActe);
-        if(acteDeces == null) throw new NotFoundDataException("Not found ActeDeces with id = " + idActe);
+        Optional<ActeDeces> opt = acteDecesRepository.findById(idActe);
+        if(!opt.isPresent()) throw new NotFoundDataException("Not found ActeDeces with id = " + idActe);
+        ActeDeces acteDeces = opt.get();
 
         PremierCopie premierCopie = premierCopieService.findById(decesRequest.getIdPremierCopie());
         if(premierCopie == null) throw new NotFoundDataException("Not found PremierCopie with id = " + decesRequest.getIdPremierCopie());
@@ -264,4 +272,11 @@ public class ActeDecesService {
         return statistiaqueDeces;
     }
 
+    public ResponsePageable<ActeDeDecesDTO> findAllSearch(String query, Pageable pageable) {
+        Page<ActeDeces> acteDecesPage = acteDecesRepository.findAllSearch(query, pageable);
+        List<ActeDeDecesDTO> acteDecesList = acteDecesPage.getContent().stream().
+            map(ActeDeDecesDTO::new).collect(Collectors.toList());
+        Page<ActeDeDecesDTO> page = new PageImpl<>(acteDecesList,pageable,acteDecesPage.getTotalPages());
+        return new ResponsePageable<>(page);
+    }
 }

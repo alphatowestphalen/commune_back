@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.back.commune.model.Jugement;
 import com.back.commune.request.JugementRequest;
 
+import java.util.Optional;
+
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/jugements")
@@ -38,10 +40,16 @@ public class JugementController {
     @GetMapping
 	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
     public ResponseEntity<ResponsePageable<Jugement>> getAllJugements(
-		        @RequestParam(defaultValue = "1") int page,
-		        @RequestParam(defaultValue = "10") int size) {
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam()Optional<String> q,
+        @RequestParam(defaultValue = "10") int size) {
         Pageable paging = PageRequest.of(page-1, size);
-        ResponsePageable<Jugement> response = jugementService.getAll(paging);
+        ResponsePageable<Jugement> response ;
+            if( q.isPresent() && !q.get().trim().isEmpty()){
+                response = jugementService.getAllSearch(q.get().trim(), paging);
+            }else{
+                response = jugementService.getAll(paging);
+            }
         return new ResponseEntity<> (response, HttpStatus.OK);
     }
 

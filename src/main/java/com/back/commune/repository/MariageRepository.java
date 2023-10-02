@@ -3,6 +3,8 @@ package com.back.commune.repository;
 
 import com.back.commune.DTO.resulSet.CountByUser;
 import com.back.commune.model.mariage.Mariage;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -47,5 +49,48 @@ public interface MariageRepository extends JpaRepository<Mariage, Long> {
     @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idMariage)) " +
         "FROM Mariage p WHERE  year(p.createdDate) = :anne group by p.createdBy")
     List<CountByUser> countByUserYear(@Param("anne") Integer date);
+
+    @Query("SELECT m FROM Mariage m \n" +
+        "LEFT JOIN MariageAllInterne mii ON mii.idMariage = m.idMariage\n" +
+        "LEFT JOIN MariageAllExterne mee ON mee.idMariage = m.idMariage\n" +
+        "LEFT JOIN MariageMixteFemme mei ON mei.idMariage = m.idMariage\n" +
+        "LEFT JOIN MariageMixteHomme mie ON mie.idMariage = m.idMariage " +
+        "WHERE \n" +
+        "  ( \n" +
+        "    TYPE(m) = MariageAllInterne AND (\n" +
+        "      lower(mii.femme.enfant.nomEnfant) like lower(concat(:query,'%')) \n" +
+        "      OR lower(mii.femme.enfant.prenomsEnfant) like lower(concat(:query,'%')) \n" +
+        "      OR lower(mii.homme.enfant.nomEnfant) like lower(concat(:query,'%')) \n" +
+        "      OR lower(mii.homme.enfant.prenomsEnfant) like lower(concat(:query,'%'))\n" +
+        "    )\n" +
+        "  )\n" +
+        "  OR\n" +
+        "  (\n" +
+        "    TYPE(m) = MariageAllExterne AND (\n" +
+        "      lower(mee.femme.nomFemme) like lower(concat(:query,'%')) \n" +
+        "      OR lower(mee.femme.prenomsFemme) like lower(concat(:query,'%')) \n" +
+        "      OR lower(mee.homme.nomHomme) like lower(concat(:query,'%')) \n" +
+        "      OR lower(mee.homme.prenomsHomme) like lower(concat(:query,'%'))\n" +
+        "    )\n" +
+        "  )\n" +
+        "  OR\n" +
+        "  (\n" +
+        "    TYPE(m) = MariageMixteFemme AND (\n" +
+        "      lower(mei.homme.nomHomme) like lower(concat(:query,'%')) \n" +
+        "      OR lower(mei.homme.prenomsHomme) like lower(concat(:query,'%')) \n" +
+        "      OR lower(mei.femme.enfant.nomEnfant) like lower(concat(:query,'%')) \n" +
+        "      OR lower(mei.femme.enfant.prenomsEnfant) like lower(concat(:query,'%'))\n" +
+        "    )\n" +
+        "  )\n" +
+        "  OR\n" +
+        "  (\n" +
+        "    TYPE(m) = MariageMixteHomme AND (\n" +
+        "      lower(mie.femme.nomFemme) like lower(concat(:query,'%')) \n" +
+        "      OR lower(mie.femme.prenomsFemme) like lower(concat(:query,'%')) \n" +
+        "      OR lower(mie.homme.enfant.nomEnfant) like lower(concat(:query,'%')) \n" +
+        "      OR lower(mie.homme.enfant.prenomsEnfant) like lower(concat(:query,'%'))\n" +
+        "    )\n" +
+        "  )" )
+    Page<Mariage> findSearchAll(@Param("query") String query, Pageable pageable);
 
 }

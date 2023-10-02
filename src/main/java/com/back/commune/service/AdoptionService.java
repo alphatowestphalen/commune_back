@@ -146,4 +146,9 @@ public class AdoptionService {
 
         return statistiqueAdoption;
     }
+
+    public ResponsePageable<Adoption> getSearchAll(String query, Pageable pageable) {
+        Page<Adoption> adoptionPage  = adoptionRepository.findSearchAll(query, pageable);
+        return new ResponsePageable<>(adoptionPage);
+    }
 }

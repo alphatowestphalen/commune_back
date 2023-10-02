@@ -59,4 +59,9 @@ public interface JugementRepository extends JpaRepository<Jugement, Long> {
     @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idJugement)) " +
         "FROM Jugement p WHERE  year(p.createdDate) = :anne group by p.createdBy")
     List<CountByUser> countByUserYear(@Param("anne") Integer date);
+
+    @Query("SELECT j FROM Jugement j WHERE cast(j.idJugement as string) like :query% " +
+        "or lower(j.premierCopie.enfant.nomEnfant) like lower(concat(:query,'%')) " +
+        "or lower(j.premierCopie.enfant.prenomsEnfant) like lower(concat(:query,'%')) order by j.createdDate desc")
+    Page<Jugement> findAllSearch(String query, Pageable paging);
 }

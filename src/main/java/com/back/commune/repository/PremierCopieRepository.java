@@ -93,4 +93,7 @@ public interface PremierCopieRepository extends JpaRepository<PremierCopie, Stri
     List<CountByUser> countByUserYear(@Param("anne") Integer year);
     @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idPremierCopie)) FROM PremierCopie p WHERE p.deleted = true group by p.createdBy")
     List<CountByUser> countDeletedByUser();
+
+    @Query("select p from PremierCopie p where p.deleted = true and p.idPremierCopie like :query% or lower(p.enfant.nomEnfant) like lower(concat(:query,'%')) ")
+    Page<PremierCopie> findAllSearch(@Param("query") String query, Pageable pageable);
 }

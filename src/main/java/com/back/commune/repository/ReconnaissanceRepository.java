@@ -53,4 +53,9 @@ public interface ReconnaissanceRepository extends JpaRepository<Reconnaissance, 
     @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idReconnaissance)) " +
         "FROM Reconnaissance p WHERE  year(p.createdDate) = :anne group by p.createdBy")
     List<CountByUser> countByUserYear(@Param("anne") Integer date);
+
+    @Query("SELECT r FROM Reconnaissance  r WHERE cast(r.idReconnaissance as string ) like :query% " +
+        "or lower(r.premierecopie.enfant.nomEnfant) like lower(concat(:query,'%')) " +
+        "or lower(r.premierecopie.enfant.prenomsEnfant) like lower(concat(:query,'%')) order by r.createdDate desc " )
+    Page<Reconnaissance> findSearchAll(String query, Pageable pageable);
 }

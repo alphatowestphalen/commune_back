@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/reconnaissances")
@@ -34,10 +36,17 @@ public class ReconnaissanceController {
 	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
     public ResponseEntity<ResponsePageable<Reconnaissance>> getAllReconnaissances(
         @RequestParam(defaultValue = "1") int page,
+        @RequestParam()Optional<String> q,
         @RequestParam(defaultValue = "10") int size)
     {
         Pageable pageable = PageRequest.of(page-1, size);
-        ResponsePageable<Reconnaissance> response = reconnaissanceService.getAll(pageable);
+        ResponsePageable<Reconnaissance> response;
+
+        if(q.isPresent() && !q.get().trim().isEmpty()){
+            response = reconnaissanceService.getSearchAll(q.get().trim(), pageable);
+        }else{
+            response = reconnaissanceService.getAll(pageable);
+        }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

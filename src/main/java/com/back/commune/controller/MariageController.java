@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import com.back.commune.service.MariageService;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin("*")
 @RestController
@@ -49,10 +50,18 @@ public class MariageController {
     @GetMapping
     public ResponseEntity<ResponsePageable<MariageDTO>> getAllMariages(
         @RequestParam(defaultValue = "1") int page,
+        @RequestParam()Optional<String> q,
         @RequestParam(defaultValue = "10") int size)
     {
         Pageable pageable = PageRequest.of(page-1, size);
-        return ResponseEntity.ok(mariageService.getAllMariages(pageable));
+        ResponsePageable<MariageDTO> responsePageable;
+        if( q.isPresent() && !q.get().trim().isEmpty()){
+            System.out.println(q.get().trim());
+            responsePageable = mariageService.getSearchAllMariages(q.get().trim() ,pageable);
+        }else{
+            responsePageable = mariageService.getAllMariages(pageable);
+        }
+        return ResponseEntity.ok(responsePageable);
     }
 
     @DeleteMapping("/{id}")

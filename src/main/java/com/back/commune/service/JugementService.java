@@ -165,5 +165,8 @@ public class JugementService {
     }
 
 
-
+    public ResponsePageable<Jugement> getAllSearch(String query, Pageable paging) {
+        Page<Jugement> jugementPage = jugementRepository.findAllSearch(query, paging);
+        return new ResponsePageable<>(jugementPage);
+    }
 }

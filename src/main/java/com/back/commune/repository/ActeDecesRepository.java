@@ -2,6 +2,8 @@ package com.back.commune.repository;
 
 import com.back.commune.DTO.resulSet.CountByUser;
 import com.back.commune.model.deces.ActeDeces;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -49,4 +51,8 @@ public interface ActeDecesRepository extends JpaRepository<ActeDeces, Long>{
     @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idActeDeces)) " +
         "FROM ActeDeces p WHERE  year(p.createdDate) = :anne group by p.createdBy")
     List<CountByUser> countByUserYear(@Param("anne") Integer date);
+
+    @Query("SELECT d FROM ActeDeces d WHERE cast(d.idActeDeces as string ) like :query% " +
+        "or lower(d.defunt.nomDefunt) like lower( concat(:query,'%')) order by d.defunt.dateDeces desc ")
+    Page<ActeDeces> findAllSearch(@Param("query") String query, Pageable pageable);
 }

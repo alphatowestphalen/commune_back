@@ -17,6 +17,7 @@ import java.util.Date;
 public class ActeCelibataireDTO {
     private String nomFkt;
     private Long idActeCelibataire;
+    private String idPremierCopie;
     private String numCin;
     private String dateCin;
     private String lieuCin;
@@ -33,6 +34,8 @@ public class ActeCelibataireDTO {
         this.numCin = acteCelibataire.getNumCin();
         this.dateCin = acteCelibataire.getDateCin();
         this.lieuCin = acteCelibataire.getLieuCin();
+        if(acteCelibataire.getPremierecopie() != null)
+            this.idPremierCopie = acteCelibataire.getPremierecopie().getIdPremierCopie();
         this.idActeCelibataire = acteCelibataire.getIdActeCelibataire();
         SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd");
         Date d = Date.from(acteCelibataire.getCreatedDate());

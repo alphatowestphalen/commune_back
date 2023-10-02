@@ -1,5 +1,6 @@
 package com.back.commune.mapper;
 
+import com.back.commune.DTO.ActeDeDecesDTO;
 import com.back.commune.model.deces.ActeDeces;
 import com.back.commune.model.deces.Defunt;
 import com.back.commune.request.DecesRequest;

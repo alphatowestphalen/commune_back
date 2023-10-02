@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.back.commune.request.AdoptionRequest;
 
+import java.util.Optional;
+
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/adoptions")
@@ -37,10 +39,17 @@ public class AdoptionController {
 	// @PreAuthorize("hasRole('USER') or hasRole('MAIRE')")
     public ResponseEntity<ResponsePageable<Adoption>> getAllAdoptions(
                 @RequestParam(defaultValue = "1") int page,
+                @RequestParam() Optional<String> q,
                 @RequestParam(defaultValue = "10") int size)
     {
         Pageable pageable = PageRequest.of(page-1, size);
-        ResponsePageable<Adoption> response = adoptionService.getAll(pageable);
+        ResponsePageable<Adoption> response;
+        if(q.isPresent() && !q.get().trim().isEmpty()){
+            response  = adoptionService.getSearchAll( q.get().trim(),pageable);
+        }else{
+            response  = adoptionService.getAll(pageable);
+        }
+
         return new ResponseEntity<>(response , HttpStatus.OK);
     }
 

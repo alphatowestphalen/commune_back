@@ -148,4 +148,10 @@ public class ReconnaissanceService {
 
         return statistiqueReconnaissance;
     }
+
+    public ResponsePageable<Reconnaissance> getSearchAll(String query, Pageable pageable) {
+        Page<Reconnaissance> reconnaissancePage = reconnaissanceRepository.findSearchAll(query, pageable);
+        reconnaissancePage.getContent().forEach(e-> System.out.println(e.getPremierecopie().getEnfant().getNomEnfant()));
+        return new ResponsePageable<Reconnaissance>(reconnaissancePage);
+    }
 }

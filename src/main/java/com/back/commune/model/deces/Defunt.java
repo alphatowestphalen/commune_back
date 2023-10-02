@@ -40,6 +40,8 @@ public class Defunt {
 
     private String communeEnterement;
 
+    private String districtEnterement;
+
     private String regionEnterement;
 
     private String nomDefunt;

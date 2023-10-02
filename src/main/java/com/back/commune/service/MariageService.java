@@ -232,12 +232,24 @@ public class MariageService {
     }
 
     public ResponsePageable<MariageDTO> getAllMariages(Pageable pageable){
-
         Page<Mariage> page = mariageRepository.findAll(pageable);
         List<Mariage> mariageList = page.getContent();
         List<MariageDTO> mariageDTOS = mariageList.stream().map(MariageDTO::new).collect(Collectors.toList());
         Page<MariageDTO> mariageDTOPage = new PageImpl<>(mariageDTOS,pageable,page.getTotalElements());
         return new ResponsePageable<>(mariageDTOPage);
+    }
+
+    public ResponsePageable<MariageDTO> getSearchAllMariages( String query, Pageable pageable){
+        try {
+            Page<Mariage> page = mariageRepository.findSearchAll(query, pageable);
+            List<Mariage> mariageList = page.getContent();
+            List<MariageDTO> mariageDTOS = mariageList.stream().map(MariageDTO::new).collect(Collectors.toList());
+            Page<MariageDTO> mariageDTOPage = new PageImpl<>(mariageDTOS, pageable, page.getTotalElements());
+            return new ResponsePageable<>(mariageDTOPage);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public StatistiqueMariage getStatistiqueMariage() {
