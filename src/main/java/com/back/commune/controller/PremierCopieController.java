@@ -98,6 +98,23 @@ public class PremierCopieController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/celibataires")
+    public ResponseEntity<ResponsePageable<PremierCopie>> getAllPremierCopieCelibataire(
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "10") int size,
+        @RequestParam("sexeEnfant") Optional<String> sexeEnfant
+    ){
+        Pageable pageable = PageRequest.of(page-1, size);
+        try{
+            ResponsePageable<PremierCopie> response =  premierCopieService.findCelibataire(sexeEnfant, pageable);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
     @GetMapping("/living")
     public ResponseEntity<ResponsePageable<PremierCopie>> getAllPremierCopieAlive(
         @RequestParam(defaultValue = "1") int page,

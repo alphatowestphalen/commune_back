@@ -96,4 +96,23 @@ public interface PremierCopieRepository extends JpaRepository<PremierCopie, Stri
 
     @Query("select p from PremierCopie p where p.deleted = true and p.idPremierCopie like :query% or lower(p.enfant.nomEnfant) like lower(concat(:query,'%')) ")
     Page<PremierCopie> findAllSearch(@Param("query") String query, Pageable pageable);
+
+    @Query("select p from PremierCopie p" +
+        " left join MariageMixteFemme mf on mf.femme.idPremierCopie = p.idPremierCopie" +
+        " left join MariageMixteHomme mh on mh.homme.idPremierCopie = p.idPremierCopie " +
+        " where p.deleted = false " +
+        " and p.idPremierCopie not in (select mii.homme.idPremierCopie from MariageAllInterne mii WHERE mii.homme.idPremierCopie IS NOT NULL)" +
+        " and p.idPremierCopie not in (select mii.femme.idPremierCopie from MariageAllInterne mii WHERE mii.femme.idPremierCopie IS NOT NULL) " +
+        " and mf.femme.idPremierCopie is null and mh.homme.idPremierCopie is null")
+    Page<PremierCopie> findCelibataire(Pageable pageable);
+
+    @Query("select p from PremierCopie p" +
+        " left join MariageMixteFemme mf on mf.femme.idPremierCopie = p.idPremierCopie" +
+        " left join MariageMixteHomme mh on mh.homme.idPremierCopie = p.idPremierCopie " +
+        " where p.deleted = false " +
+        " and p.idPremierCopie not in (select mii.homme.idPremierCopie from MariageAllInterne mii WHERE mii.homme.idPremierCopie IS NOT NULL)" +
+        " and p.idPremierCopie not in (select mii.femme.idPremierCopie from MariageAllInterne mii WHERE mii.femme.idPremierCopie IS NOT NULL) " +
+        " and mf.femme.idPremierCopie is null and mh.homme.idPremierCopie is null"+
+        " and p.enfant.sexeEnfant like :sexeEnfant%")
+    Page<PremierCopie> findCelibataire(@Param("sexeEnfant") String sexeEnfant ,Pageable pageable);
 }

@@ -205,4 +205,14 @@ public class PremierCopieService {
         if(premierCopie == null) throw new RuntimeException("Premier Copie not found");
         premierCopieRepository.undoDeletePremierCopie(premierCopie.getIdPremierCopie());
     }
+
+    public ResponsePageable<PremierCopie> findCelibataire(Optional<String> sexeEnfant, Pageable pageable) {
+        Page<PremierCopie> page;
+        if(!sexeEnfant.isPresent() || sexeEnfant.get().trim().isEmpty()){
+           page = premierCopieRepository.findCelibataire(pageable);
+        }else {
+            page = premierCopieRepository.findCelibataire(sexeEnfant.get(), pageable);
+        }
+        return new ResponsePageable<>(page);
+    }
 }
