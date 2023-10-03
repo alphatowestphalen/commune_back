@@ -2,6 +2,7 @@ package com.back.commune.controller;
 
 import com.back.commune.model.Audit;
 import com.back.commune.security.jwt.TokenProvider;
+import com.back.commune.utils.ResponsePageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,10 +25,7 @@ import com.back.commune.repository.UserRepository;
 import com.back.commune.security.services.UserService;
 import com.back.commune.service.AuditService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -103,37 +101,21 @@ public class UserController {
         }
 
     }
-
     @GetMapping("/users")
-    public ResponseEntity<Map<String, Object>> getAllUser(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        try {
-            List<User> listuser = new ArrayList<User>();
-            Pageable paging = PageRequest.of(page, size);
-
-            Page<User> pageuser;
-            pageuser = userRepository.findAll(paging);
-
-            if (pageuser.hasContent())
-
-                listuser = pageuser.getContent();
-
-            Map<String, Object> response = new HashMap<>();
-            response.put("users", listuser);
-            response.put("currentPage", pageuser.getNumber());
-            response.put("totalItems", pageuser.getTotalElements());
-            response.put("totalPages", pageuser.getTotalPages());
-
-            return new ResponseEntity<>(response, HttpStatus.OK);
-
-        } catch (Exception e) {
-
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<ResponsePageable<User>> getAllUser(
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam() Optional<String> q,
+        @RequestParam(defaultValue = "10") int size)
+    {
+        Pageable paging = PageRequest.of(page-1, size);
+        ResponsePageable<User> result ;
+        if(q.isPresent() && !q.get().trim().isEmpty()){
+            result = userService.getSearchAll(q.get().trim(), paging);
+        }else{
+            result = userService.getAll(paging);
         }
-
+        return new ResponseEntity<>(result,HttpStatus.OK);
     }
-
 
     @PutMapping("/users")
     public ResponseEntity<User> updateUser(@PathVariable(value = "id") Long id, @RequestBody User user ){

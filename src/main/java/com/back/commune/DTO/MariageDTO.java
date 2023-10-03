@@ -82,7 +82,7 @@ public class MariageDTO {
         femme.setPrenomsFemme(femmeTmp.getEnfant().getPrenomsEnfant());
         femme.setNationaliteFemme("Malagasy");
         // missing proffession/ adresse
-        homme.setLieuNaissHomme(femmeTmp.getEnfant().getLieunaissEnfant());
+        femme.setLieuNaissFemme(femmeTmp.getEnfant().getLieunaissEnfant());
     }
     private void getHommeFemmeMF(MariageMixteFemme mariage){
         typeMariage = "Externe-Interne";

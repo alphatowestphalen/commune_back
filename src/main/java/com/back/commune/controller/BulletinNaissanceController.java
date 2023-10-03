@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 
 @CrossOrigin("*")
 @RestController
@@ -62,11 +64,17 @@ public class BulletinNaissanceController {
 
 	@GetMapping()
 	public ResponseEntity<ResponsePageable<BulletinNaissance>> getAllBulletinNaissances(
-	@RequestParam(defaultValue = "0") int page,
-	@RequestParam(defaultValue = "10") int size)
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam() Optional<String> q,
+	    @RequestParam(defaultValue = "10") int size)
 	{
-		Pageable pageable = PageRequest.of(page, size);
-        ResponsePageable<BulletinNaissance> response = bulletinNaissanceService.findAll(pageable);
+		Pageable pageable = PageRequest.of(page-1, size);
+        ResponsePageable<BulletinNaissance> response ;
+        if(q.isPresent() && !q.get().trim().isEmpty()){
+            response = bulletinNaissanceService.findSearchAll(q.get().trim(),pageable);
+        }else{
+            response = bulletinNaissanceService.findAll(pageable);
+        }
         return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 

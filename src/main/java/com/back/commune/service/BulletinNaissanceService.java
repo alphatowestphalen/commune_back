@@ -168,4 +168,8 @@ public class BulletinNaissanceService {
         return statistiqueBulletinNaiss;
     }
 
+    public ResponsePageable<BulletinNaissance> findSearchAll(String query, Pageable pageable) {
+        Page<BulletinNaissance> responsePage = bulletinNaissanceRepository.findSearchAll(query, pageable);
+        return new ResponsePageable<>(responsePage);
+    }
 }

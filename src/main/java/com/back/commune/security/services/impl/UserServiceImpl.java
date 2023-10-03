@@ -5,7 +5,10 @@ import java.util.Collections;
 import java.util.List;
 
 import com.back.commune.exceptions.NotFoundDataException;
+import com.back.commune.utils.ResponsePageable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -84,5 +87,15 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             nUser.setRoles(role);
         }
         return userDao.save(nUser);
+    }
+
+    public ResponsePageable<User> getSearchAll(String name, Pageable pageable){
+        Page<User> userList =  userDao.findSearchAll(name, pageable);
+        return new ResponsePageable<>(userList);
+    }
+
+    public ResponsePageable<User> getAll(Pageable pageable){
+        Page<User> userList =  userDao.findAll(pageable);
+        return new ResponsePageable<>(userList);
     }
 }
