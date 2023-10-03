@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.back.commune.request.ActeCelibataireRequestI;
 import com.back.commune.service.ActeCelibataireService;
 
+import java.util.Optional;
+
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/acteCelibataires")
@@ -35,11 +37,16 @@ public class ActeCelibataireController {
 	  public ResponseEntity<ResponsePageable<ActeCelibataireDTO>> getAllActeCelibataires
         (
             @RequestParam(defaultValue = "1") int page,
+            @RequestParam() Optional<String> q,
             @RequestParam(defaultValue = "10") int size
         )
     {
         Pageable pageable = PageRequest.of(page-1, size);
-        ResponsePageable<ActeCelibataireDTO> response = acteCelibataireService.findAll(pageable);
+        ResponsePageable<ActeCelibataireDTO> response;
+        if(q.isPresent() && !q.get().trim().isEmpty()){
+            response = acteCelibataireService.findSearchAll(q.get().trim(), pageable);
+        }else
+            response = acteCelibataireService.findAll(pageable);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

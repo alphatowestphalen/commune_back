@@ -49,6 +49,6 @@ public interface BulletinNaissanceRepository extends JpaRepository<BulletinNaiss
         "FROM BulletinNaissance p WHERE  year(p.createdDate) = :anne group by p.createdBy")
     List<CountByUser> countByUserYear(@Param("anne") Integer date);
 
-    @Query("SELECT b FROM BulletinNaissance b WHERE cast(b.idBulletinNaissance as string ) like :query% or lower(b.nomPersonne+' '+b.prenomsPersonne) like lower(concat('%',:query,'%') )")
+    @Query("SELECT b FROM BulletinNaissance b WHERE cast(b.idBulletinNaissance as string ) like :query% or lower(concat(b.nomPersonne ,' ',b.prenomsPersonne)) like lower(concat('%',:query,'%') )")
     Page<BulletinNaissance> findSearchAll(String query, Pageable pageable);
 }

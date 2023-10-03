@@ -154,4 +154,11 @@ public class ActeCelibataireService {
         return statistiqueCelibataire;
     }
 
+    public ResponsePageable<ActeCelibataireDTO> findSearchAll(String query, Pageable pageable) {
+        Page<ActeCelibataire> resultDB = acteCelibataireRepository.findSearchAll(query, pageable);
+        List<ActeCelibataireDTO> listDTO =  resultDB.getContent().
+            stream().map(ActeCelibataireDTO::new).collect(java.util.stream.Collectors.toList());
+        Page<ActeCelibataireDTO> page = new PageImpl<>(listDTO,pageable,resultDB.getTotalElements());
+        return new ResponsePageable<>(page);
+    }
 }

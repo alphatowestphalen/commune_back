@@ -1,6 +1,8 @@
 package com.back.commune.repository;
 
 import com.back.commune.DTO.resulSet.CountByUser;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -47,4 +49,8 @@ public interface ActeCelibataireRepository extends JpaRepository<ActeCelibataire
     @Query(value = "SELECT new com.back.commune.DTO.resulSet.CountByUser( p.createdBy, count(p.idActeCelibataire)) " +
         "FROM ActeCelibataire p WHERE  year(p.createdDate) = :anne group by p.createdBy")
     List<CountByUser> countByUserYear(@Param("anne") Integer year);
+
+    @Query("SELECT s FROM ActeCelibataire s WHERE CAST(s.idActeCelibataire as string ) like :query% " +
+        "or  lower(concat(s.premierecopie.enfant.nomEnfant,' ',s.premierecopie.enfant.prenomsEnfant)) like lower(concat(:query,'%')) ")
+    Page<ActeCelibataire> findSearchAll(@Param("query") String query, Pageable pageable);
 }
